@@ -1,0 +1,459 @@
+{
+ "file": "C:\\dev\\AgentReach\\.claude\\worktrees\\agent-a43726cb5b288ee06\\docs\\boceto-reporte\\propuesta-externa\\index.html",
+ "contrast_externa-desktop-dark-es": {
+  "n": 399,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 4.05
+ },
+ "contrast_end_externa-desktop-dark-es": {
+  "n": 399,
+  "fail": 0,
+  "worst": []
+ },
+ "log_externa-desktop-dark-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_externa-desktop-light-es": {
+  "n": 399,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 4.05
+ },
+ "contrast_end_externa-desktop-light-es": {
+  "n": 399,
+  "fail": 0,
+  "worst": []
+ },
+ "log_externa-desktop-light-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_externa-mobile-dark-es": {
+  "n": 378,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 4.14
+ },
+ "contrast_end_externa-mobile-dark-es": {
+  "n": 378,
+  "fail": 0,
+  "worst": []
+ },
+ "log_externa-mobile-dark-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_externa-mobile-light-es": {
+  "n": 378,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 4.14
+ },
+ "contrast_end_externa-mobile-light-es": {
+  "n": 378,
+  "fail": 0,
+  "worst": []
+ },
+ "log_externa-mobile-light-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "overflow": {
+  "320-dark": {
+   "sw": 320,
+   "W": 320,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "320-light": {
+   "sw": 320,
+   "W": 320,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "360-dark": {
+   "sw": 360,
+   "W": 360,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "360-light": {
+   "sw": 360,
+   "W": 360,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "390-dark": {
+   "sw": 390,
+   "W": 390,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "390-light": {
+   "sw": 390,
+   "W": 390,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "768-dark": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "768-light": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-dark": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-light": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-dark": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-light": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-dark": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-light": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  }
+ },
+ "tab_sequence": [
+  {
+   "tag": "a",
+   "id": "",
+   "label": "Skip to findings",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 151,
+   "h": 45
+  },
+  {
+   "tag": "button",
+   "id": "b-en",
+   "label": "EN",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 56,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-es",
+   "label": "ES",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 52,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-theme",
+   "label": "Switch to light theme",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 101,
+   "h": 44
+  },
+  {
+   "tag": "a",
+   "id": "",
+   "label": "6pointsCould not checkAgentReach could n",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 294,
+   "h": 218
+  },
+  {
+   "tag": "input",
+   "id": "q",
+   "label": "",
+   "outline": "none 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 419,
+   "h": 43
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "All levels",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 110,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Verified 2",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 122,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Potential 4",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 130,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Hypothesis 3",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 144,
+   "h": 44
+  },
+  null,
+  {
+   "tag": "a",
+   "id": "",
+   "label": "Skip to findings",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 151,
+   "h": 45
+  },
+  {
+   "tag": "button",
+   "id": "b-en",
+   "label": "EN",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 56,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-es",
+   "label": "ES",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 52,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-theme",
+   "label": "Switch to light theme",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 101,
+   "h": 44
+  },
+  {
+   "tag": "a",
+   "id": "",
+   "label": "6pointsCould not checkAgentReach could n",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 294,
+   "h": 218
+  },
+  {
+   "tag": "input",
+   "id": "q",
+   "label": "",
+   "outline": "none 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 419,
+   "h": 43
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "All levels",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 110,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Verified 2",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 122,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Potential 4",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 130,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Hypothesis 3",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 144,
+   "h": 44
+  },
+  null,
+  {
+   "tag": "a",
+   "id": "",
+   "label": "Skip to findings",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 151,
+   "h": 45
+  },
+  {
+   "tag": "button",
+   "id": "b-en",
+   "label": "EN",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 56,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-es",
+   "label": "ES",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 52,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-theme",
+   "label": "Switch to light theme",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 101,
+   "h": 44
+  },
+  {
+   "tag": "a",
+   "id": "",
+   "label": "6pointsCould not checkAgentReach could n",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 294,
+   "h": 218
+  },
+  {
+   "tag": "input",
+   "id": "q",
+   "label": "",
+   "outline": "none 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 419,
+   "h": 43
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "All levels",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 110,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Verified 2",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 122,
+   "h": 44
+  }
+ ],
+ "aria_snapshot_head": "- link \"Skip to findings\":\n  - /url: \"#findings\"\n- banner:\n  - text: AGENTREACH\n  - group \"Language\":\n    - button \"EN\" [pressed]\n    - button \"ES\"\n  - button \"Switch to light theme\": Light\n  - paragraph: AgentReach (demo)\n  - heading \"Access report\" [level=1]\n  - text: \"Folder reviewed: demo-app 41 files looked at\"\n  - note:\n    - paragraph:\n      - strong: No secret values are shown.\n      - text: AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.\n  - heading \"Summary by level\" [level=2]\n  - list:\n    - listitem:\n      - 'group \"Verified: 2 findings\"':\n        - paragraph: 2findings\n        - paragraph: Verified\n        - paragraph: \"Confirmed: the agent can reach it today.\"\n    - listitem:\n      - 'group \"Potential: 4 findings\"':\n        - paragraph: 4findings\n        - paragraph: Potential\n        - paragraph: Likely reachable, but not fully confirmed.\n    - listitem:\n      - 'group \"Hypothesis: 3 findings\"':\n        - paragraph: 3findings\n        - paragraph: Hypothesis\n        - paragraph: A suggestion only. Not a confirmed access.\n    - listitem:\n      - link \"6points Could not check AgentReach could not look at this. See below\":\n        - /url: \"#cnc\"\n        - paragraph: 6points\n        - paragraph: Could not check\n        - paragraph: AgentReach could not look at this.\n        - text: See below\n- main:\n  - region \"Findings\":\n    - heading \"Findings\" [level=2]\n    - search:\n      - text: Search findings\n      - textbox \"Search findings\":\n        - /placeholder: Search text…\n      - group \"Filter by level\":\n        - button \"All levels\" [pressed]\n        - button \"Verified 2\"\n        - button \"Potential 4\"\n        - button \"Hypothesis 3\"\n      - status: Showing 9 of 9 findings\n    - list:\n      - listitem:\n        - 'article \"Verified: Credential in a file — demo-app/config/settings.example\"':\n          - term: 1 Location and line\n          - definition:\n            - code: demo-app/config/settings.example\n            - text: line 2\n          - term: 2 What it is, and whose it is\n          - definition:\n            - paragraph: Credential in a file\n            - paragraph: payments service (demo)\n          - term: 3 Level, and why\n          - definition:\n            - text: Verified\n            - paragraph: It exists, the system lets the agent read it, and no agent rule blocks it.\n          - term: 4 Unrelated to the task\n          - definition: \"No\"\n          - term: 5 Platform and agent\n          - definition: Demo Agent A\n          - term: 6 Agent rules\n          - definition: no rule\n          - term: 7 What to do\n          - definition:\n            - paragraph: Move the credential out of the project, or keep it in a secrets manager (a safe vault for passwords and keys). Replace it with a new one if it was ever exposed.\n          - term: 8 What it means\n          - definition:\n            - paragraph: A project file holds a credential (a key or password that gives access to a service). An agent that can read the project could read it.\n      - listitem:\n        - 'article \"Verified: Credential in a file — demo-app/config/staging.example\"':\n          - term: 1 Location and line\n          - definition:\n            - code: demo-app/config/staging.example\n            - text: line 5\n          - term: 2 What it is, and whose it is\n          - definition:\n            - paragraph: Credential in a file\n            - paragraph: database (demo)\n          - term: 3 Level, and why\n          - definition:\n            - text: Verified\n            - paragraph: It exists, the system lets the agent read it, and no agent rule blocks it.\n          - term: 4 Unrelated to the task\n          - definition: Not determined\n          - term: 5 Platform and agent\n          - definition: Demo Agent A\n          - term: 6 Agent rules\n          - definition: asks first\n          - term: 7 What to do\n          - definition:\n            - paragraph: Keep database access out of files in the project. Use a safer place and replace the old access.\n          - term: 8 What it means\n          - definition:\n            - paragraph: A file stores database access. The agent asks before reading it, but it is still reachable if you say yes.\n      - listitem:\n        - 'article \"Potential: Deployment script (publishes changes) — demo-app/deploy/publish-demo.sh\"':\n          - term: 1 Location and line\n          - definition:\n            - code: demo-app/deploy/publish-demo.sh\n            - text: line 12\n          - term: 2 What it is, and whose it is\n          - definition:\n            - paragraph: Deployment script (publishes changes)\n            - paragraph: deployment platform (demo)\n          - term: 3 Level, and why\n          - definition:\n            - text: Potential\n            - paragraph: The script exists and the agent may run programs, but we did not confirm it can reach the platform.\n          - term: 4 Unrelated to the task\n          - definition: \"No\"\n          - term: 5 Platform and agent\n          - definition: Demo Agent B\n          - term: 6 Agent rules\n          - definition: allows it\n          - term: 7 What to do\n          - definition:\n            - paragraph: Require a human to approve any publish step. Remove the agent's permission to run this script.\n          - term: 8 What it means\n          - definition:\n            - paragraph: An agent could start a script that publishes your changes to a live place.\n      - listitem:\n        - 'article \"Potential: Agent rule that is too permissive — demo-app/.agent/rules.example\"':\n          - term: 1 Location and line\n          - definition:\n            - code: demo-app/.agent/rules.example\n            - text: line 3\n          - term: 2 What it is, and whose it is\n          - definition:\n            - paragraph: Agent rule that is too permissive\n            - paragraph: agent settings (demo)\n          - term: 3 Level, and why\n          - definition:\n            - text: Potential\n            - paragraph: T",
+ "small_targets": [
+  {
+   "t": "INPUT#q.",
+   "w": 419,
+   "h": 43
+  }
+ ]
+}

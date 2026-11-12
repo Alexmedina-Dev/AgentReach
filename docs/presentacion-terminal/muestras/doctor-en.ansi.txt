@@ -1,0 +1,18 @@
+[38;2;234;244;242mAGENT[0m [38;2;61;245;208mREACH[0m doctor  v0.1.0
+Know what your agents can reach.
+
+Read-only check of this computer. It does not analyze any folder.
+Console without Unicode detected: showing the plain-ASCII version.
+
+  [38;2;61;245;208m[ok][0m Python                  3.12.4 (3.12 or newer is needed)
+  [38;2;61;245;208m[ok][0m Read permissions        can read the current folder
+  [38;2;255;178;36m[!][0m  Console encoding        cp437 cannot write accented letters
+       Tip: use Windows Terminal, or run `agentreach --ascii`.
+  [38;2;61;245;208m[ok][0m Color                   16 colors
+  [38;2;255;178;36m[!][0m  Unicode                 no symbols; using ASCII marks
+  [38;2;61;245;208m[ok][0m Language                English (en-US), from regional settings
+
+4 checks passed, 2 warnings, 0 failures.
+
+AgentReach does not modify anything or run any program.
+Exit code: 0 (no failures). With failures it would be 1.

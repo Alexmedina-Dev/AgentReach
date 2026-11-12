@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diagrama AgentReach</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 900px; background-color: #0B1114; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px">
+
+<div style="position: absolute; left: 328px; top: 584px; width: 560px; height: 168px; box-sizing: border-box; border: 1px solid #2F4044; border-radius: 14px; background-color: #0F181B"></div>
+<div style="position: absolute; left: 940px; top: 584px; width: 596px; height: 168px; box-sizing: border-box; border: 1px dashed #4A5C5F; border-radius: 14px; background-color: #0D1518"></div>
+<div style="position: absolute; left: 64px; top: 252px; width: 1472px; height: 1px; background-color: #3DF5D0; opacity: 0.3"></div>
+
+<svg width="103" height="8" viewBox="0 0 103 8" preserveAspectRatio="none" style="position: absolute; left: 364px; top: 376px; width: 103px; height: 8px; overflow: visible; fill: none; stroke: #3DF5D0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-1" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#3DF5D0" stroke="none" style="stroke: none; fill: #3DF5D0; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 99 4" marker-end="url(#dc-arrow-head-filled-1)"></path></svg>
+<svg width="103" height="8" viewBox="0 0 103 8" preserveAspectRatio="none" style="position: absolute; left: 748px; top: 376px; width: 103px; height: 8px; overflow: visible; fill: none; stroke: #3DF5D0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-2" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#3DF5D0" stroke="none" style="stroke: none; fill: #3DF5D0; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 99 4" marker-end="url(#dc-arrow-head-filled-2)"></path></svg>
+<svg width="87" height="8" viewBox="0 0 87 8" preserveAspectRatio="none" style="position: absolute; left: 1172px; top: 376px; width: 87px; height: 8px; overflow: visible; fill: none; stroke: #3DF5D0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-3" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#3DF5D0" stroke="none" style="stroke: none; fill: #3DF5D0; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 83 4" marker-end="url(#dc-arrow-head-filled-3)"></path></svg>
+<svg width="8" height="113" viewBox="0 0 8 113" preserveAspectRatio="none" style="position: absolute; left: 604px; top: 471px; width: 8px; height: 113px; overflow: visible; fill: none; stroke: #3DF5D0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-4" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#3DF5D0" stroke="none" style="stroke: none; fill: #3DF5D0; fill: context-stroke"></path></marker></defs><path d="M 4 113 L 4 4" marker-end="url(#dc-arrow-head-filled-4)"></path></svg>
+<svg width="8" height="85" viewBox="0 0 8 85" preserveAspectRatio="none" style="position: absolute; left: 1008px; top: 499px; width: 8px; height: 85px; overflow: visible; fill: none; stroke: #7C928E; stroke-width: 2; stroke-dasharray: 6 6; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-5" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#7C928E" stroke="none" style="stroke: none; fill: #7C928E; fill: context-stroke"></path></marker></defs><path d="M 4 85 L 4 4" marker-end="url(#dc-arrow-head-filled-5)"></path></svg>
+
+<div style="position: absolute; left: 64px; top: 64px; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 34px; line-height: 40px; font-weight: 700; color: #EAF4F2">Cómo funciona AgentReach</div>
+<div style="position: absolute; left: 64px; top: 116px; font-size: 16px; line-height: 24px; color: #A9BDB9">Auditoría estática: lee, analiza y reporta. Nunca modifica nada.</div>
+<div style="position: absolute; left: 64px; top: 224px; font-size: 13px; line-height: 16px; letter-spacing: 0.18em; color: #3DF5D0">ALCANCE DEL MVP</div>
+
+<div style="position: absolute; left: 64px; top: 290px; width: 300px; height: 180px; box-sizing: border-box; padding: 16px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 1px solid #7C928E; border-radius: 12px"><span style="line-height: 24px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 20px; line-height: 28px; color: #EAF4F2">1 · Entorno real</b><br>archivos · repos · env<br>credenciales · SSH<br>tokens · scripts</span></div>
+
+<div style="position: absolute; left: 468px; top: 290px; width: 280px; height: 180px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 2px solid #3DF5D0; border-radius: 12px"><svg width="56" height="56" viewBox="0 0 200 200" role="img" aria-label="Símbolo de AgentReach"><g fill="none" stroke-linecap="round"><circle cx="100" cy="100" r="30" stroke="#3DF5D0" stroke-width="6" stroke-dasharray="120 68.5" transform="rotate(-100 100 100)"></circle><circle cx="100" cy="100" r="55" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.6" stroke-dasharray="200 145.6" transform="rotate(-20 100 100)"></circle><circle cx="100" cy="100" r="80" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.3" stroke-dasharray="270 232.7" transform="rotate(60 100 100)"></circle><line x1="100" y1="100" x2="156.6" y2="43.4" stroke="#3DF5D0" stroke-width="4"></line><line x1="100" y1="100" x2="169.3" y2="140" stroke="#FFB224" stroke-width="4"></line><line x1="100" y1="100" x2="24.8" y2="72.6" stroke="#3DF5D0" stroke-width="4"></line></g><circle cx="156.6" cy="43.4" r="9" fill="#3DF5D0"></circle><circle cx="169.3" cy="140" r="9" fill="#FFB224"></circle><circle cx="24.8" cy="72.6" r="9" fill="#3DF5D0"></circle><circle cx="100" cy="100" r="14" fill="#3DF5D0"></circle></svg><span style="line-height: 24px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 20px; line-height: 28px; color: #EAF4F2">2 · Núcleo</b><br>agnóstico · solo lectura</span></div>
+
+<div style="position: absolute; left: 852px; top: 262px; width: 320px; height: 236px; box-sizing: border-box; padding: 24px 16px 16px 16px; display: flex; align-items: flex-start; justify-content: center; text-align: center; background-color: #121C20; border: 2px solid #FFB224; border-radius: 12px"><span style="line-height: 24px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 20px; line-height: 28px; color: #FFB224">3 · Hallazgos</b><br>ubicación · qué es · agente<br>nivel · por qué · postura<br>ajeno a la tarea · qué hacer<br>qué significa</span></div>
+<div style="position: absolute; left: 860px; top: 428px; width: 170px; font-size: 13px; line-height: 16px; color: #7C928E">nivel de confianza</div>
+<div style="position: absolute; left: 860px; top: 452px; width: 96px; height: 28px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #FF6B6B; font-weight: 700; background-color: rgba(255,107,107,0.14); border: 2px solid #FF6B6B; border-radius: 4px">comprobado</div>
+<div style="position: absolute; left: 964px; top: 452px; width: 96px; height: 28px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #FFB224; border: 1px solid #FFB224; border-radius: 14px">potencial</div>
+<div style="position: absolute; left: 1068px; top: 452px; width: 96px; height: 28px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #A9BDB9; border: 1px dashed #A9BDB9; border-radius: 14px">hipótesis</div>
+
+<div style="position: absolute; left: 1260px; top: 290px; width: 276px; height: 180px; box-sizing: border-box; padding: 16px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 1.5px solid #3DF5D0; border-radius: 12px"><span style="line-height: 24px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 20px; line-height: 28px; color: #EAF4F2">4 · Reporte</b><br>sin valores<br>de secretos</span></div>
+
+<div style="position: absolute; left: 620px; top: 520px; width: 164px; font-size: 14px; line-height: 16px; color: #A9BDB9">reglas y capacidades</div>
+<div style="position: absolute; left: 1024px; top: 525px; width: 76px; font-size: 14px; line-height: 16px; color: #7C928E">posterior</div>
+
+<div style="position: absolute; left: 352px; top: 596px; font-size: 13px; line-height: 16px; letter-spacing: 0.18em; color: #7C928E">ADAPTADORES</div>
+<div style="position: absolute; left: 344px; top: 632px; width: 140px; height: 88px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 1px solid #7C928E; border-radius: 10px"><span style="line-height: 22px; font-size: 13px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 18px; line-height: 24px; color: #EAF4F2">Claude Code</b><br>referencia</span></div>
+<div style="position: absolute; left: 508px; top: 632px; width: 140px; height: 88px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 1px solid #7C928E; border-radius: 10px"><span><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 18px; line-height: 24px; color: #EAF4F2">opencode</b></span></div>
+<div style="position: absolute; left: 672px; top: 632px; width: 200px; height: 88px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #121C20; border: 1px dashed #7C928E; border-radius: 10px"><span style="line-height: 22px; font-size: 13px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 18px; line-height: 24px; color: #EAF4F2">Otras IA</b><br>más plataformas</span></div>
+
+<div style="position: absolute; left: 964px; top: 596px; font-size: 13px; line-height: 16px; letter-spacing: 0.18em; color: #7C928E">FASES 2 Y 3 · FUTURO</div>
+<div style="position: absolute; left: 964px; top: 632px; width: 264px; height: 88px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #0B1114; border: 1px dashed #7C928E; border-radius: 10px"><span style="line-height: 22px; font-size: 13px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 18px; line-height: 24px; color: #A9BDB9">Observabilidad</b><br>Fase 2 · qué hizo el agente</span></div>
+<div style="position: absolute; left: 1248px; top: 632px; width: 264px; height: 88px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #0B1114; border: 1px dashed #7C928E; border-radius: 10px"><span style="line-height: 22px; font-size: 13px; color: #A9BDB9"><b style="font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 18px; line-height: 24px; color: #A9BDB9">Protección</b><br>Fase 3 · límites y bloqueos</span></div>
+
+<div style="position: absolute; left: 64px; top: 810px; width: 24px; height: 3px; background-color: #3DF5D0"></div>
+<div style="position: absolute; left: 96px; top: 804px; width: 120px; font-size: 13px; line-height: 16px; color: #A9BDB9">flujo del MVP</div>
+<div style="position: absolute; left: 240px; top: 810px; width: 24px; height: 3px; background-color: #FFB224"></div>
+<div style="position: absolute; left: 272px; top: 804px; width: 100px; font-size: 13px; line-height: 16px; color: #A9BDB9">hallazgo</div>
+<div style="position: absolute; left: 396px; top: 810px; width: 24px; height: 0; border-top: 2px dashed #7C928E"></div>
+<div style="position: absolute; left: 428px; top: 804px; width: 140px; font-size: 13px; line-height: 16px; color: #A9BDB9">fases futuras</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

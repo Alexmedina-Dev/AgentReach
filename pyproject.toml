@@ -1,0 +1,29 @@
+[project]
+name = "agentreach"
+version = "0.1.0.dev0"
+description = "Audita, en solo lectura, a qué puede acceder un agente de IA."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+# Solo biblioteca estándar en tiempo de ejecución (decisión del proyecto).
+dependencies = []
+
+[project.scripts]
+agentreach = "agentreach.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+extend-exclude = ["_bmad", "_bmad-output", ".claude", "docs", "assets"]

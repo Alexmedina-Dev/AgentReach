@@ -1,0 +1,1 @@
+[38;2;234;244;242mAGENT[0m [38;2;61;245;208mREACH[0m[38;2;124;146;142m  v0.1.0  ·  [0m[38;2;169;189;185mKnow what your agents can reach.[0m

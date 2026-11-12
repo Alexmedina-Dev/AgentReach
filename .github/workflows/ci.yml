@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, development]
+  push:
+    branches: [main, development]
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    # AgentReach se prueba en Windows, que es la plataforma probada hoy.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Pruebas
+        run: uv run pytest -q
+      - name: Lint
+        run: uv run ruff check .

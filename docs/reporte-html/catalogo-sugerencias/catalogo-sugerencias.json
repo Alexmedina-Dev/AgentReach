@@ -1,0 +1,631 @@
+{
+  "schema_version": 1,
+  "estado": "borrador para revision de Alex; no se usa en el generador hasta validarlo",
+  "nota_general": {
+    "es": "Las sugerencias salen de este catalogo fijo, nunca de un modelo de lenguaje. AgentReach solo lee: no cambia ningun archivo. Las reglas de denegar y de pedir confirmacion son politicas del agente, no barreras del sistema operativo. Todas las rutas y nombres entre < > son marcadores que la persona cambia por los suyos.",
+    "en": "Suggestions come from this fixed catalog, never from a language model. AgentReach only reads: it never changes any file. Deny and ask rules are agent policies, not operating system barriers. Every path or name between < > is a placeholder the person replaces with their own."
+  },
+  "fuentes": [
+    {
+      "id": "F1",
+      "titulo": "Permisos de Claude Code (reglas Read, Edit, Bash; orden deny, ask, allow)",
+      "url": "https://code.claude.com/docs/en/permissions",
+      "leida": "2026-11-10 (WebFetch, resumen y texto de la pagina)",
+      "confirma": "Formato de regla Read(./.env); prefijos ./, // (raiz absoluta), ~/ (carpeta personal); en Windows las rutas se normalizan a /c/...; Read(path) bloquea las herramientas de lectura y tambien Edit y Write sobre la misma ruta; orden de evaluacion deny, luego ask, luego allow; la clave permissions.disableBypassPermissionsMode con valor disable; las reglas de Bash no son frontera de seguridad y el documento remite a sandboxing para imponer limites.",
+      "no_confirma": "Si una regla Read deny impide que un comando de Bash (por ejemplo cat) lea el archivo: el documento no lo afirma."
+    },
+    {
+      "id": "F2",
+      "titulo": "Permisos de opencode 1.x (clave permission, objeto por herramienta)",
+      "url": "https://opencode.ai/v1/docs/permissions (redirigida desde https://docs.opencode.ai/docs/permissions)",
+      "leida": "2026-11-10 (WebFetch, resumen)",
+      "confirma": "Clave permission con objeto por herramienta, ejemplo {\"bash\": {\"*\": \"ask\", \"git *\": \"allow\"}}; comodines * y ?; los .env requieren aprobacion por defecto (*.env y *.env.* en ask, *.env.example en allow); la ultima regla que coincide gana.",
+      "no_confirma": "Que una regla de read o edit en deny proteja frente a comandos de shell: el documento no lo dice. Forma exacta de read con deny: no vista literal (deducida de la forma de bash)."
+    },
+    {
+      "id": "F3",
+      "titulo": "Permisos de opencode 2.x (lista permissions con action, resource, effect)",
+      "url": "https://opencode.ai/docs/permissions",
+      "leida": "2026-11-10 (WebFetch, resumen)",
+      "confirma": "Lista de reglas {action, resource, effect}; accion shell para comandos; comodines; los .env por defecto en ask y *.env.example en allow; la ultima regla que coincide gana; shell corre con la autoridad del usuario del equipo.",
+      "no_confirma": "Que un deny de read proteja frente a shell: no se afirma; el documento no llama a los permisos sandbox."
+    },
+    {
+      "id": "F4",
+      "titulo": "Investigacion previa de opencode 1.x frente a 2.x",
+      "url": "_bmad-output/planning-artifacts/research/opencode-1x-frente-a-2x.md",
+      "leida": "2026-11-10 (lectura local)",
+      "confirma": "Regla de trabajo: un deny de read o edit NO protege frente al shell (politica, no barrera); external_directory pasa de ask (1.x) a allow (2.x); clave bash=shell en 2.x; carpeta de politicas de organizacion solo en 2.x (solo niega)."
+    },
+    {
+      "id": "F5",
+      "titulo": "PRD de AgentReach (catalogo TH-1 a TH-22, FR-5, FR-6, FR-7, FR-11, FR-12)",
+      "url": "_bmad-output/planning-artifacts/prds/prd-agent-reach-2026-11-05/prd.md",
+      "leida": "2026-11-10 (lectura local)",
+      "confirma": "Niveles maximos por tipo; regla de nivel para deny y ask; comandos que NO deben sugerirse (FR-10); clave de VS Code task.allowAutomaticTasks con valor off (fuente primaria segun el PRD, no releida hoy)."
+    },
+    {
+      "id": "F6",
+      "titulo": "Codigo de tipos y textos actuales",
+      "url": "src/agentreach/contracts/finding.py",
+      "leida": "2026-11-10 (lectura local)",
+      "confirma": "Tipos TH-1 a TH-20 y textos actuales de que hacer y que significa. TH-21 y TH-22 existen solo en el PRD (no en el codigo todavia)."
+    }
+  ],
+  "reglas": {
+    "R1": {
+      "para": "Claude Code, archivos del proyecto",
+      "donde": "<proyecto>/.claude/settings.json, bloque permissions.deny",
+      "valor": "\"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]",
+      "fuente": "F1 (formato Read(./ruta) confirmado; el comodin .env.* usa la misma sintaxis gitignore, no hay ejemplo literal con .env.*)",
+      "estado": "parcialmente verificado",
+      "nota": {
+        "es": "Impide que las herramientas de lectura, edicion y escritura de Claude Code toquen esos archivos. Es una regla de Claude Code, no una barrera del sistema operativo. No se sabe si un comando de Bash los lee igual: no verificado.",
+        "en": "Stops Claude Code's read, edit and write tools from touching those files. It is a Claude Code rule, not an operating system barrier. Whether a Bash command can still read them is not verified."
+      }
+    },
+    "R2": {
+      "para": "Claude Code, un archivo concreto",
+      "donde": "<proyecto>/.claude/settings.json, bloque permissions.deny",
+      "valor": "\"deny\": [\"Read(./<nombre-del-archivo>)\"]",
+      "fuente": "F1",
+      "estado": "verificado (formato)",
+      "nota": {
+        "es": "Mismo efecto que R1 para un solo archivo. En Windows las rutas se escriben con barra normal.",
+        "en": "Same effect as R1 for one file. On Windows, write paths with forward slashes."
+      }
+    },
+    "R3": {
+      "para": "Claude Code, carpeta personal (aplica a todos los proyectos)",
+      "donde": "~/.claude/settings.json, bloque permissions.deny",
+      "valor": "\"deny\": [\"Read(~/.ssh/**)\", \"Read(~/.aws/**)\"]",
+      "fuente": "F1 (prefijo ~/ y reglas de ajustes de usuario: confirmados)",
+      "estado": "verificado (formato); la ruta exacta de la carpeta depende del equipo",
+      "nota": {
+        "es": "Aplica a todas las carpetas. Solo cambia lo que Claude Code puede leer; no es una barrera del sistema.",
+        "en": "Applies to every folder. It only changes what Claude Code can read; it is not a system barrier."
+      }
+    },
+    "R4": {
+      "para": "Claude Code, carpeta de memoria o historial (marcador)",
+      "donde": "~/.claude/settings.json, bloque permissions.deny",
+      "valor": "\"deny\": [\"Read(~/<carpeta-de-memoria>/**)\"]",
+      "fuente": "F1 (formato). La ruta de la carpeta no esta verificada (TH-22).",
+      "estado": "no verificado (ruta por verificar)",
+      "nota": {
+        "es": "Usa solo la ruta que la persona confirme en su equipo.",
+        "en": "Use only the path the person confirms on their machine."
+      }
+    },
+    "R5": {
+      "para": "Claude Code, saltar permisos",
+      "donde": "<proyecto>/.claude/settings.json o ~/.claude/settings.json",
+      "valor": "\"permissions\": { \"disableBypassPermissionsMode\": \"disable\" }  (y quitar \"defaultMode\": \"bypassPermissions\" si existe)",
+      "fuente": "F1 (clave y valor confirmados)",
+      "estado": "verificado",
+      "nota": {
+        "es": "Impide que el modo de saltar permisos se use. Quitar la opcion de salto es decision de la persona.",
+        "en": "Prevents the skip-permissions mode from being used. Removing the skip option is the person's decision."
+      }
+    },
+    "R6": {
+      "para": "Claude Code, comandos de Bash que deben pedir confirmacion",
+      "donde": "<proyecto>/.claude/settings.json, bloque permissions.ask",
+      "valor": "\"ask\": [\"Bash(./<script-de-despliegue> *)\"]",
+      "fuente": "F1 (orden deny, ask, allow confirmado; las reglas Bash solo cubren la forma escrita del comando)",
+      "estado": "verificado (formato); sin frontera de seguridad",
+      "nota": {
+        "es": "Solo cubre la forma exacta que se escribe. Otra forma de llamar al mismo programa puede no coincidir. No es una barrera.",
+        "en": "Only covers the exact form written. Another way of calling the same program may not match. Not a barrier."
+      }
+    },
+    "R7": {
+      "para": "Claude Code, pedir confirmacion para todos los comandos",
+      "donde": "<proyecto>/.claude/settings.json, bloque permissions.ask",
+      "valor": "\"ask\": [\"Bash\"]",
+      "fuente": "no verificado: la forma sin patron no aparece en la documentacion leida; comprobarla con /permissions tras guardar",
+      "estado": "no verificado",
+      "nota": {
+        "es": "Si /permissions no muestra la regla, no se aplico: no darla por buena.",
+        "en": "If /permissions does not show the rule, it was not applied: do not assume it works."
+      }
+    },
+    "R8": {
+      "para": "Claude Code, servidor MCP",
+      "donde": "<proyecto>/.claude/settings.json, bloque permissions.deny",
+      "valor": "\"deny\": [\"mcp__<servidor>__*\"]",
+      "fuente": "F1 (forma mcp__servidor__* confirmada en el texto de reglas de MCP)",
+      "estado": "verificado (formato)",
+      "nota": {
+        "es": "Desactiva las herramientas de ese servidor. Es una regla de Claude Code, no una barrera.",
+        "en": "Disables that server's tools. It is a Claude Code rule, not a barrier."
+      }
+    },
+    "R9": {
+      "para": "opencode 1.x, lectura de .env",
+      "donde": "<proyecto>/opencode.json o .opencode/opencode.json",
+      "valor": "\"permission\": { \"read\": { \"*.env\": \"deny\", \"*.env.*\": \"deny\", \"*.env.example\": \"allow\" } }",
+      "fuente": "F2 (forma de objeto por herramienta con patrones confirmada con bash; read con deny no visto literal)",
+      "estado": "parcialmente verificado",
+      "nota": {
+        "es": "La ultima regla que coincide gana: *.env.example va al final para quedar permitido. Es una politica del agente, NO una barrera del sistema: el documento no dice que proteja frente a comandos de shell (bash en 1.x). Un comando de shell puede leer el archivo igualmente.",
+        "en": "The last matching rule wins: *.env.example goes last so it stays allowed. It is an agent policy, NOT a system barrier: the docs do not say it protects against shell commands (bash in 1.x). A shell command may still read the file."
+      }
+    },
+    "R10": {
+      "para": "opencode 2.x, lectura de .env",
+      "donde": "<proyecto>/opencode.json, clave permissions (lista)",
+      "valor": "\"permissions\": [ {\"action\": \"read\", \"resource\": \"*.env\", \"effect\": \"deny\"}, {\"action\": \"read\", \"resource\": \"*.env.*\", \"effect\": \"deny\"}, {\"action\": \"read\", \"resource\": \"*.env.example\", \"effect\": \"allow\"} ]",
+      "fuente": "F3 (forma {action, resource, effect} y ultima regla gana confirmadas; el valor deny es el mismo campo que ask/allow)",
+      "estado": "parcialmente verificado",
+      "nota": {
+        "es": "Politica del agente, no barrera. En 2.x la accion shell corre con la autoridad del usuario: un deny de read no la frena (no afirmado por la documentacion; tratar como no protegido).",
+        "en": "Agent policy, not a barrier. In 2.x the shell action runs with the user's authority: a read deny does not stop it (the docs do not say it does; treat it as not protected)."
+      }
+    },
+    "R11": {
+      "para": "opencode 1.x, pedir confirmacion para comandos de shell",
+      "donde": "<proyecto>/opencode.json, clave permission",
+      "valor": "\"permission\": { \"bash\": \"ask\" }",
+      "fuente": "F2 y F4 (ejemplo de la guia 1.x)",
+      "estado": "verificado (formato)",
+      "nota": {
+        "es": "Pide confirmacion antes de cada comando. No es una barrera.",
+        "en": "Asks before each command. Not a barrier."
+      }
+    },
+    "R12": {
+      "para": "opencode 2.x, pedir confirmacion para shell",
+      "donde": "<proyecto>/opencode.json, clave permissions (lista)",
+      "valor": "\"permissions\": [ {\"action\": \"shell\", \"resource\": \"*\", \"effect\": \"ask\"} ]",
+      "fuente": "F3 (accion shell y forma de lista confirmadas)",
+      "estado": "verificado (formato)",
+      "nota": {
+        "es": "Pide confirmacion antes de cada comando. No es una barrera.",
+        "en": "Asks before each command. Not a barrier."
+      }
+    },
+    "R13": {
+      "para": "VS Code, tareas que se lanzan al abrir la carpeta",
+      "donde": "Ajustes de VS Code (settings.json del usuario)",
+      "valor": "\"task.allowAutomaticTasks\": \"off\"",
+      "fuente": "F5 (fuente primaria segun el PRD, verificada el 2026-11-09; no releida hoy)",
+      "estado": "verificado en el PRD; no releido hoy",
+      "nota": {
+        "es": "Desactiva las tareas automaticas en todas las carpetas.",
+        "en": "Turns off automatic tasks in every folder."
+      }
+    },
+    "R14": {
+      "para": "git, revisar claves de programas",
+      "donde": "Terminal, dentro del proyecto (solo lectura)",
+      "valor": "git config --local --list",
+      "fuente": "F5 (clave y riesgo por TH-18; no releido hoy en la documentacion de git)",
+      "estado": "verificado en el PRD; no releido hoy",
+      "nota": {
+        "es": "Solo lista la configuracion. Si aparece una direccion con clave dentro, no la copies a ningun sitio.",
+        "en": "Only lists the configuration. If an address with a key appears, do not copy it anywhere."
+      }
+    },
+    "R15": {
+      "para": "git, quitar la clave de una direccion de remoto",
+      "donde": "Terminal, dentro del proyecto",
+      "valor": "git remote set-url origin <direccion-sin-clave>",
+      "fuente": "F5 (no releido hoy)",
+      "estado": "no verificado hoy",
+      "nota": {
+        "es": "Cambia la direccion. Hazlo solo tras confirmar con la persona; cambia tambien la clave en el servicio.",
+        "en": "Changes the address. Do it only after the person confirms; also change the key on the service."
+      }
+    },
+    "R16": {
+      "para": "git, ayudante de credenciales",
+      "donde": "Terminal, configuracion de usuario",
+      "valor": "git config --global credential.helper <ayudante-elegido>",
+      "fuente": "F5 (el PRD menciona un fallo de wincred; el nombre del ayudante recomendado no esta verificado)",
+      "estado": "no verificado",
+      "nota": {
+        "es": "No se sabe que ayudante recomendar hoy. Consultar la documentacion oficial de git antes de cambiarlo.",
+        "en": "The recommended helper is not known for certain today. Check the official git documentation before changing it."
+      }
+    }
+  },
+  "catalogo": [
+    {
+      "id": "TH-1",
+      "nombre": { "es": "Credencial en archivo del proyecto", "en": "Credential stored in a project file" },
+      "sugerencia": {
+        "es": "Saca la credencial del proyecto, guardala en un gestor de secretos (un programa que guarda claves cifradas) y, si pudo quedar expuesta, cambiala por una nueva.",
+        "en": "Move the credential out of the project into a secrets manager (a program that stores keys encrypted) and, if it may have been exposed, replace it with a new one."
+      },
+      "reglas": ["R1", "R2", "R9", "R10"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach sobre la misma carpeta. El hallazgo TH-1 debe desaparecer o cambiar de sitio.",
+        "en": "Run AgentReach again on the same folder. The TH-1 finding should disappear or move."
+      },
+      "nivel_maximo": "comprobado",
+      "nunca_sugerir": {
+        "es": "No copiar el valor de la credencial a un chat, a un reporte ni a un issue. No borrar el archivo sin preguntar. No usar comandos que imprimen valores: dotnet user-secrets list, aws configure list, az account get-access-token, ni gh auth status sin --no-refresh. No presentar la regla de denegar como proteccion completa.",
+        "en": "Do not copy the credential value into a chat, report or issue. Do not delete the file without asking. Do not use commands that print values: dotnet user-secrets list, aws configure list, az account get-access-token, or gh auth status without --no-refresh. Do not present a deny rule as full protection."
+      }
+    },
+    {
+      "id": "TH-2",
+      "nombre": { "es": "Clave privada SSH", "en": "Private SSH key" },
+      "sugerencia": {
+        "es": "No copies esa clave a la carpeta del proyecto. Protegela con frase de paso (una contrasena extra) y limita al agente en tu configuracion de usuario.",
+        "en": "Do not copy that key into the project folder. Protect it with a passphrase (an extra password) and limit the agent in your user settings."
+      },
+      "reglas": ["R3"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. Revisa en /permissions de Claude Code que la regla aparece. Para ver la huella de tus claves SSH, ssh-add -l es seguro: solo muestra huellas.",
+        "en": "Run AgentReach again. In Claude Code, check that the rule appears in /permissions. To see your SSH key fingerprints, ssh-add -l is safe: it only shows fingerprints."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No abrir ni pegar el contenido de la clave. No borrar la clave sin preguntar. Para opencode no hay regla verificada para esa carpeta: no decirlo.",
+        "en": "Do not open or paste the key contents. Do not delete the key without asking. There is no verified rule for that folder in opencode: do not claim one."
+      }
+    },
+    {
+      "id": "TH-3",
+      "nombre": { "es": "Credenciales de nube", "en": "Cloud account credentials" },
+      "sugerencia": {
+        "es": "Usa credenciales temporales con solo los permisos que la tarea necesita y saca el archivo del alcance del agente.",
+        "en": "Use temporary credentials with only the permissions the task needs, and keep the file out of the agent's reach."
+      },
+      "reglas": ["R3"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. Confirma en /permissions que la regla aparece.",
+        "en": "Run AgentReach again. Confirm the rule appears in /permissions."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No ejecutar aws configure list (deja ver parte de las claves). No borrar credenciales sin preguntar.",
+        "en": "Do not run aws configure list (it shows part of the keys). Do not delete credentials without asking."
+      }
+    },
+    {
+      "id": "TH-4",
+      "nombre": { "es": "Variable de entorno con secreto", "en": "Environment variable holding a secret" },
+      "sugerencia": {
+        "es": "Quita esa variable del entorno con el que se lanza el agente y vuelve a abrir la terminal.",
+        "en": "Remove that variable from the environment the agent starts with, then open a new terminal."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Abre una terminal nueva sin la variable y vuelve a ejecutar AgentReach. Como AgentReach ve su propio entorno, el hallazgo puede seguir como hipotesis.",
+        "en": "Open a new terminal without the variable and run AgentReach again. AgentReach sees its own environment only, so the finding may stay as a hypothesis."
+      },
+      "nivel_maximo": "hipotesis",
+      "nunca_sugerir": {
+        "es": "No imprimir el valor para comprobarlo (echo, set, env, printenv). No pegar el valor en ningun sitio.",
+        "en": "Do not print the value to check it (echo, set, env, printenv). Do not paste the value anywhere."
+      }
+    },
+    {
+      "id": "TH-5",
+      "nombre": { "es": "Archivo de contexto con instrucciones sospechosas", "en": "Context file with suspicious instructions" },
+      "sugerencia": {
+        "es": "Abre el archivo y borra las instrucciones que no escribiste tu. Si no sabes de donde vienen, no uses ese proyecto con el agente.",
+        "en": "Open the file and remove instructions you did not write. If you do not know where they came from, do not use that project with the agent."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach; el texto sospechoso no debe aparecer.",
+        "en": "Run AgentReach again; the suspicious text should no longer appear."
+      },
+      "nivel_maximo": "hipotesis",
+      "nunca_sugerir": {
+        "es": "No obedecer esas instrucciones. No enviar el archivo ni su contenido a nadie.",
+        "en": "Do not follow those instructions. Do not send the file or its contents to anyone."
+      }
+    },
+    {
+      "id": "TH-6",
+      "nombre": { "es": "Enlace que sale del proyecto", "en": "Link that leads out of the project" },
+      "sugerencia": {
+        "es": "Confirma que el enlace apunta a donde debe. Si no, borra solo el enlace, nunca la carpeta de destino.",
+        "en": "Confirm the link points where it should. If not, delete only the link, never the destination folder."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. El enlace debe desaparecer o mostrar el destino esperado.",
+        "en": "Run AgentReach again. The link should disappear or show the expected destination."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No seguir el enlace para mirar que hay al otro lado. No borrar la carpeta de destino.",
+        "en": "Do not follow the link to look at what is on the other side. Do not delete the destination folder."
+      }
+    },
+    {
+      "id": "TH-7",
+      "nombre": { "es": "Regla del agente demasiado permisiva", "en": "Agent rule that is too permissive" },
+      "sugerencia": {
+        "es": "Cambia las reglas amplias de lectura, edicion, comandos y web a \"pide confirmacion\". Una confirmacion no es una barrera: solo hace que el agente pregunte.",
+        "en": "Change broad read, edit, command and web rules to \"ask first\". A confirmation is not a barrier: it only makes the agent ask."
+      },
+      "reglas": ["R7", "R11", "R12"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach y revisa /permissions (Claude Code) o el archivo de configuracion (opencode). TH-7 debe bajar o desaparecer.",
+        "en": "Run AgentReach again and check /permissions (Claude Code) or the configuration file (opencode). TH-7 should go down or disappear."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No quitar todas las reglas de golpe sin probar. No crear reglas allow nuevas para 'arreglar' un bloqueo. No decir que pedir confirmacion aisla el equipo.",
+        "en": "Do not remove all rules at once without testing. Do not add new allow rules to fix a block. Do not say that asking for confirmation isolates the computer."
+      }
+    },
+    {
+      "id": "TH-8",
+      "nombre": { "es": "Capacidad de ejecutar programas (shell)", "en": "Ability to run programs (shell)" },
+      "sugerencia": {
+        "es": "Limita los comandos permitidos o exige confirmacion antes de ejecutar comandos. Un shell (la linea de comandos) da acceso a lo que tu usuario puede tocar.",
+        "en": "Restrict the allowed commands or require confirmation before running commands. A shell (the command line) reaches whatever your user account can touch."
+      },
+      "reglas": ["R6", "R11", "R12"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach y revisa las reglas de comandos en la configuracion de la plataforma.",
+        "en": "Run AgentReach again and review the command rules in the platform configuration."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No decir que una lista de comandos permitidos aisla el equipo. No dejar comodines amplios como seguros.",
+        "en": "Do not say that an allowed-command list isolates the computer. Do not treat broad wildcards as safe."
+      }
+    },
+    {
+      "id": "TH-9",
+      "nombre": { "es": "Script de despliegue", "en": "Deployment script" },
+      "sugerencia": {
+        "es": "Revisa a mano que hace el script. Haz que el agente pida confirmacion antes de lanzarlo.",
+        "en": "Review by hand what the script does. Make the agent ask before launching it."
+      },
+      "reglas": ["R6"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. Revisa en /permissions que la regla aparece.",
+        "en": "Run AgentReach again. Check in /permissions that the rule appears."
+      },
+      "nivel_maximo": "hipotesis",
+      "nunca_sugerir": {
+        "es": "No ejecutar el script para probarlo. No subir cambios a produccion por tu cuenta.",
+        "en": "Do not run the script to test it. Do not publish changes to production on your own."
+      }
+    },
+    {
+      "id": "TH-10",
+      "nombre": { "es": "Plataforma sin sandbox", "en": "Platform without a sandbox" },
+      "sugerencia": {
+        "es": "Ejecuta el agente en un entorno aislado, como una maquina virtual o un contenedor (una caja que aisla programas), si trabaja con carpetas importantes.",
+        "en": "Run the agent in an isolated environment, such as a virtual machine or a container (a box that isolates programs), if it works with important folders."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Revisa la version de tu plataforma (el reporte no la ve) y vuelve a ejecutar AgentReach.",
+        "en": "Check your platform version (the report does not see it) and run AgentReach again."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No decir que una regla equivale a un sandbox. No prometer que un entorno aislado es seguro sin revisarlo.",
+        "en": "Do not say that a rule equals a sandbox. Do not promise an isolated environment is safe without checking it."
+      }
+    },
+    {
+      "id": "TH-11",
+      "nombre": { "es": "Definicion de agente con herramientas", "en": "Agent definition with tools" },
+      "sugerencia": {
+        "es": "Revisa las herramientas del archivo del agente y deja solo las necesarias para la tarea.",
+        "en": "Review the tools in the agent's file and keep only those the task needs."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach tras editar la lista de herramientas.",
+        "en": "Run AgentReach again after editing the tool list."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No borrar el archivo del agente sin preguntar.",
+        "en": "Do not delete the agent file without asking."
+      }
+    },
+    {
+      "id": "TH-12",
+      "nombre": { "es": "Texto invisible en instrucciones", "en": "Invisible text in instructions" },
+      "sugerencia": {
+        "es": "Abre el archivo con un editor que muestre caracteres ocultos. Quita solo esos caracteres y lee el texto visible completo.",
+        "en": "Open the file in an editor that shows hidden characters. Remove only those characters and read the full visible text."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. TH-12 no debe aparecer.",
+        "en": "Run AgentReach again. TH-12 should not appear."
+      },
+      "nivel_maximo": "comprobado",
+      "nunca_sugerir": {
+        "es": "No pegar el texto oculto en un chat para 'traducirlo'. No borrar el archivo entero sin preguntar.",
+        "en": "Do not paste the hidden text into a chat to 'translate' it. Do not delete the whole file without asking."
+      }
+    },
+    {
+      "id": "TH-13",
+      "nombre": { "es": "Instrucciones fuera de un proyecto", "en": "Instructions outside a project" },
+      "sugerencia": {
+        "es": "Mueve el archivo a un proyecto que controles. Si ya no lo necesitas, borralo solo despues de confirmarlo.",
+        "en": "Move the file into a project you control. If you no longer need it, delete it only after confirming."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach sobre la carpeta donde estaba.",
+        "en": "Run AgentReach again on the folder where it was."
+      },
+      "nivel_maximo": "comprobado",
+      "nunca_sugerir": {
+        "es": "No leer el contenido para decidir. No abrir el agente en esa carpeta para comprobarlo.",
+        "en": "Do not read the contents to decide. Do not open the agent in that folder to test it."
+      }
+    },
+    {
+      "id": "TH-14",
+      "nombre": { "es": "Hook o servidor MCP que ejecuta un programa", "en": "Hook or MCP server that runs a program" },
+      "sugerencia": {
+        "es": "Revisa el comando del hook (comando que la herramienta lanza sola) o del servidor MCP (conexion con herramientas externas). Desactiva el que no reconozcas y no aceptes la confianza de la carpeta hasta revisarlo.",
+        "en": "Review the command of the hook (a command the tool launches by itself) or of the MCP server (a link to external tools). Disable any you do not recognize and do not accept folder trust until you have reviewed it."
+      },
+      "reglas": ["R8"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. La entrada de hook o MCP debe desaparecer si la quitaste.",
+        "en": "Run AgentReach again. The hook or MCP entry should disappear if you removed it."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No ejecutar el comando para probarlo. No borrar el archivo de configuracion del proyecto sin preguntar. No aceptar el aviso de confianza de una carpeta sin revisarla.",
+        "en": "Do not run the command to test it. Do not delete the project configuration file without asking. Do not accept the trust prompt for a folder without reviewing it."
+      }
+    },
+    {
+      "id": "TH-15",
+      "nombre": { "es": "Configuracion que salta los permisos", "en": "Configuration that skips permissions" },
+      "sugerencia": {
+        "es": "Quita la opcion que salta los permisos y deja que el agente pida confirmacion.",
+        "en": "Remove the option that skips permissions and let the agent ask for confirmation."
+      },
+      "reglas": ["R5"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. En /permissions debe verse el modo normal.",
+        "en": "Run AgentReach again. /permissions should show the normal mode."
+      },
+      "nivel_maximo": "potencial (en el proyecto); comprobado (en la configuracion del usuario)",
+      "nunca_sugerir": {
+        "es": "No usar el salto de permisos 'solo para probar'. No recomendar ese modo para trabajo normal.",
+        "en": "Do not use the permission skip 'just to test'. Do not recommend that mode for normal work."
+      }
+    },
+    {
+      "id": "TH-16",
+      "nombre": { "es": "Tarea que corre al abrir la carpeta", "en": "Task that runs when the folder opens" },
+      "sugerencia": {
+        "es": "Borra la tarea de tasks.json o pon la opcion de tareas automaticas en \"off\" en los ajustes de VS Code.",
+        "en": "Delete the task from tasks.json, or set the automatic tasks option to \"off\" in VS Code settings."
+      },
+      "reglas": ["R13"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach y abre la carpeta en VS Code para comprobar que no lanza tareas.",
+        "en": "Run AgentReach again and open the folder in VS Code to check that no task starts."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No ejecutar la tarea para ver que hace. No marcar la carpeta como confiable solo para quitar un aviso.",
+        "en": "Do not run the task to see what it does. Do not mark the folder as trusted just to remove a prompt."
+      }
+    },
+    {
+      "id": "TH-17",
+      "nombre": { "es": "Secreto de alto poder fuera de la tarea", "en": "High-power secret outside the task" },
+      "sugerencia": {
+        "es": "Saca el secreto del proyecto, crea uno nuevo en la plataforma, desactiva el anterior y limita sus permisos.",
+        "en": "Remove the secret from the project, create a new one on the platform, disable the old one and limit its permissions."
+      },
+      "reglas": ["R1", "R2"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. TH-17 debe desaparecer del archivo.",
+        "en": "Run AgentReach again. TH-17 should disappear from the file."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No pegar el token en ningun sitio. No usar el token para comprobar si funciona. No revocar otros tokens sin preguntar.",
+        "en": "Do not paste the token anywhere. Do not use the token to check whether it works. Do not revoke other tokens without asking."
+      }
+    },
+    {
+      "id": "TH-18",
+      "nombre": { "es": "Configuracion de git que ejecuta programas", "en": "Git configuration that runs programs" },
+      "sugerencia": {
+        "es": "Revisa esas claves con git config --local --list, anota las que no reconozcas y quitalas solo tras confirmarlo.",
+        "en": "Review those keys with git config --local --list, note the ones you do not recognize and remove them only after confirming."
+      },
+      "reglas": ["R14"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach. TH-18 debe bajar o desaparecer.",
+        "en": "Run AgentReach again. TH-18 should go down or disappear."
+      },
+      "nivel_maximo": "comprobado (en algunos casos); potencial (en el resto)",
+      "nunca_sugerir": {
+        "es": "No ejecutar git log, git show ni git status mientras revisas la configuracion: algunas claves lanzan programas al usarse. No copiar direcciones con clave que aparezcan en la lista.",
+        "en": "Do not run git log, git show or git status while reviewing the configuration: some keys launch programs when used. Do not copy any address containing a key that shows up in the list."
+      }
+    },
+    {
+      "id": "TH-19",
+      "nombre": { "es": "Remoto de git con clave o direccion sospechosa", "en": "Git remote with a key or a suspicious address" },
+      "sugerencia": {
+        "es": "Cambia la direccion del remoto para quitar la clave, y cambia esa clave por una nueva en el servicio. Despues usa un ayudante de credenciales.",
+        "en": "Change the remote address to remove the key, and replace that key with a new one on the service. Then use a credential helper."
+      },
+      "reglas": ["R15", "R16"],
+      "verificacion": {
+        "es": "Tras quitar la clave, vuelve a ejecutar AgentReach. Usa git remote -v solo despues del cambio, porque antes muestra la clave.",
+        "en": "After removing the key, run AgentReach again. Use git remote -v only after the change, because before it shows the key."
+      },
+      "nivel_maximo": "comprobado (si la clave es literal); potencial (si es un token reconocido por prefijo o un valor de relleno)",
+      "nunca_sugerir": {
+        "es": "No copiar la direccion con la clave a un chat o a un issue. No cambiar la direccion sin confirmar antes con la persona.",
+        "en": "Do not copy the address with the key into a chat or issue. Do not change the address without confirming with the person first."
+      }
+    },
+    {
+      "id": "TH-20",
+      "nombre": { "es": "Configuracion de git que no se pudo leer", "en": "Git configuration that could not be read" },
+      "sugerencia": {
+        "es": "Revisa el archivo .git/config a mano y busca lineas raras, cortadas o repetidas.",
+        "en": "Review the .git/config file by hand and look for odd, cut or repeated lines."
+      },
+      "reglas": [],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach tras corregir el archivo a mano.",
+        "en": "Run AgentReach again after fixing the file by hand."
+      },
+      "nivel_maximo": "hipotesis",
+      "nunca_sugerir": {
+        "es": "No ejecutar git para 'arreglarlo'. No borrar el archivo sin preguntar.",
+        "en": "Do not run git to 'fix' it. Do not delete the file without asking."
+      }
+    },
+    {
+      "id": "TH-21",
+      "nombre": { "es": "Memoria persistente de agentes instalada", "en": "Persistent agent memory installed" },
+      "sugerencia": {
+        "es": "Este equipo guarda memoria de conversaciones en esta ruta; un agente con acceso de lectura a tu carpeta podria leerla. Si no la quieres, quita su entrada de configuracion. Si la usas, no hay nada que arreglar.",
+        "en": "This computer keeps conversation memory at this path; an agent with read access to your folder could read it. If you do not want it, remove its configuration entry. If you use it, there is nothing to fix."
+      },
+      "reglas": ["R4"],
+      "verificacion": {
+        "es": "Si quitaste la entrada, vuelve a ejecutar AgentReach y comprueba que la senal ya no aparece.",
+        "en": "If you removed the entry, run AgentReach again and check that the signal no longer appears."
+      },
+      "nivel_maximo": "comprobado (la entrada existe); potencial (su alcance)",
+      "nunca_sugerir": {
+        "es": "No abrir, copiar ni borrar la base de datos de memoria sin preguntar. No calificar la memoria como mala o insegura.",
+        "en": "Do not open, copy or delete the memory database without asking. Do not describe the memory as bad or unsafe."
+      }
+    },
+    {
+      "id": "TH-22",
+      "nombre": { "es": "Almacen local de conversaciones o memoria de agentes", "en": "Local store of agent conversations or memory" },
+      "sugerencia": {
+        "es": "Revisa si quieres que el agente pueda leer ese historial. Si no, pon una regla de lectura denegada en tu configuracion de usuario, usando la ruta que hayas confirmado.",
+        "en": "Check whether you want the agent to be able to read that history. If not, add a read deny rule in your user settings, using the path you have confirmed."
+      },
+      "reglas": ["R4"],
+      "verificacion": {
+        "es": "Vuelve a ejecutar AgentReach y revisa /permissions.",
+        "en": "Run AgentReach again and check /permissions."
+      },
+      "nivel_maximo": "potencial",
+      "nunca_sugerir": {
+        "es": "No inventar la ruta del almacen. No leer el contenido del historial. No borrar historial sin preguntar.",
+        "en": "Do not invent the store's path. Do not read the history contents. Do not delete history without asking."
+      }
+    }
+  ]
+}

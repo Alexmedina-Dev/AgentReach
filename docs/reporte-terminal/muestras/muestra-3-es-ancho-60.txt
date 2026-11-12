@@ -1,0 +1,222 @@
+AGENTREACH  Reporte de revisión
+===============================
+Carpeta revisada:
+  C:\dev\proyecto-prueba-agentreach\proyecto
+Fecha: 2026-11-09 16:40
+Solo lectura: AgentReach no cambió nada ni ejecutó ningún
+programa.
+
+(i) No se muestran valores de secretos. AgentReach nunca
+    copia contraseñas, tokens ni claves: solo dice dónde
+    están y de qué tipo son.
+
+RESUMEN  (41 archivos mirados)
+  [!!] COMPROBADO          2
+      exposición confirmada; se atiende primero
+  [!] POTENCIAL            6
+      probable, falta confirmar algo; revisar pronto
+  [?] HIPÓTESIS            1
+      sugerencias, no accesos comprobados
+  [-] NO SE PUDO REVISAR   7
+      huecos de cobertura, no un veredicto
+
+[!!] COMPROBADO (2)
+Exposición confirmada. Se atiende primero.
+
+.env.local
+  [!!] línea 2 · Credencial en un archivo (servicio de
+    inteligencia artificial)
+    Nivel y por qué: comprobado. Existe, el sistema
+      operativo permite leerlo y ninguna regla del agente
+      lo impide.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      sin regla · Ajeno a la tarea: no determinado
+    -> Qué hacer: Saque la credencial del proyecto o
+      guárdela en un gestor de secretos, y rote la clave si
+      estuvo expuesta.
+    Qué significa: Un archivo del proyecto guarda una
+      credencial (una clave o contraseña que da acceso a un
+      servicio). Un agente que pueda leer el proyecto
+      podría leerla.
+
+.env.staging
+  [!!] línea 3 · Credencial en un archivo (servicio de
+    pagos)
+    Nivel y por qué: comprobado. Existe, el sistema
+      operativo permite leerlo y ninguna regla del agente
+      lo impide.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      sin regla · Ajeno a la tarea: no determinado
+    -> Qué hacer: Saque la credencial del proyecto o
+      guárdela en un gestor de secretos, y rote la clave si
+      estuvo expuesta.
+    Qué significa: Un archivo del proyecto guarda una
+      credencial (una clave o contraseña que da acceso a un
+      servicio). Un agente que pueda leer el proyecto
+      podría leerla.
+
+[!] POTENCIAL (6)
+Probable, pero falta confirmar algo. Revisar pronto:
+potencial no quiere decir riesgo menor. El motivo está en
+cada hallazgo.
+
+.env
+  [!] línea 2 · Credencial en un archivo (servicio de
+    inteligencia artificial)
+    Nivel y por qué: potencial. Protegido por política del
+      agente, no por barrera del sistema operativo.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      lo bloquea (solo por regla) · Ajeno a la tarea: no
+    -> Qué hacer: Saque la credencial del proyecto o
+      guárdela en un gestor de secretos, y rote la clave si
+      estuvo expuesta.
+    Qué significa: Un archivo del proyecto guarda una
+      credencial (una clave o contraseña que da acceso a un
+      servicio). Un agente que pueda leer el proyecto
+      podría leerla.
+
+  [!] línea 3 · Credencial en un archivo (servicio de
+    pagos)
+    Nivel y por qué: potencial. Protegido por política del
+      agente, no por barrera del sistema operativo.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      lo bloquea (solo por regla) · Ajeno a la tarea: no
+    Qué hacer / qué significa: igual que el hallazgo de la
+      línea 2 de este archivo
+
+  [!] línea 5 · Credencial en un archivo (plataforma de
+    despliegue)
+    Nivel y por qué: potencial. Protegido por política del
+      agente, no por barrera del sistema operativo.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      lo bloquea (solo por regla) · Ajeno a la tarea: no
+    Qué hacer / qué significa: igual que el hallazgo de la
+      línea 2 de este archivo
+
+.env.production
+  [!] línea no determinada · Credencial en un archivo
+    (proveedor desconocido)
+    Nivel y por qué: potencial. Existe y hoy el agente no
+      puede leerlo con los permisos verificados.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      sin regla · Ajeno a la tarea: no determinado
+    -> Qué hacer: Saque la credencial del proyecto o
+      guárdela en un gestor de secretos, y rote la clave si
+      estuvo expuesta.
+    Qué significa: Un archivo del proyecto guarda una
+      credencial (una clave o contraseña que da acceso a un
+      servicio). Un agente que pueda leer el proyecto
+      podría leerla.
+
+enlace-externo
+  [!] línea no determinada · Enlace que sale de la carpeta
+    Nivel y por qué: potencial. No determinado.
+    Plataforma y agente: no determinada · Reglas del
+      agente: no determinadas · Ajeno a la tarea: no
+      determinado
+    -> Qué hacer: Confirme que el destino es intencional o
+      elimine el enlace.
+    Qué significa: Un enlace (junction: enlace de carpeta
+      de Windows) parece estar en el proyecto pero lleva a
+      otro lugar del equipo. No se entró en él.
+
+src/estilos/notas-tipografia.txt
+  [!] línea 3 · Secreto de plataforma o de despliegue
+    (plataforma de despliegue)
+    Nivel y por qué: potencial. Sin fuente verificada.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      sin regla · Ajeno a la tarea: sí
+    -> Qué hacer: Retírelo del proyecto, rótelo y limite su
+      alcance en la plataforma.
+    Qué significa: Hay un secreto de plataforma o de
+      despliegue, reconocido por su nombre, en un archivo
+      sin relación con la tarea. Lo que ese secreto permite
+      hacer no se ve.
+
+[?] HIPÓTESIS (1)
+Sugerencias, no accesos comprobados.
+
+AGENTS.md
+  [?] línea 7 · Archivo de instrucciones con texto
+    sospechoso
+    Nivel y por qué: hipótesis. Indicio débil o indirecto.
+    Plataforma y agente: Claude Code · Reglas del agente:
+      sin regla · Ajeno a la tarea: no determinado
+    -> Qué hacer: Revise ese archivo a mano y elimine las
+      instrucciones que no escribió usted.
+    Qué significa: Un archivo de contexto (instrucciones
+      que el agente lee, como CLAUDE.md o AGENTS.md)
+      contiene un texto que parece pedir saltarse reglas o
+      sacar datos.
+
+[-] QUÉ NO PUDO REVISAR AGENTREACH
+----------------------------------------
+A. En esta carpeta
+Cada entrada dice qué pasó y cómo resolverlo. Que algo no
+se pudiera revisar no significa que esté bien. (~ es su
+carpeta personal)
+
+[-] Ubicación sensible sin activar (3)
+    ~\.ssh
+    ~\.aws
+    ~\.npmrc
+    Cómo resolverlo: Si quiere que AgentReach mire solo el
+      nombre, el tamaño y los permisos (nunca el contenido)
+      de estas carpetas, ejecute de nuevo con
+      --incluir-ubicaciones-sensibles.
+
+[-] No se pudo abrir el archivo (1)
+    docs/nota\u202etxt.exe
+    Cómo resolverlo: Compruebe que el archivo existe y que
+      su usuario tiene permiso de lectura; luego ejecute de
+      nuevo.
+
+[-] Archivo demasiado grande (más de 5 MB) (1)
+    datos/exportacion-grande.bin
+    Cómo resolverlo: Por seguridad AgentReach no abre
+      archivos tan grandes. Si puede guardar secretos,
+      revíselo a mano.
+
+[-] Texto en una codificación que no se pudo leer (1)
+    notas/viejo-latin1.txt
+    Cómo resolverlo: Guárdelo como UTF-8 (un formato de
+      texto estándar) y ejecute de nuevo.
+
+[-] Historial de git (llega en una fase futura) (1)
+    .git
+    Cómo resolverlo: Esta versión no ejecuta git. Si le
+      preocupa el historial, revíselo con una herramienta
+      aparte.
+
+Algunos nombres traían caracteres invisibles o de control;
+se muestran escritos como \uXXXX.
+
+B. Límites de la herramienta (salen siempre, en todo
+reporte)
+Ver una condición en un archivo no es ver el ataque.
+AgentReach no puede ver:
+  1. La versión del agente. Algunos ataques dependen de que
+     el agente tenga un defecto de cierta versión;
+     AgentReach no la conoce.
+  2. Si el modelo de inteligencia artificial obedecería. Un
+     archivo con una orden escondida es una condición; que
+     el modelo la siga depende del modelo.
+  3. Instrucciones maliciosas escritas en lenguaje normal,
+     sin trucos de formato. Solo se marcan frases muy
+     simples, como máximo como hipótesis.
+  4. Las descripciones de las herramientas MCP (la conexión
+     del agente con herramientas externas). Solo aparecen
+     al ejecutar el servidor, y AgentReach no ejecuta nada.
+  5. Paquetes inventados por el modelo. Saber si un paquete
+     existe exige consultar internet, y AgentReach no sale
+     a la red.
+  6. El poder real de un token. Se ve que existe y de qué
+     tipo, no qué podría hacer con él en el servicio.
+Tampoco se revisan en esta versión: el historial de commits
+de git, los cambios de una configuración después de
+aprobada y los procesos y puertos en ejecución.
+
+Código de salida: 1 (hay hallazgos comprobados)
+Para ver el código del catálogo, la regla exacta y el
+motivo técnico de cada hallazgo, ejecute de nuevo con
+--detalle.

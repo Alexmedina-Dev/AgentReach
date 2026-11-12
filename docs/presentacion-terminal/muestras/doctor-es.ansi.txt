@@ -1,0 +1,18 @@
+[38;2;234;244;242mAGENT[0m [38;2;61;245;208mREACH[0m  doctor  [38;2;124;146;142mv0.1.0[0m
+[38;2;169;189;185mKnow what your agents can reach.[0m
+
+[38;2;169;189;185mComprobación de solo lectura de este equipo. No analiza ninguna carpeta.[0m
+
+  [38;2;61;245;208m√[0m Python                    3.12.4 (se necesita 3.12 o más)
+  [38;2;61;245;208m√[0m Permisos de lectura       puede leer la carpeta actual
+  [38;2;61;245;208m√[0m Codificación de consola   utf-8
+  [38;2;61;245;208m√[0m Color                     24 bits (Windows Terminal)
+  [38;2;61;245;208m√[0m Unicode                   puede escribir ■ ▲ ◊ ○ √ →
+  [38;2;61;245;208m√[0m Idioma                    español (es-CO)
+  [38;2;255;178;36m▲[0m Ancho de la terminal      58 columnas (se usarán 60 como mínimo)
+      [38;2;124;146;142mAgrande la ventana para que las líneas no se partan.[0m
+
+[38;2;61;245;208m√[0m 6 comprobaciones correctas, [38;2;255;178;36m▲[0m 1 aviso, 0 fallos.
+
+[38;2;169;189;185mAgentReach no modifica nada ni ejecuta ningún programa.[0m
+[38;2;124;146;142mCódigo de salida: 0 (sin fallos). Con fallos sería 1.[0m

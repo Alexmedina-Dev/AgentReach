@@ -1,0 +1,24 @@
+PS C:\Users\ejemplo\proyectos> agentreach mi-app
+
+[38;2;234;244;242mAGENT[0m [38;2;61;245;208mREACH[0m [38;2;124;146;142mv0.1.0[0m · [38;2;169;189;185mKnow what your agents can reach.[0m
+[38;2;124;146;142mSolo lectura: no cambió nada ni ejecutó ningún programa.[0m
+
+Carpeta: C:\Users\ejemplo\proyectos\mi-app
+Idioma: español · Color: 24 bits
+
+[38;2;169;189;185mMirando archivos... 41 revisados · 7 hallazgos hasta ahora[0m
+[38;2;124;146;142m  (una sola línea que se reescribe; sin porcentaje)[0m
+
+[38;2;169;189;185mMirando archivos... 41 revisados · 7 hallazgos[0m  [38;2;61;245;208m√ listo en 1,8 s[0m
+
+[38;2;61;245;208mRESUMEN[0m
+  41 archivos mirados
+  [38;2;255;107;107m■[0m [38;2;255;107;107mCOMPROBADO[0m        2   [38;2;124;146;142mse puede leer y ninguna regla lo impide[0m
+  [38;2;255;178;36m▲[0m [38;2;255;178;36mPOTENCIAL[0m         3   [38;2;124;146;142mpuede pasar si el agente ejecuta algo[0m
+  [38;2;169;189;185m◊[0m [38;2;169;189;185mHIPÓTESIS[0m         2   [38;2;124;146;142msugerencias, no accesos comprobados[0m
+  [38;2;169;189;185m○[0m [38;2;169;189;185mNO SE PUDO REVISAR[0m 1  [38;2;124;146;142mver la sección final[0m
+
+[38;2;124;146;142m... aquí sigue el reporte completo (ver docs/reporte-terminal) ...[0m
+
+[38;2;61;245;208m→[0m Para ver el detalle de cada hallazgo: agentreach mi-app --detalle
+[38;2;124;146;142mCódigo de salida: 1 (hay hallazgos comprobados).[0m

@@ -1,0 +1,518 @@
+{
+ "file": "C:\\Users\\<usuario>\\AppData\\Local\\Temp\\claude\\c237366b8a8ea80b\\c4ef19e9-3ef1-4d8c-b902-e588f60a4358\\scratchpad\\rh\\t_small.html",
+ "contrast_plantilla-small-desktop-dark-es": {
+  "n": 316,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 4.68
+ },
+ "contrast_end_plantilla-small-desktop-dark-es": {
+  "n": 316,
+  "fail": 0,
+  "worst": []
+ },
+ "log_plantilla-small-desktop-dark-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_plantilla-small-desktop-light-es": {
+  "n": 316,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 6.06
+ },
+ "contrast_end_plantilla-small-desktop-light-es": {
+  "n": 316,
+  "fail": 0,
+  "worst": []
+ },
+ "log_plantilla-small-desktop-light-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_plantilla-small-mobile-dark-es": {
+  "n": 329,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 5.26
+ },
+ "contrast_end_plantilla-small-mobile-dark-es": {
+  "n": 329,
+  "fail": 0,
+  "worst": []
+ },
+ "log_plantilla-small-mobile-dark-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "contrast_plantilla-small-mobile-light-es": {
+  "n": 329,
+  "fail": 0,
+  "worst": [],
+  "min_ratio": 6.1
+ },
+ "contrast_end_plantilla-small-mobile-light-es": {
+  "n": 329,
+  "fail": 0,
+  "worst": []
+ },
+ "log_plantilla-small-mobile-light-es": {
+  "console": [],
+  "req": [],
+  "fail": []
+ },
+ "overflow": {
+  "320-dark": {
+   "sw": 320,
+   "W": 320,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "320-light": {
+   "sw": 320,
+   "W": 320,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "360-dark": {
+   "sw": 360,
+   "W": 360,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "360-light": {
+   "sw": 360,
+   "W": 360,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "390-dark": {
+   "sw": 390,
+   "W": 390,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "390-light": {
+   "sw": 390,
+   "W": 390,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "768-dark": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "768-light": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-dark": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-light": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-dark": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-light": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-dark": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-light": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  }
+ },
+ "tab_sequence": [
+  {
+   "tag": "a",
+   "id": "",
+   "label": "Skip to findings",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 151,
+   "h": 45
+  },
+  {
+   "tag": "button",
+   "id": "b-en",
+   "label": "EN",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 56,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-es",
+   "label": "ES",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 52,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-theme",
+   "label": "Switch to light theme",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 101,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Claude Code (5)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 151,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "opencode (3)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 132,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Not tied to a specific agent (2)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 257,
+   "h": 44
+  },
+  {
+   "tag": "summary",
+   "id": "",
+   "label": "Rules this agent declares (context, not ",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 640,
+   "h": 32
+  },
+  {
+   "tag": "a",
+   "id": "",
+   "label": "7 itemsCould not checkCoverage gaps, not",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 294,
+   "h": 234
+  },
+  {
+   "tag": "input",
+   "id": "q",
+   "label": "",
+   "outline": "none 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 281,
+   "h": 43
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "All levels",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 110,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Verified 2",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 122,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Potential 0",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 130,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Hypothesis 3",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 144,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Cards",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 96,
+   "h": 40
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Table",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 94,
+   "h": 40
+  },
+  {
+   "tag": "button",
+   "id": "b-print",
+   "label": "Print",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 77,
+   "h": 36
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Copy path and line: docs/very-long-folde",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 78,
+   "h": 36
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Copy path and line: src/pkg1/pkg5/pkg1/f",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 78,
+   "h": 36
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Copy path and line: src/pkg2/pkg1/file3.",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 78,
+   "h": 36
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Copy path and line: src/pkg6/pkg9/file4.",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 78,
+   "h": 36
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Copy path and line: src/pkg7/pkg3/file1.",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 78,
+   "h": 36
+  },
+  null,
+  {
+   "tag": "a",
+   "id": "",
+   "label": "Skip to findings",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 151,
+   "h": 45
+  },
+  {
+   "tag": "button",
+   "id": "b-en",
+   "label": "EN",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 56,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-es",
+   "label": "ES",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 52,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "b-theme",
+   "label": "Switch to light theme",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": null,
+   "w": 101,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Claude Code (5)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "true",
+   "w": 151,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "opencode (3)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 132,
+   "h": 44
+  },
+  {
+   "tag": "button",
+   "id": "",
+   "label": "Not tied to a specific agent (2)",
+   "outline": "solid 3px",
+   "visible": true,
+   "pressed": "false",
+   "w": 257,
+   "h": 44
+  }
+ ],
+ "aria_snapshot_head": "- link \"Skip to findings\":\n  - /url: \"#findings\"\n- status\n- banner:\n  - text: AGENTREACH\n  - group \"Language\":\n    - button \"EN\" [pressed]\n    - button \"ES\"\n  - button \"Switch to light theme\": Light\n  - paragraph: AgentReach 0.1.0\n  - heading \"Access report\" [level=1]\n  - text: \"Folder reviewed: ~/demo-app (fictional) 412 files looked at Generated: 2026-11-10 09:30\"\n  - note:\n    - paragraph:\n      - strong: No secret values are shown.\n      - text: \"AgentReach never copies passwords, tokens or keys: it only says where they are and what type they are.\"\n  - text: Agent\n  - group \"Agent\":\n    - button \"Claude Code (5)\" [pressed]\n    - button \"opencode (3)\"\n    - button \"Not tied to a specific agent (2)\"\n  - paragraph:\n    - text: Levels are counted per agent and never mixed between agents.\n    - group: Rules this agent declares (context, not findings) (2)\n  - heading \"Summary by level for Claude Code\" [level=2]\n  - list:\n    - listitem:\n      - 'group \"Verified: 2 findings\"':\n        - paragraph: 2 findings\n        - paragraph: Verified\n        - paragraph: \"Confirmed: the agent can reach it today.\"\n    - listitem:\n      - 'group \"Potential: 0 findings\"':\n        - paragraph: 0 findings\n        - paragraph: Potential\n        - paragraph: Likely reachable, but something is left to confirm.\n    - listitem:\n      - 'group \"Hypothesis: 3 findings\"':\n        - paragraph: 3 findings\n        - paragraph: Hypothesis\n        - paragraph: A suggestion only. Not a verified access.\n    - listitem:\n      - link \"7 items Could not check Coverage gaps, not a verdict. See below\":\n        - /url: \"#cnc\"\n        - paragraph: 7 items\n        - paragraph: Could not check\n        - paragraph: Coverage gaps, not a verdict.\n        - text: See below\n- main:\n  - region \"Findings\":\n    - heading \"Findings\" [level=2]\n    - search:\n      - text: Search findings\n      - textbox \"Search findings\":\n        - /placeholder: Search text…\n      - group \"Filter by level\":\n        - button \"All levels\" [pressed]\n        - button \"Verified 2\"\n        - button \"Potential 0\"\n        - button \"Hypothesis 3\"\n      - group \"View\":\n        - button \"Cards\" [pressed]\n        - button \"Table\"\n      - button \"Print\"\n      - status: Showing 5 of 5 findings\n    - list:\n      - listitem:\n        - 'article \"Verified: Git address with a credential, or suspicious — docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example\"':\n          - term: Location and line\n          - definition:\n            - code: docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example\n            - text: line not determined\n            - 'button \"Copy path and line: docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example\"': Copy\n          - term: What it is, and whose it is\n          - definition:\n            - paragraph: Git address with a credential, or suspicious\n            - paragraph: deployment platform\n          - term: Level, and why\n          - definition:\n            - text: Verified\n            - paragraph: The agent must ask for confirmation before reading it\n          - term: Unrelated to the task\n          - definition: not determined\n          - term: Platform and agent\n          - definition: Claude Code\n          - term: Agent rules\n          - definition:\n            - text: blocks it (rule only)\n            - paragraph:\n              - text: rule in\n              - code: config/rules.example:36\n          - term: What to do\n          - definition:\n            - paragraph: Remove the credential from the address, rotate it (replace it with a new one and disable the old one) and use a credential helper.\n          - term: What it means\n          - definition:\n            - paragraph: A git remote or submodule (the address changes are downloaded from or uploaded to) carries a credential inside the address, or a suspicious address.\n      - listitem:\n        - 'article \"Verified: Credential in a file — src/pkg1/pkg5/pkg1/file2.example:610\"':\n          - term: Location and line\n          - definition:\n            - code: src/pkg1/pkg5/pkg1/file2.example\n            - text: line 610\n            - 'button \"Copy path and line: src/pkg1/pkg5/pkg1/file2.example:610\"': Copy\n          - term: What it is, and whose it is\n          - definition:\n            - paragraph: Credential in a file\n            - paragraph: remote server access\n          - term: Level, and why\n          - definition:\n            - text: Verified\n            - paragraph: Weak or indirect hint\n          - term: Unrelated to the task\n          - definition: \"yes\"\n          - term: Platform and agent\n          - definition: Claude Code · reviewer\n          - term: Agent rules\n          - definition:\n            - text: blocks it (rule only)\n            - paragraph:\n              - text: rule in\n              - code: config/rules.example:31\n          - term: What to do\n          - definition:\n            - paragraph: Move the credential out of the project or into a secrets manager (a program that stores keys encrypted), and rotate it (replace it with a new one and disable the old one) if it was exposed.\n          - term: What it means\n          - definition:\n            - paragraph: A project file stores a credential (a key or password that grants access to a service). An agent that can read the project could read it.\n      - listitem:\n        - 'article \"Hypothesis: Git address with a credential, or suspicious — src/pkg2/pkg1/file3.example:223\"':\n          - term: Location and line\n          - definition:\n            - code: src/pkg2/pkg1/file3.example\n            - text: line 223\n  ",
+ "small_targets": [
+  {
+   "t": "SUMMARY#.",
+   "w": 640,
+   "h": 32
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  },
+  {
+   "t": "INPUT#q.",
+   "w": 281,
+   "h": 43
+  },
+  {
+   "t": "BUTTON#.btn",
+   "w": 96,
+   "h": 40
+  },
+  {
+   "t": "BUTTON#.btn",
+   "w": 94,
+   "h": 40
+  },
+  {
+   "t": "BUTTON#b-print.mini",
+   "w": 77,
+   "h": 36
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  },
+  {
+   "t": "BUTTON#.mini",
+   "w": 78,
+   "h": 36
+  }
+ ]
+}

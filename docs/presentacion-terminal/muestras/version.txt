@@ -1,0 +1,3 @@
+AGENT REACH 0.1.0
+Python 3.12.4 en win32 (ejemplo)
+Solo lectura: no modifica nada ni ejecuta ningún programa.

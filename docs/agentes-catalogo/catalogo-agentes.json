@@ -1,0 +1,2699 @@
+[
+  {
+    "id": "claude-code",
+    "nombre": "Claude Code",
+    "fabricante": "Anthropic",
+    "proyecto": [
+      {
+        "ruta": "CLAUDE.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/CLAUDE.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "CLAUDE.local.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/settings.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/settings.local.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/rules/*.md",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".mcp.json",
+        "tipo": "mcp",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/agents/*.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/skills/<nombre>/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/commands/*.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/output-styles/*.md",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/workflows/*.js",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/agent-memory/<nombre>/",
+        "tipo": "datos",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".worktreeinclude",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.claude\\",
+          "tipo": "carpeta de configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\CLAUDE.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\agents\\*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\skills\\<nombre>\\SKILL.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\commands\\*.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\rules\\*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude.json",
+          "tipo": "estado y MCP personales",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\plugins\\",
+          "tipo": "plugins",
+          "verificada": true
+        },
+        {
+          "ruta": "(ruta de sistema de managed-settings.json: no verificada en esta consulta)",
+          "tipo": "gestionada",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.claude/",
+          "tipo": "carpeta de configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/CLAUDE.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/skills/<nombre>/SKILL.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/commands/*.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/rules/*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude.json",
+          "tipo": "estado y MCP personales",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/plugins/",
+          "tipo": "plugins",
+          "verificada": true
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "gestionada",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.claude/",
+          "tipo": "carpeta de configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/CLAUDE.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/skills/<nombre>/SKILL.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/commands/*.md",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/rules/*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude.json",
+          "tipo": "estado y MCP personales",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/plugins/",
+          "tipo": "plugins",
+          "verificada": true
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "gestionada",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [
+      "CLAUDE_CONFIG_DIR",
+      "CLAUDE_CODE_TMPDIR",
+      "CLAUDE_CODE_SKIP_PROMPT_HISTORY",
+      "ANTHROPIC_MODEL",
+      "ANTHROPIC_DEFAULT_MODEL"
+    ],
+    "datos_historial": [
+      "~/.claude/projects/",
+      "~/.claude/history.jsonl",
+      "~/.claude/file-history/",
+      "~/.claude/plans/"
+    ],
+    "firma_fuerte": "Cualquiera de: CLAUDE.md, .claude/settings.json, .claude/settings.local.json, .claude/agents/*.md, .claude/skills/*/SKILL.md, .claude/commands/*.md, .claude/rules/*.md (proyecto) o ~/.claude/settings.json, ~/.claude/agents/ (usuario).",
+    "firma_debil": "AGENTS.md; .mcp.json; ~/.claude.json sin nada mas.",
+    "falsos_positivos": [
+      "AGENTS.md solo: lo usan muchos agentes.",
+      ".mcp.json solo: otros agentes (Cursor, Copilot, Kiro...) tambien lo leen.",
+      "~/.claude.json puede quedar tras desinstalar.",
+      "Una carpeta .claude/ vacia no prueba configuracion."
+    ],
+    "fuentes": [
+      {
+        "url": "https://code.claude.com/docs/en/claude-directory.md",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://code.claude.com/docs/en/settings.md",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://code.claude.com/docs/en/sub-agents.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Rutas de managed-settings.json por sistema operativo (la pagina remite a otra); semantica de '.agent.md' como subagente (el doc solo dice .md)."
+    ],
+    "notas": "Datos (solo existencia): ~/.claude/projects/, ~/.claude/history.jsonl, ~/.claude/file-history/. En Windows ~ es %USERPROFILE%. Si CLAUDE_CONFIG_DIR esta definida, todo ~/.claude vive alli."
+  },
+  {
+    "id": "opencode",
+    "nombre": "opencode",
+    "fabricante": "SST / Anomaly (codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": "opencode.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "opencode.jsonc",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".opencode/opencode.json(c)",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".opencode/agents/*.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".opencode/skills/<nombre>/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".opencode/commands/*.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".opencode/plugins/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.config\\opencode\\opencode.json (no documentado por la fuente; visto en la maquina de Alex y en el PRD FR-15)",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.config\\opencode\\agents\\*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.config\\opencode\\skills\\",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "%ProgramData%\\opencode\\",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.config/opencode/opencode.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/opencode/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/opencode/skills/",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "/etc/opencode/",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.config/opencode/opencode.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/opencode/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/opencode/skills/",
+          "tipo": "habilidad",
+          "verificada": true
+        },
+        {
+          "ruta": "/Library/Application Support/opencode/",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "OPENCODE_MODEL"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "opencode.json, opencode.jsonc, .opencode/opencode.json(c) o .opencode/agents/ en el proyecto; ~/.config/opencode/ en el usuario.",
+    "firma_debil": "AGENTS.md; carpeta .opencode/ vacia.",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "Un opencode.json de otra herramienta (nombre generico)."
+    ],
+    "fuentes": [
+      {
+        "url": "https://opencode.ai/docs/config/",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://opencode.ai/docs/agents/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Ruta global en Windows (la doc no la da; el PRD usa %USERPROFILE%\\.config\\opencode); ubicacion de datos e historial; commands/ y plugins/ a nivel proyecto; variable de la carpeta de configuracion."
+    ],
+    "notas": "Adaptador existente cubre 1.x y 2.x. Los agentes viven en 'agents' (plural)."
+  },
+  {
+    "id": "gemini-cli",
+    "nombre": "Gemini CLI",
+    "fabricante": "Google",
+    "proyecto": [
+      {
+        "ruta": "GEMINI.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".gemini/settings.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".gemini/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".gemini/.env",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".gemini/skills/<nombre>/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".gemini/extensions/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "C:\\ProgramData\\gemini-cli\\settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.gemini/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "/etc/gemini-cli/settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.gemini/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "/Library/Application Support/GeminiCli/settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "GEMINI_API_KEY",
+      "GOOGLE_API_KEY",
+      "GOOGLE_APPLICATION_CREDENTIALS",
+      "GEMINI_MODEL",
+      "GOOGLE_CLOUD_PROJECT",
+      "GOOGLE_CLOUD_LOCATION",
+      "GEMINI_CLI_HOME",
+      "GEMINI_CLI_SYSTEM_SETTINGS_PATH",
+      "GEMINI_CLI_SYSTEM_DEFAULTS_PATH",
+      "GEMINI_CLI_TRUSTED_FOLDERS_PATH",
+      "GEMINI_CLI_TRUST_WORKSPACE",
+      "GEMINI_SANDBOX",
+      "GEMINI_SYSTEM_MD"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": ".gemini/settings.json (proyecto) o ~/.gemini/settings.json (usuario); GEMINI_CLI_HOME definida.",
+    "firma_debil": "GEMINI.md solo; ~/.gemini/ solo; GEMINI_API_KEY (la usa cualquier cliente de Gemini).",
+    "falsos_positivos": [
+      "~/.gemini/ lo comparten Antigravity y gentle-ai: la carpeta sola no prueba Gemini CLI.",
+      "GEMINI.md lo leen tambien Copilot, Antigravity y otros.",
+      "GOOGLE_API_KEY y GOOGLE_CLOUD_PROJECT son genericas de Google."
+    ],
+    "fuentes": [
+      {
+        "url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/reference/configuration.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Ruta de historial/sesiones; carpeta de skills y extensiones a nivel proyecto."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "codex-cli",
+    "nombre": "OpenAI Codex CLI",
+    "fabricante": "OpenAI",
+    "proyecto": [
+      {
+        "ruta": ".codex/config.toml",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.override.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": false
+      },
+      {
+        "ruta": ".codex/",
+        "tipo": "carpeta",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".agents/skills/<nombre>/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.codex\\config.toml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.codex\\",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.codex\\AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.codex\\prompts\\",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "(no documentado)",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.codex/config.toml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codex/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codex/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.codex/prompts/",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "/etc/codex/config.toml",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.codex/config.toml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codex/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codex/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.codex/prompts/",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "/etc/codex/config.toml (la doc solo dice 'Unix'; macOS no confirmado)",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "CODEX_HOME"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": ".codex/config.toml (proyecto) o ~/.codex/config.toml (usuario).",
+    "firma_debil": "AGENTS.md; carpeta .codex/ sin config.toml.",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "CODEX_HOME: nombre no confirmado en esta consulta."
+    ],
+    "fuentes": [
+      {
+        "url": "https://learn.chatgpt.com/docs/config-file/config-basic",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "CODEX_HOME, AGENTS.override.md, skills, prompts, ruta en Windows, historial (todo 'no cubierto' por la pagina consultada)."
+    ],
+    "notas": "El config de proyecto solo se carga si el proyecto es de confianza."
+  },
+  {
+    "id": "copilot-vscode",
+    "nombre": "GitHub Copilot (VS Code)",
+    "fabricante": "GitHub / Microsoft",
+    "proyecto": [
+      {
+        "ruta": ".github/copilot-instructions.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".github/instructions/*.instructions.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".github/agents/*.agent.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".github/prompts/*.prompt.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".vscode/mcp.json",
+        "tipo": "mcp",
+        "fuerza": "debil",
+        "verificada": false
+      },
+      {
+        "ruta": ".vscode/",
+        "tipo": "carpeta",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "CLAUDE.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "GEMINI.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%APPDATA%\\Code\\User\\ (no verificado)",
+          "tipo": "subagente",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.config/Code/User/ (no verificado)",
+          "tipo": "subagente",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/Library/Application Support/Code/User/ (no verificado)",
+          "tipo": "subagente",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".github/copilot-instructions.md, .github/instructions/*.instructions.md o .github/agents/*.agent.md.",
+    "firma_debil": ".vscode/ ; AGENTS.md ; CLAUDE.md ; GEMINI.md ; .github/ sola.",
+    "falsos_positivos": [
+      ".vscode/ existe sin Copilot (es de VS Code).",
+      "AGENTS.md, CLAUDE.md y GEMINI.md los lee Copilot pero pertenecen a otros agentes.",
+      ".github/ existe en casi todo repositorio de GitHub.",
+      "copilot-instructions.md tambien lo usa Copilot de GitHub.com y la CLI: no distingue donde."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://code.visualstudio.com/docs/copilot/customization/custom-agents",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Ruta exacta del perfil de usuario de VS Code para agentes/prompts; .github/prompts; .vscode/mcp.json."
+    ],
+    "notas": "Las rutas .github/ son compartidas con la CLI y Copilot en la nube: solo se sabe 'Copilot configurado', no en que superficie."
+  },
+  {
+    "id": "copilot-cli",
+    "nombre": "GitHub Copilot CLI",
+    "fabricante": "GitHub / Microsoft",
+    "proyecto": [
+      {
+        "ruta": ".github/copilot-instructions.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".github/instructions/**/*.instructions.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "CLAUDE.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/CLAUDE.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "GEMINI.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\instructions\\**\\*.instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\mcp-config.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\skills\\",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\config.json",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.copilot/copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.copilot/instructions/**/*.instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.copilot/mcp-config.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/skills/",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/config.json",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.copilot/copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.copilot/instructions/**/*.instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.copilot/mcp-config.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/skills/",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/config.json",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [
+      "COPILOT_HOME",
+      "COPILOT_CUSTOM_INSTRUCTIONS_DIRS"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "~/.copilot/ (o COPILOT_HOME) con copilot-instructions.md, instructions/ o config.json.",
+    "firma_debil": ".github/copilot-instructions.md (no distingue de VS Code); AGENTS.md.",
+    "falsos_positivos": [
+      "Mismos archivos .github que Copilot en VS Code.",
+      "Lee CLAUDE.md y GEMINI.md sin ser Claude ni Gemini."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "config.json, mcp-config.json (aparece en la doc de gentle-ai, no en la de GitHub), .github/agents para la CLI, historial."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "cursor",
+    "nombre": "Cursor",
+    "fabricante": "Anysphere",
+    "proyecto": [
+      {
+        "ruta": ".cursor/rules/*.mdc",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".cursor/rules/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".cursor/mcp.json",
+        "tipo": "mcp",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".cursor/agents/",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".cursorrules",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".cursorignore",
+        "tipo": "reglas",
+        "fuerza": "debil",
+        "verificada": false
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.cursor\\mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.cursor\\agents\\",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.cursor/mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.cursor/agents/",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.cursor/mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.cursor/agents/",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".cursor/rules/*.mdc en el proyecto.",
+    "firma_debil": "AGENTS.md; ~/.cursor/ solo.",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "Archivos .md dentro de .cursor/rules se ignoran (solo .mdc).",
+      "~/.cursor/agents/ tambien lo escribe gentle-ai: prueba que gentle-ai se instalo, no que el usuario use Cursor."
+    ],
+    "fuentes": [
+      {
+        "url": "https://cursor.com/docs/context/rules",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/docs/agents.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      ".cursor/mcp.json y ~/.cursor/mcp.json, .cursorrules, .cursorignore (conocidos por uso comun, no en la pagina consultada); ruta de datos de la aplicacion por sistema operativo; reglas de usuario (se guardan en la aplicacion, sin archivo documentado)."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "windsurf",
+    "nombre": "Windsurf",
+    "fabricante": "Cognition (antes Codeium)",
+    "proyecto": [
+      {
+        "ruta": ".windsurf/rules/*.md",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".windsurfrules",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".windsurf/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.local.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.windsurf\\global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.devin\\global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.codeium\\windsurf\\",
+          "tipo": "datos y MCP",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.windsurf/global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.devin/global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codeium/windsurf/",
+          "tipo": "datos y MCP",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.windsurf/global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.devin/global_rules.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.codeium/windsurf/",
+          "tipo": "datos y MCP",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".windsurf/rules/*.md o .windsurfrules.",
+    "firma_debil": "AGENTS.md; ~/.codeium/ solo.",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "'.devin/' puede ser de Devin y no de Windsurf."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.devin.ai/desktop/cascade/memories",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "~/.codeium/windsurf/ (memorias, mcp_config.json) y .windsurf/workflows: no aparecen en la pagina consultada."
+    ],
+    "notas": "La doc se movio a docs.devin.ai; la ruta global exacta '~/.windsurf/global_rules.md' esta escrita como '.windsurf/global_rules.md' en la fuente (relativa a la carpeta del usuario, a confirmar)."
+  },
+  {
+    "id": "kiro",
+    "nombre": "Kiro",
+    "fabricante": "Amazon Web Services",
+    "proyecto": [
+      {
+        "ruta": ".kiro/steering/*.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".kiro/specs/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".kiro/settings/mcp.json",
+        "tipo": "mcp",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".kiro/hooks/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".kiro/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.kiro\\steering\\",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.kiro\\settings\\mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.kiro\\",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.kiro/steering/",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.kiro/settings/mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.kiro/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.kiro/steering/",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.kiro/settings/mcp.json",
+          "tipo": "mcp",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.kiro/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".kiro/steering/ en el proyecto o ~/.kiro/steering/.",
+    "firma_debil": "AGENTS.md.",
+    "falsos_positivos": [
+      "AGENTS.md solo (Kiro tambien lo lee en ~/.kiro/steering/)."
+    ],
+    "fuentes": [
+      {
+        "url": "https://kiro.dev/docs/steering/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      ".kiro/specs, .kiro/settings/mcp.json, .kiro/hooks (la pagina solo los enlaza)."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "cline",
+    "nombre": "Cline",
+    "fabricante": "Cline Bot (codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": ".clinerules/",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".cline/rules/",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\Documents\\Cline\\Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.cline\\rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\Cline\\Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.agents\\AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "mcp",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/Documents/Cline/Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.cline/rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/Cline/Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.agents/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "mcp",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/Documents/Cline/Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.cline/rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/Cline/Rules",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.agents/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "mcp",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".clinerules/ o .cline/rules/ en el proyecto.",
+    "firma_debil": "AGENTS.md; ~/.agents/AGENTS.md (otros agentes pueden usar ~/.agents).",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "~/Documents/Cline puede existir sin uso activo."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.cline.bot/customization/cline-rules",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "cline_mcp_settings.json, workflows, hooks (la pagina remite a 'Configuration Directory Layout')."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "roo-code",
+    "nombre": "Roo Code",
+    "fabricante": "Roo Code Inc. (codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": ".roo/rules/",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".roo/rules-<modo>/",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".roorules",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".roorules-<modo>",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".roomodes",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".roo/mcp.json",
+        "tipo": "mcp",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENT.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.roo\\rules\\",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.roo\\rules-<modo>\\",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.roo\\",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.roo/rules/",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.roo/rules-<modo>/",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.roo/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.roo/rules/",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.roo/rules-<modo>/",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.roo/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".roo/rules/, .roorules o .roo/rules-<modo>/.",
+    "firma_debil": "AGENTS.md; AGENT.md.",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      ".roo/ puede quedar de Roo y de bifurcaciones (Kilo Code usa nombres parecidos: no verificado)."
+    ],
+    "fuentes": [
+      {
+        "url": "https://roocodeinc.github.io/Roo-Code/features/custom-instructions",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      ".roomodes, .roo/mcp.json y custom_modes.yaml (la pagina no los menciona)."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "continue",
+    "nombre": "Continue",
+    "fabricante": "Continue Dev",
+    "proyecto": [
+      {
+        "ruta": ".continue/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".continue/rules/",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".continue/agents/",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".continue/mcpServers/",
+        "tipo": "mcp",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "config.yaml en .continue/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.continue\\config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.continue\\config.json",
+          "tipo": "configuracion (obsoleto)",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.continue/config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.continue/config.json",
+          "tipo": "configuracion (obsoleto)",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.continue/config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.continue/config.json",
+          "tipo": "configuracion (obsoleto)",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "CONTINUE_GLOBAL_DIR"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "~/.continue/config.yaml (usuario, confirmado).",
+    "firma_debil": "~/.continue/ vacia; .continue/ de proyecto sin confirmar.",
+    "falsos_positivos": [
+      "'config.yaml' sin la carpeta .continue/ es un nombre generico.",
+      "CONTINUE_GLOBAL_DIR: no confirmado."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.continue.dev/customize/deep-dives/configuration",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Todo el nivel proyecto (.continue/rules, agents, mcpServers: la pagina dice 'no mencionado'), variable de entorno."
+    ],
+    "notas": "Verificado solo el nivel usuario."
+  },
+  {
+    "id": "aider",
+    "nombre": "Aider",
+    "fabricante": "Paul Gauthier (codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": ".aider.conf.yml",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".env",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".aiderignore",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".aider.chat.history.md",
+        "tipo": "datos",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".aider.input.history",
+        "tipo": "datos",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "CONVENTIONS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.aider.conf.yml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.env",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.aider.conf.yml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.env",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.aider.conf.yml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.env",
+          "tipo": "configuracion",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [
+      "prefijo AIDER_ (por ejemplo AIDER_DARK_MODE)"
+    ],
+    "datos_historial": [
+      "historial (.aider.chat.history.md)"
+    ],
+    "firma_fuerte": ".aider.conf.yml (proyecto o home) o variables AIDER_*.",
+    "firma_debil": ".env con AIDER_ (indicio); CONVENTIONS.md.",
+    "falsos_positivos": [
+      ".env lo usan todos los proyectos.",
+      "CONVENTIONS.md es un nombre generico (Aider lo carga solo si se le pide)."
+    ],
+    "fuentes": [
+      {
+        "url": "https://aider.chat/docs/config.html",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      ".aiderignore, archivos de historial, CONVENTIONS.md: la pagina no los menciona (conocidos por uso comun)."
+    ],
+    "notas": "Aider escribe sus historiales en la raiz del repositorio: su existencia es indicio de uso pasado, no solo de configuracion."
+  },
+  {
+    "id": "amp",
+    "nombre": "Amp",
+    "fabricante": "Sourcegraph",
+    "proyecto": [
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": false
+      },
+      {
+        "ruta": ".agents/skills/",
+        "tipo": "habilidad",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "(no verificado)",
+          "tipo": "configuracion",
+          "verificada": false
+        },
+        {
+          "ruta": "(no verificado)",
+          "tipo": "instrucciones",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.config/amp/settings.json",
+          "tipo": "configuracion",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.config/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.config/amp/settings.json",
+          "tipo": "configuracion",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.config/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [
+      "(no verificado; prefijo AMP_ probable)"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "No hay firma fuerte confirmada.",
+    "firma_debil": "AGENTS.md.",
+    "falsos_positivos": [
+      "AGENTS.md solo."
+    ],
+    "fuentes": [
+      {
+        "url": "https://ampcode.com/manual",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": false,
+    "no_verificado": [
+      "Todo: la manual consultada solo enlaza paginas (agents-md, cli/settings, skills) que no se pudieron leer."
+    ],
+    "notas": "Sin fuente verificada: tope 'potencial' (FR-7)."
+  },
+  {
+    "id": "junie",
+    "nombre": "JetBrains Junie",
+    "fabricante": "JetBrains",
+    "proyecto": [
+      {
+        "ruta": ".junie/guidelines.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".junie/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.junie\\",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.junie/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.junie/",
+          "tipo": "carpeta",
+          "verificada": false
+        }
+      ]
+    },
+    "entorno": [
+      "(no verificado)"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "No hay firma fuerte confirmada.",
+    "firma_debil": ".idea/ (solo prueba el IDE).",
+    "falsos_positivos": [
+      "AGENTS.md solo.",
+      "'.idea/' existe en cualquier proyecto JetBrains sin Junie."
+    ],
+    "fuentes": [
+      {
+        "url": "https://junie.jetbrains.com/docs/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": false,
+    "no_verificado": [
+      "Todo: la pagina oficial se obtuvo vacia; .junie/guidelines.md es conocimiento previo."
+    ],
+    "notas": "Sin fuente verificada: tope 'potencial'."
+  },
+  {
+    "id": "qwen-code",
+    "nombre": "Qwen Code",
+    "fabricante": "Alibaba Cloud / Qwen (codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": "QWEN.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".qwen/settings.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".qwen/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".qwen/skills/<nombre>/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.qwen\\settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.qwen\\",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "C:\\ProgramData\\qwen-code\\settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.qwen/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.qwen/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "/etc/qwen-code/settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.qwen/settings.json",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.qwen/",
+          "tipo": "carpeta",
+          "verificada": true
+        },
+        {
+          "ruta": "/Library/Application Support/QwenCode/settings.json",
+          "tipo": "gestionada",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "QWEN_CODE_SYSTEM_SETTINGS_PATH",
+      "QWEN_CODE_SYSTEM_DEFAULTS_PATH",
+      "QWEN_SANDBOX_IMAGE",
+      "QWEN_CODE_MAX_OUTPUT_TOKENS"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "QWEN.md o .qwen/settings.json.",
+    "firma_debil": "Variables QWEN_* sueltas.",
+    "falsos_positivos": [
+      "Es una bifurcacion de Gemini CLI: la estructura es parecida pero los nombres son .qwen y QWEN.md; no confundir con .gemini."
+    ],
+    "fuentes": [
+      {
+        "url": "https://qwenlm.github.io/qwen-code-docs/en/users/configuration/settings/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Ruta de historial; segunda mitad de la pagina (no leida)."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "antigravity",
+    "nombre": "Google Antigravity",
+    "fabricante": "Google",
+    "proyecto": [
+      {
+        "ruta": ".agents/rules/*.md",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".agent/rules/*.md",
+        "tipo": "reglas",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".agents/AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".agents/GEMINI.md",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".agents/rules.json",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": "GEMINI.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\rules\\*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\agents\\",
+          "tipo": "subagente",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.gemini/config/rules/*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/agents/",
+          "tipo": "subagente",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.gemini/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.gemini/config/rules/*.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/agents/",
+          "tipo": "subagente",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.gemini/AGENTS.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/GEMINI.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": ".agents/rules/ o ~/.gemini/config/rules/ (carpeta propia 'config').",
+    "firma_debil": "AGENTS.md; GEMINI.md; ~/.gemini/ solo.",
+    "falsos_positivos": [
+      "~/.gemini/GEMINI.md es COMPARTIDO con Gemini CLI: no identifica a Antigravity.",
+      "AGENTS.md y GEMINI.md en la raiz los leen varios agentes."
+    ],
+    "fuentes": [
+      {
+        "url": "https://antigravity.google/docs/rules",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/docs/agents.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Flujos de trabajo (workflows) y habilidades (la pagina remite a otras); ruta de datos de la aplicacion por sistema operativo."
+    ],
+    "notas": "Ojo: ~/.gemini/config/ lo usa tambien gentle-ai para Antigravity."
+  },
+  {
+    "id": "goose",
+    "nombre": "Goose",
+    "fabricante": "Block (ahora Linux Foundation / AAIF; codigo abierto)",
+    "proyecto": [
+      {
+        "ruta": ".goosehints",
+        "tipo": "instrucciones",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "AGENTS.md",
+        "tipo": "instrucciones",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%APPDATA%\\Block\\goose\\config\\config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "%APPDATA%\\Block\\goose\\config\\permission.yaml",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%APPDATA%\\Block\\goose\\config\\secrets.yaml",
+          "tipo": "secretos (no leer)",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.config/goose/config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/goose/permission.yaml",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/goose/secrets.yaml",
+          "tipo": "secretos (no leer)",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.config/goose/config.yaml",
+          "tipo": "configuracion",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/goose/permission.yaml",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.config/goose/secrets.yaml",
+          "tipo": "secretos (no leer)",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "GOOSE_PROVIDER",
+      "GOOSE_MODEL",
+      "GOOSE_MODE",
+      "GOOSE_MAX_TURNS",
+      "GOOSE_TOOL_DEFERRAL",
+      "GOOSE_TEMPERATURE",
+      "GOOSE_MAX_TOKENS",
+      "GOOSE_CACHE_TTL",
+      "GOOSE_TOOLSHIM",
+      "GOOSE_CLI_THEME",
+      "GOOSE_ALLOWLIST",
+      "GOOSE_RECIPE_GITHUB_REPO",
+      "GOOSE_TELEMETRY_ENABLED"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "config.yaml en la ruta de usuario; variables GOOSE_*.",
+    "firma_debil": "AGENTS.md; .goosehints (sin confirmar).",
+    "falsos_positivos": [
+      "AGENTS.md solo."
+    ],
+    "fuentes": [
+      {
+        "url": "https://goose-docs.ai/docs/guides/config-files",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      ".goosehints y AGENTS.md a nivel proyecto (la pagina dice 'no cubierto'); carpeta de sesiones; secrets.yaml existe: solo contar su existencia, nunca leerlo."
+    ],
+    "notas": ""
+  },
+  {
+    "id": "gentle-ai",
+    "nombre": "gentle-ai (marco que se instala sobre agentes)",
+    "fabricante": "Gentleman Programming",
+    "proyecto": [
+      {
+        "ruta": ".gentle-ai/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": "skill-registry (.atl/skill-registry.md)",
+        "tipo": "habilidad",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\gentle-ai\\guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\gentle-ai\\.gentle-ai-modules.json",
+          "tipo": "estado",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\gentle-ai\\guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\rules\\gentle-ai-NN-<seccion>.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.cursor\\agents\\jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.gemini\\config\\agents\\jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\skills\\<nombre>\\SKILL.md (habilidades de gentle-ai; ver nota)",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.copilot\\copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.gemini/gentle-ai/guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/gentle-ai/.gentle-ai-modules.json",
+          "tipo": "estado",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/gentle-ai/guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/rules/gentle-ai-NN-<seccion>.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.cursor/agents/jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/agents/jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/skills/<nombre>/SKILL.md (habilidades de gentle-ai; ver nota)",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.gemini/gentle-ai/guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/gentle-ai/.gentle-ai-modules.json",
+          "tipo": "estado",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/gentle-ai/guidance.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/rules/gentle-ai-NN-<seccion>.md",
+          "tipo": "reglas",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.cursor/agents/jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.gemini/config/agents/jd-judge-a (y jd-judge-b, jd-fix-agent)",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/skills/<nombre>/SKILL.md (habilidades de gentle-ai; ver nota)",
+          "tipo": "habilidad",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.copilot/copilot-instructions.md",
+          "tipo": "instrucciones",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": "Archivos gentle-ai-NN-*.md en ~/.gemini/config/rules/ ; ~/.gemini/gentle-ai/ ; agentes jd-judge-a/b + jd-fix-agent juntos.",
+    "firma_debil": "Una sola habilidad con nombre parecido; linea '# gentle-ai installer' en el archivo de arranque del shell (solo prueba que se instalo el binario).",
+    "falsos_positivos": [
+      "Los nombres jd-judge-a, jd-judge-b, jd-fix-agent indican gentle-ai solo si aparecen juntos.",
+      "Una habilidad llamada 'judgment-day' o 'branch-pr' puede copiarse a mano.",
+      "Es una capa sobre otro agente: nunca cuenta como agente por si mismo, sino como 'marco sobre X'."
+    ],
+    "fuentes": [
+      {
+        "url": "https://github.com/Gentleman-Programming/gentle-ai",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/docs/agents.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Rutas para Claude Code, opencode, Codex, Windsurf, VS Code Copilot, Kiro, Qwen y Trae (la doc dice 'no paths stated'); archivo de estado general; copias de seguridad."
+    ],
+    "notas": "Marco, no agente. Se reporta como capa 'instalada sobre' los agentes cuyas carpetas toca."
+  },
+  {
+    "id": "bmad",
+    "nombre": "BMAD (BMad Method)",
+    "fabricante": "BMad Code",
+    "proyecto": [
+      {
+        "ruta": "_bmad/",
+        "tipo": "carpeta",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "_bmad/custom/",
+        "tipo": "configuracion",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "_bmad-output/",
+        "tipo": "datos",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/skills/bmad-*/SKILL.md",
+        "tipo": "habilidad",
+        "fuerza": "fuerte",
+        "verificada": false
+      },
+      {
+        "ruta": ".agents/skills/bmad-*",
+        "tipo": "habilidad",
+        "fuerza": "debil",
+        "verificada": false
+      }
+    ],
+    "usuario": {
+      "windows": [],
+      "linux": [],
+      "macos": []
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": "Carpeta _bmad/ (la crea 'bmad setup') mas habilidades bmad-* en la carpeta de skills del agente.",
+    "firma_debil": "Solo habilidades bmad-*; solo _bmad-output/.",
+    "falsos_positivos": [
+      "Una habilidad 'bmad-*' sin la carpeta _bmad/ puede ser una copia suelta.",
+      "_bmad-output/ puede quedar tras desinstalar."
+    ],
+    "fuentes": [
+      {
+        "url": "https://docs.bmad-method.org/start/install-bmad/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Carpeta de skills por cada agente (la guia dice que el instalador pregunta y no las nombra); en este repositorio se observan .claude/skills/bmad-* (observacion local, no fuente oficial)."
+    ],
+    "notas": "Marco, no agente. La carpeta de skills donde aparezcan indica sobre que agente esta instalado."
+  },
+  {
+    "id": "claude-code-agente-personalizado",
+    "nombre": "Agentes personalizados de Claude Code (subagentes)",
+    "fabricante": "Anthropic (definidos por el usuario)",
+    "proyecto": [
+      {
+        "ruta": ".claude/agents/*.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/agents/**/*.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/agent-memory/<nombre>/",
+        "tipo": "datos",
+        "fuerza": "debil",
+        "verificada": true
+      },
+      {
+        "ruta": ".claude/output-styles/*.md",
+        "tipo": "configuracion",
+        "fuerza": "debil",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.claude\\agents\\*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\agents\\alex-dev.agent.md",
+          "tipo": "subagente (ejemplo de agente personal)",
+          "verificada": false
+        },
+        {
+          "ruta": "%USERPROFILE%\\.claude\\agent-memory\\<nombre>\\",
+          "tipo": "datos",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.claude/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/agents/alex-dev.agent.md",
+          "tipo": "subagente (ejemplo de agente personal)",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.claude/agent-memory/<nombre>/",
+          "tipo": "datos",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.claude/agents/*.md",
+          "tipo": "subagente",
+          "verificada": true
+        },
+        {
+          "ruta": "~/.claude/agents/alex-dev.agent.md",
+          "tipo": "subagente (ejemplo de agente personal)",
+          "verificada": false
+        },
+        {
+          "ruta": "~/.claude/agent-memory/<nombre>/",
+          "tipo": "datos",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [
+      "CLAUDE_CONFIG_DIR"
+    ],
+    "datos_historial": [],
+    "firma_fuerte": "Archivo .md con encabezado YAML que tenga 'name' y 'description' dentro de .claude/agents/ o ~/.claude/agents/.",
+    "firma_debil": "Archivo en .claude/agents/ sin 'name' o sin 'description' (Claude Code lo salta).",
+    "falsos_positivos": [
+      "La extension '.agent.md' es la convencion de Copilot en VS Code; en Claude Code el documento solo habla de '.md': un archivo '*.agent.md' bajo ~/.claude/agents/ se lee como subagente SI tiene 'name' y 'description' en el encabezado (la doc dice que sin ellos se salta)."
+    ],
+    "fuentes": [
+      {
+        "url": "https://code.claude.com/docs/en/sub-agents.md",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://code.claude.com/docs/en/claude-directory.md",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Que '*.agent.md' sea cargado igual que '*.md' (la doc no lo afirma ni lo niega); ruta de agentes gestionados (managed settings directory)."
+    ],
+    "notas": "Prioridad si hay nombres repetidos: gestionada, --agents, proyecto, usuario, plugin. La identidad es el campo 'name', no el nombre del archivo."
+  },
+  {
+    "id": "opencode-agente-personalizado",
+    "nombre": "Agentes personalizados de opencode",
+    "fabricante": "SST / Anomaly (definidos por el usuario)",
+    "proyecto": [
+      {
+        "ruta": ".opencode/agents/<nombre>.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": ".opencode/agents/<equipo>/<nombre>.md",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      },
+      {
+        "ruta": "opencode.json (clave agent)",
+        "tipo": "subagente",
+        "fuerza": "fuerte",
+        "verificada": true
+      }
+    ],
+    "usuario": {
+      "windows": [
+        {
+          "ruta": "%USERPROFILE%\\.config\\opencode\\agents\\<nombre>.md (ruta Windows no documentada; ver opencode)",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ],
+      "linux": [
+        {
+          "ruta": "~/.config/opencode/agents/<nombre>.md",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ],
+      "macos": [
+        {
+          "ruta": "~/.config/opencode/agents/<nombre>.md",
+          "tipo": "subagente",
+          "verificada": true
+        }
+      ]
+    },
+    "entorno": [],
+    "datos_historial": [],
+    "firma_fuerte": "Archivo .md en .opencode/agents/ o ~/.config/opencode/agents/, o clave agent dentro de opencode.json.",
+    "firma_debil": "Carpeta .opencode/agents/ vacia.",
+    "falsos_positivos": [
+      "Carpeta 'agents' en plural; 'agent' en singular es la clave de opencode.json, no la carpeta.",
+      "Una subcarpeta crea el id 'equipo/nombre'."
+    ],
+    "fuentes": [
+      {
+        "url": "https://opencode.ai/docs/agents/",
+        "fecha": "2026-11-10"
+      },
+      {
+        "url": "https://opencode.ai/docs/config/",
+        "fecha": "2026-11-10"
+      }
+    ],
+    "verificado": true,
+    "no_verificado": [
+      "Ruta global de agentes en Windows."
+    ],
+    "notas": ""
+  }
+]

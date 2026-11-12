@@ -1,0 +1,1748 @@
+{
+ "schema_version": 1,
+ "tool": "AgentReach",
+ "tool_version": "0.1.0",
+ "generated_at": "2026-11-10 09:30",
+ "folder": "~/demo-app (fictional)",
+ "files_looked_at": 412,
+ "secrets_notice": {
+  "en": "No secret values are shown. AgentReach never copies passwords, tokens or keys: it only says where they are and what type they are.",
+  "es": "No se muestran valores de secretos. AgentReach nunca copia contraseñas, tokens ni claves: solo dice dónde están y de qué tipo son."
+ },
+ "agents": [
+  {
+   "id": "claude_code",
+   "name": "Claude Code",
+   "env_cleaning": false,
+   "rules": [
+    {
+     "posture": "allow",
+     "tool": "Bash(git *)",
+     "location": "~/.claude/settings.json:12"
+    },
+    {
+     "posture": "ask",
+     "tool": "Edit",
+     "location": ".claude/settings.json:4"
+    }
+   ],
+   "findings": [
+    {
+     "id": "cc-0",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example",
+     "line": null,
+     "type": "TH-19",
+     "provider": "despliegue",
+     "level": "verified",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "deny",
+     "rule": "config/rules.example:36",
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-1",
+     "path": "src/pkg7/pkg3/file1.example",
+     "line": 156,
+     "type": "TH-16",
+     "provider": "no_aplica",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:41",
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-2",
+     "path": "src/pkg1/pkg5/pkg1/file2.example",
+     "line": 610,
+     "type": "TH-1",
+     "provider": "ssh",
+     "level": "verified",
+     "reason": "indicio_debil",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "deny",
+     "rule": "config/rules.example:31",
+     "source_verified": false,
+     "text": "TH-1"
+    },
+    {
+     "id": "cc-3",
+     "path": "src/pkg2/pkg1/file3.example",
+     "line": 223,
+     "type": "TH-19",
+     "provider": "base_de_datos",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:32",
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-4",
+     "path": "src/pkg6/pkg9/file4.example",
+     "line": 418,
+     "type": "TH-10",
+     "provider": "desconocido",
+     "level": "hypothesis",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": "reviewer",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-10"
+    },
+    {
+     "id": "cc-5",
+     "path": "src/pkg3/pkg6/pkg9/file5.example",
+     "line": 583,
+     "type": "TH-1",
+     "provider": "pagos",
+     "level": "potential",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-1"
+    },
+    {
+     "id": "cc-6",
+     "path": "src/pkg2/file6.example",
+     "line": 875,
+     "type": "TH-19",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-7",
+     "path": "src/pkg5/file7.example",
+     "line": 788,
+     "type": "TH-3",
+     "provider": "ssh",
+     "level": "hypothesis",
+     "reason": "no_determinado",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-3"
+    },
+    {
+     "id": "cc-8",
+     "path": "src/pkg6/pkg9/file8.example",
+     "line": 242,
+     "type": "TH-20",
+     "provider": "ia",
+     "level": "hypothesis",
+     "reason": "existe_no_legible",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:33",
+     "source_verified": false,
+     "text": "TH-20"
+    },
+    {
+     "id": "cc-9",
+     "path": "src/pkg1/pkg4/pkg7/file9.example",
+     "line": null,
+     "type": "TH-3",
+     "provider": "base_de_datos",
+     "level": "verified",
+     "reason": "regla_deny",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "deny",
+     "rule": "config/rules.example:40",
+     "source_verified": false,
+     "text": "TH-3"
+    },
+    {
+     "id": "cc-10",
+     "path": "src/pkg3/pkg7/file10.example",
+     "line": 472,
+     "type": "TH-2",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "indicio_debil",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-2"
+    },
+    {
+     "id": "cc-11",
+     "path": "src/pkg9/pkg5/pkg7/file11.example",
+     "line": 448,
+     "type": "TH-20",
+     "provider": "base_de_datos",
+     "level": "hypothesis",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "ask",
+     "rule": "config/rules.example:20",
+     "source_verified": false,
+     "text": "TH-20"
+    },
+    {
+     "id": "cc-12",
+     "path": "src/pkg6/pkg1/file12.example",
+     "line": 631,
+     "type": "TH-18",
+     "provider": "desconocido",
+     "level": "potential",
+     "reason": "regla_deny",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-18"
+    },
+    {
+     "id": "cc-13",
+     "path": "src/pkg6/pkg5/pkg8/file13.example",
+     "line": 63,
+     "type": "TH-11",
+     "provider": "ia",
+     "level": "hypothesis",
+     "reason": "sin_fuente_verificada",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "allow",
+     "rule": "config/rules.example:38",
+     "source_verified": false,
+     "text": "TH-11"
+    },
+    {
+     "id": "cc-14",
+     "path": "src/pkg6/pkg3/pkg6/file14.example",
+     "line": 777,
+     "type": "TH-15",
+     "provider": "nube",
+     "level": "potential",
+     "reason": "existe_no_legible",
+     "unrelated": "no_determinado",
+     "agent": "reviewer",
+     "posture": "ask",
+     "rule": "config/rules.example:21",
+     "source_verified": false,
+     "text": "TH-15"
+    },
+    {
+     "id": "cc-15",
+     "path": "src/pkg3/pkg5/pkg9/file15.example",
+     "line": 824,
+     "type": "TH-13",
+     "provider": "base_de_datos",
+     "level": "verified",
+     "reason": "regla_ask",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "ask",
+     "rule": "config/rules.example:42",
+     "source_verified": false,
+     "text": "TH-13"
+    },
+    {
+     "id": "cc-16",
+     "path": "src/pkg2/pkg2/pkg6/file16.example",
+     "line": 854,
+     "type": "TH-6",
+     "provider": "despliegue",
+     "level": "hypothesis",
+     "reason": "no_confirmado_independiente",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:44",
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-17",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f17.example",
+     "line": 35,
+     "type": "TH-3",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": "reviewer",
+     "posture": "ask",
+     "rule": "config/rules.example:8",
+     "source_verified": false,
+     "text": "TH-3"
+    },
+    {
+     "id": "cc-18",
+     "path": "src/pkg2/pkg6/file18.example",
+     "line": null,
+     "type": "TH-19",
+     "provider": "codigo",
+     "level": "potential",
+     "reason": "indicio_debil",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-19",
+     "path": "src/pkg7/pkg5/file19.example",
+     "line": 582,
+     "type": "TH-17",
+     "provider": "ssh",
+     "level": "potential",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-17"
+    },
+    {
+     "id": "cc-20",
+     "path": "src/pkg9/pkg7/file20.example",
+     "line": 735,
+     "type": "TH-5",
+     "provider": "despliegue",
+     "level": "potential",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-5"
+    },
+    {
+     "id": "cc-21",
+     "path": "src/pkg6/pkg4/pkg2/file21.example",
+     "line": 294,
+     "type": "TH-15",
+     "provider": "pagos",
+     "level": "hypothesis",
+     "reason": "regla_ask",
+     "unrelated": "no",
+     "agent": "main",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-15"
+    },
+    {
+     "id": "cc-22",
+     "path": "src/pkg1/pkg1/file22.example",
+     "line": 764,
+     "type": "TH-2",
+     "provider": "pagos",
+     "level": "hypothesis",
+     "reason": "regla_deny",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-2"
+    },
+    {
+     "id": "cc-23",
+     "path": "src/pkg9/file23.example",
+     "line": 424,
+     "type": "TH-10",
+     "provider": "ia",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no_determinado",
+     "agent": "reviewer",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-10"
+    },
+    {
+     "id": "cc-24",
+     "path": "src/pkg1/pkg6/file24.example",
+     "line": 126,
+     "type": "TH-5",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "ask",
+     "rule": "config/rules.example:13",
+     "source_verified": false,
+     "text": "TH-5"
+    },
+    {
+     "id": "cc-25",
+     "path": "src/pkg8/file25.example",
+     "line": 884,
+     "type": "TH-8",
+     "provider": "ssh",
+     "level": "potential",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-8"
+    },
+    {
+     "id": "cc-26",
+     "path": "src/pkg9/pkg7/pkg1/file26.example",
+     "line": 331,
+     "type": "TH-8",
+     "provider": "ia",
+     "level": "potential",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-8"
+    },
+    {
+     "id": "cc-27",
+     "path": "src/pkg8/file27.example",
+     "line": null,
+     "type": "TH-2",
+     "provider": "pagos",
+     "level": "verified",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "allow",
+     "rule": "config/rules.example:46",
+     "source_verified": false,
+     "text": "TH-2"
+    },
+    {
+     "id": "cc-28",
+     "path": "src/pkg2/pkg6/file28.example",
+     "line": 663,
+     "type": "TH-16",
+     "provider": "ssh",
+     "level": "potential",
+     "reason": "existe_no_legible",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-29",
+     "path": "src/pkg2/pkg3/file29.example",
+     "line": 4,
+     "type": "TH-9",
+     "provider": "ssh",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-9"
+    },
+    {
+     "id": "cc-30",
+     "path": "src/pkg9/pkg7/file30.example",
+     "line": 442,
+     "type": "TH-6",
+     "provider": "ia",
+     "level": "verified",
+     "reason": "sin_fuente_verificada",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "allow",
+     "rule": "config/rules.example:40",
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-31",
+     "path": "src/pkg7/pkg8/pkg1/file31.example",
+     "line": 549,
+     "type": "TH-16",
+     "provider": "base_de_datos",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "ask",
+     "rule": "config/rules.example:14",
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-32",
+     "path": "src/pkg6/file32.example",
+     "line": 810,
+     "type": "TH-8",
+     "provider": "base_de_datos",
+     "level": "hypothesis",
+     "reason": "no_determinado",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "deny",
+     "rule": "config/rules.example:36",
+     "source_verified": false,
+     "text": "TH-8"
+    },
+    {
+     "id": "cc-33",
+     "path": "src/pkg2/pkg6/pkg9/file33.example",
+     "line": 734,
+     "type": "TH-4",
+     "provider": "ia",
+     "level": "hypothesis",
+     "reason": "no_confirmado_independiente",
+     "unrelated": "no",
+     "agent": "main",
+     "posture": "allow",
+     "rule": "config/rules.example:38",
+     "source_verified": false,
+     "text": "TH-4"
+    },
+    {
+     "id": "cc-34",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f34.example",
+     "line": 350,
+     "type": "TH-8",
+     "provider": "pagos",
+     "level": "hypothesis",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "ask",
+     "rule": "config/rules.example:2",
+     "source_verified": false,
+     "text": "TH-8"
+    },
+    {
+     "id": "cc-35",
+     "path": "src/pkg2/pkg1/file35.example",
+     "line": 524,
+     "type": "TH-16",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-36",
+     "path": "src/pkg9/file36.example",
+     "line": null,
+     "type": "TH-18",
+     "provider": "codigo",
+     "level": "verified",
+     "reason": "no_determinado",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:37",
+     "source_verified": false,
+     "text": "TH-18"
+    },
+    {
+     "id": "cc-37",
+     "path": "src/pkg7/pkg5/pkg6/file37.example",
+     "line": 407,
+     "type": "TH-6",
+     "provider": "nube",
+     "level": "potential",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-38",
+     "path": "src/pkg7/file38.example",
+     "line": 708,
+     "type": "TH-3",
+     "provider": "desconocido",
+     "level": "hypothesis",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:27",
+     "source_verified": false,
+     "text": "TH-3"
+    },
+    {
+     "id": "cc-39",
+     "path": "src/pkg3/pkg3/file39.example",
+     "line": 767,
+     "type": "TH-16",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no_determinado",
+     "agent": "reviewer",
+     "posture": "allow",
+     "rule": "config/rules.example:32",
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-40",
+     "path": "src/pkg4/pkg3/file40.example",
+     "line": 528,
+     "type": "TH-19",
+     "provider": "nube",
+     "level": "potential",
+     "reason": "regla_ask",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-41",
+     "path": "src/pkg7/pkg5/pkg4/file41.example",
+     "line": 275,
+     "type": "TH-18",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "indicio_debil",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:2",
+     "source_verified": false,
+     "text": "TH-18"
+    },
+    {
+     "id": "cc-42",
+     "path": "src/pkg6/file42.example",
+     "line": 793,
+     "type": "TH-6",
+     "provider": "codigo",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-43",
+     "path": "src/pkg9/pkg1/file43.example",
+     "line": 739,
+     "type": "TH-16",
+     "provider": "pagos",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-44",
+     "path": "src/pkg2/file44.example",
+     "line": 248,
+     "type": "TH-2",
+     "provider": "despliegue",
+     "level": "hypothesis",
+     "reason": "existe_no_legible",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "ask",
+     "rule": "config/rules.example:17",
+     "source_verified": false,
+     "text": "TH-2"
+    },
+    {
+     "id": "cc-45",
+     "path": "src/pkg1/pkg5/pkg3/file45.example",
+     "line": null,
+     "type": "TH-6",
+     "provider": "codigo",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "allow",
+     "rule": "config/rules.example:21",
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-46",
+     "path": "src/pkg5/pkg1/file46.example",
+     "line": 595,
+     "type": "TH-3",
+     "provider": "nube",
+     "level": "verified",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:29",
+     "source_verified": false,
+     "text": "TH-3"
+    },
+    {
+     "id": "cc-47",
+     "path": "src/pkg8/pkg2/file47.example",
+     "line": 600,
+     "type": "TH-11",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "indicio_debil",
+     "unrelated": "no",
+     "agent": "main",
+     "posture": "ask",
+     "rule": "config/rules.example:42",
+     "source_verified": false,
+     "text": "TH-11"
+    },
+    {
+     "id": "cc-48",
+     "path": "src/pkg2/pkg7/file48.example",
+     "line": 541,
+     "type": "TH-18",
+     "provider": "base_de_datos",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "allow",
+     "rule": "config/rules.example:29",
+     "source_verified": false,
+     "text": "TH-18"
+    },
+    {
+     "id": "cc-49",
+     "path": "src/pkg5/pkg2/file49.example",
+     "line": 580,
+     "type": "TH-12",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no",
+     "agent": "main",
+     "posture": "deny",
+     "rule": "config/rules.example:44",
+     "source_verified": false,
+     "text": "TH-12"
+    },
+    {
+     "id": "cc-50",
+     "path": "src/pkg5/file50.example",
+     "line": 761,
+     "type": "TH-16",
+     "provider": "codigo",
+     "level": "hypothesis",
+     "reason": "regla_deny",
+     "unrelated": "no",
+     "agent": "main",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "cc-51",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f51.example",
+     "line": 661,
+     "type": "TH-12",
+     "provider": "desconocido",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:22",
+     "source_verified": false,
+     "text": "TH-12"
+    },
+    {
+     "id": "cc-52",
+     "path": "src/pkg5/pkg3/file52.example",
+     "line": 734,
+     "type": "TH-10",
+     "provider": "codigo",
+     "level": "potential",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "allow",
+     "rule": "config/rules.example:7",
+     "source_verified": false,
+     "text": "TH-10"
+    },
+    {
+     "id": "cc-53",
+     "path": "src/pkg5/file53.example",
+     "line": 55,
+     "type": "TH-19",
+     "provider": "codigo",
+     "level": "hypothesis",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "no",
+     "agent": "reviewer",
+     "posture": "deny",
+     "rule": "config/rules.example:25",
+     "source_verified": false,
+     "text": "TH-19"
+    },
+    {
+     "id": "cc-54",
+     "path": "src/pkg9/pkg6/pkg6/file54.example",
+     "line": null,
+     "type": "TH-17",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-17/si"
+    },
+    {
+     "id": "cc-55",
+     "path": "src/pkg5/file55.example",
+     "line": 103,
+     "type": "TH-12",
+     "provider": "pagos",
+     "level": "hypothesis",
+     "reason": "no_determinado",
+     "unrelated": "si",
+     "agent": "main",
+     "posture": "no_determinada",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-12"
+    },
+    {
+     "id": "cc-56",
+     "path": "src/pkg7/pkg3/pkg3/file56.example",
+     "line": 818,
+     "type": "TH-7",
+     "provider": "despliegue",
+     "level": "hypothesis",
+     "reason": "sin_certeza_del_archivo",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-7"
+    },
+    {
+     "id": "cc-57",
+     "path": "src/pkg5/file57.example",
+     "line": 31,
+     "type": "TH-6",
+     "provider": "firma",
+     "level": "hypothesis",
+     "reason": "indicio_debil",
+     "unrelated": "si",
+     "agent": "reviewer",
+     "posture": "deny",
+     "rule": "config/rules.example:19",
+     "source_verified": false,
+     "text": "TH-6"
+    },
+    {
+     "id": "cc-58",
+     "path": "src/pkg8/pkg9/file58.example",
+     "line": 496,
+     "type": "TH-11",
+     "provider": "ia",
+     "level": "hypothesis",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "deny",
+     "rule": "config/rules.example:43",
+     "source_verified": false,
+     "text": "TH-11"
+    },
+    {
+     "id": "cc-59",
+     "path": "src/pkg8/file59.example",
+     "line": 641,
+     "type": "TH-1",
+     "provider": "firma",
+     "level": "verified",
+     "reason": "regla_ask",
+     "unrelated": "no_determinado",
+     "agent": "main",
+     "posture": "ask",
+     "rule": "config/rules.example:34",
+     "source_verified": false,
+     "text": "TH-1"
+    }
+   ]
+  },
+  {
+   "id": "opencode",
+   "name": "opencode",
+   "env_cleaning": true,
+   "rules": [],
+   "findings": [
+    {
+     "id": "oc-0",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example",
+     "line": null,
+     "type": "TH-17",
+     "provider": "firma",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "si",
+     "agent": "build",
+     "posture": "ask",
+     "rule": "config/rules.example:9",
+     "source_verified": false,
+     "text": "TH-17/si"
+    },
+    {
+     "id": "oc-1",
+     "path": "src/pkg9/file1.example",
+     "line": 552,
+     "type": "TH-1",
+     "provider": "ia",
+     "level": "potential",
+     "reason": "sin_fuente_verificada",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "allow",
+     "rule": "config/rules.example:32",
+     "source_verified": false,
+     "text": "TH-1"
+    },
+    {
+     "id": "oc-2",
+     "path": "src/pkg3/pkg2/pkg1/file2.example",
+     "line": 352,
+     "type": "TH-11",
+     "provider": "despliegue",
+     "level": "potential",
+     "reason": "no_determinado",
+     "unrelated": "no_determinado",
+     "agent": "build",
+     "posture": "allow",
+     "rule": "config/rules.example:48",
+     "source_verified": false,
+     "text": "TH-11"
+    },
+    {
+     "id": "oc-3",
+     "path": "src/pkg2/pkg1/file3.example",
+     "line": 80,
+     "type": "TH-14",
+     "provider": "despliegue",
+     "level": "potential",
+     "reason": "regla_deny",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-14"
+    },
+    {
+     "id": "oc-4",
+     "path": "src/pkg9/file4.example",
+     "line": 214,
+     "type": "TH-16",
+     "provider": "firma",
+     "level": "hypothesis",
+     "reason": "existe_no_legible",
+     "unrelated": "no_determinado",
+     "agent": "build",
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-16"
+    },
+    {
+     "id": "oc-5",
+     "path": "src/pkg8/pkg3/file5.example",
+     "line": 39,
+     "type": "TH-15",
+     "provider": "base_de_datos",
+     "level": "hypothesis",
+     "reason": "sin_fuente_verificada",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-15"
+    },
+    {
+     "id": "oc-6",
+     "path": "src/pkg7/pkg4/pkg1/file6.example",
+     "line": 802,
+     "type": "TH-15",
+     "provider": "nube",
+     "level": "hypothesis",
+     "reason": "regla_deny",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:17",
+     "source_verified": false,
+     "text": "TH-15"
+    },
+    {
+     "id": "oc-7",
+     "path": "src/pkg1/file7.example",
+     "line": 414,
+     "type": "TH-18",
+     "provider": "no_aplica",
+     "level": "potential",
+     "reason": "regla_deny",
+     "unrelated": "si",
+     "agent": "build",
+     "posture": "ask",
+     "rule": "config/rules.example:38",
+     "source_verified": false,
+     "text": "TH-18"
+    },
+    {
+     "id": "oc-8",
+     "path": "src/pkg8/file8.example",
+     "line": 190,
+     "type": "TH-5",
+     "provider": "ia",
+     "level": "verified",
+     "reason": "existe_legible_sin_regla",
+     "unrelated": "no_determinado",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-5"
+    },
+    {
+     "id": "oc-9",
+     "path": "src/pkg1/file9.example",
+     "line": null,
+     "type": "TH-15",
+     "provider": "ia",
+     "level": "potential",
+     "reason": "indicio_debil",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "ask",
+     "rule": "config/rules.example:26",
+     "source_verified": false,
+     "text": "TH-15"
+    }
+   ]
+  },
+  {
+   "id": "none",
+   "name": {
+    "en": "Not tied to a specific agent",
+    "es": "Sin agente específico"
+   },
+   "env_cleaning": false,
+   "rules": [],
+   "findings": [
+    {
+     "id": "na-0",
+     "path": "docs/very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-very-long-folder-name-end/f0.example",
+     "line": null,
+     "type": "TH-1",
+     "provider": "despliegue",
+     "level": "potential",
+     "reason": "regla_deny",
+     "unrelated": "si",
+     "agent": null,
+     "posture": "sin_regla",
+     "rule": null,
+     "source_verified": false,
+     "text": "TH-1"
+    },
+    {
+     "id": "na-1",
+     "path": "src/pkg1/file1.example",
+     "line": 807,
+     "type": "TH-20",
+     "provider": "firma",
+     "level": "verified",
+     "reason": "existe_no_legible",
+     "unrelated": "no",
+     "agent": null,
+     "posture": "deny",
+     "rule": "config/rules.example:18",
+     "source_verified": false,
+     "text": "TH-20"
+    }
+   ]
+  }
+ ],
+ "catalog": {
+  "types": {
+   "TH-1": {
+    "title": {
+     "en": "Credential in a file",
+     "es": "Credencial en un archivo"
+    }
+   },
+   "TH-2": {
+    "title": {
+     "en": "Private key to log in to servers",
+     "es": "Llave privada para entrar a servidores"
+    }
+   },
+   "TH-3": {
+    "title": {
+     "en": "Cloud account credentials",
+     "es": "Credenciales de una cuenta en la nube"
+    }
+   },
+   "TH-4": {
+    "title": {
+     "en": "Environment variable named like a credential",
+     "es": "Variable de entorno con nombre de credencial"
+    }
+   },
+   "TH-5": {
+    "title": {
+     "en": "Instructions file with suspicious text",
+     "es": "Archivo de instrucciones con texto sospechoso"
+    }
+   },
+   "TH-6": {
+    "title": {
+     "en": "Link that leaves the folder",
+     "es": "Enlace que sale de la carpeta"
+    }
+   },
+   "TH-7": {
+    "title": {
+     "en": "Agent rule that is too permissive",
+     "es": "Regla del agente demasiado permisiva"
+    }
+   },
+   "TH-8": {
+    "title": {
+     "en": "The agent can run programs on the computer",
+     "es": "El agente puede ejecutar programas del equipo"
+    }
+   },
+   "TH-9": {
+    "title": {
+     "en": "Deployment script (publishes changes)",
+     "es": "Script de despliegue (publica cambios)"
+    }
+   },
+   "TH-10": {
+    "title": {
+     "en": "No isolation box (sandbox)",
+     "es": "Sin caja de aislamiento (sandbox)"
+    }
+   },
+   "TH-11": {
+    "title": {
+     "en": "Agent definition",
+     "es": "Definición de agente"
+    }
+   },
+   "TH-12": {
+    "title": {
+     "en": "Invisible text in an instructions file",
+     "es": "Texto invisible en un archivo de instrucciones"
+    }
+   },
+   "TH-13": {
+    "title": {
+     "en": "Instructions file outside a project",
+     "es": "Archivo de instrucciones fuera de un proyecto"
+    }
+   },
+   "TH-14": {
+    "title": {
+     "en": "Program that starts by itself from the project settings",
+     "es": "Programa que arranca solo con la configuración del proyecto"
+    }
+   },
+   "TH-15": {
+    "title": {
+     "en": "Setting that skips permission checks",
+     "es": "Configuración que salta las confirmaciones de permiso"
+    }
+   },
+   "TH-16": {
+    "title": {
+     "en": "Task that starts when the folder is opened",
+     "es": "Tarea que arranca al abrir la carpeta"
+    }
+   },
+   "TH-17": {
+    "title": {
+     "en": "Platform or deployment secret",
+     "es": "Secreto de plataforma o de despliegue"
+    }
+   },
+   "TH-18": {
+    "title": {
+     "en": "Git set up to run programs",
+     "es": "Git configurado para ejecutar programas"
+    }
+   },
+   "TH-19": {
+    "title": {
+     "en": "Git address with a credential, or suspicious",
+     "es": "Dirección de git con credencial o sospechosa"
+    }
+   },
+   "TH-20": {
+    "title": {
+     "en": "Git configuration AgentReach could not read",
+     "es": "Configuración de git que AgentReach no pudo leer"
+    }
+   }
+  },
+  "texts": {
+   "TH-1": {
+    "meaning": {
+     "en": "A project file stores a credential (a key or password that grants access to a service). An agent that can read the project could read it.",
+     "es": "Un archivo del proyecto guarda una credencial (una clave o contraseña que da acceso a un servicio). Un agente que pueda leer el proyecto podría leerla."
+    },
+    "what_to_do": {
+     "en": "Move the credential out of the project or into a secrets manager (a program that stores keys encrypted), and rotate it (replace it with a new one and disable the old one) if it was exposed.",
+     "es": "Saca la credencial del proyecto o guárdala en un gestor de secretos (un programa que guarda claves cifradas) y rótala (rotar es cambiarla por una nueva y desactivar la vieja) si estuvo expuesta."
+    }
+   },
+   "TH-2": {
+    "meaning": {
+     "en": "A private SSH key (Secure Shell: remote access to servers and repositories) exists and opens servers without asking for a password.",
+     "es": "Existe una clave privada SSH (Secure Shell: acceso remoto a servidores y repositorios) que abre servidores sin pedir contraseña."
+    },
+    "what_to_do": {
+     "en": "Use keys protected by a passphrase (an extra password that protects the key), keep the agent away from that folder and review its permissions.",
+     "es": "Usa claves con frase de paso (una contraseña extra que protege la clave), mantén al agente lejos de esa carpeta y revisa sus permisos."
+    }
+   },
+   "TH-3": {
+    "meaning": {
+     "en": "A cloud account credentials file exists. With it, resources of that account could be created, read or deleted.",
+     "es": "Existe un archivo de credenciales de una cuenta en la nube (servicios en internet). Con él se podrían crear, leer o borrar recursos de esa cuenta."
+    },
+    "what_to_do": {
+     "en": "Use temporary credentials with only the permissions the task needs, and keep the file where the agent cannot access it.",
+     "es": "Usa credenciales temporales con solo los permisos que la tarea necesita y mantén el archivo fuera de donde el agente puede llegar."
+    }
+   },
+   "TH-4": {
+    "meaning": {
+     "en": "An environment variable named like a credential is available to programs the agent launches. Only its name is reported, never its value.",
+     "es": "Una variable de entorno con nombre de credencial está disponible para los programas que lance el agente. Solo se informa su nombre, nunca su valor."
+    },
+    "what_to_do": {
+     "en": "Remove the variable from the agent's environment or clean the environment before starting it.",
+     "es": "Quita la variable del entorno del agente o limpia el entorno antes de iniciarlo."
+    }
+   },
+   "TH-5": {
+    "meaning": {
+     "en": "A context file (instructions the agent reads, such as CLAUDE.md or AGENTS.md) contains text that seems to ask to bypass rules or leak data.",
+     "es": "Un archivo de contexto (instrucciones que el agente lee, como CLAUDE.md o AGENTS.md) contiene un texto que parece pedir saltarse reglas o sacar datos."
+    },
+    "what_to_do": {
+     "en": "Review that file by hand and remove instructions you did not write.",
+     "es": "Revisa ese archivo a mano y elimina las instrucciones que no escribiste tú."
+    }
+   },
+   "TH-6": {
+    "meaning": {
+     "en": "A link (junction: Windows folder link) looks like part of the project but leads elsewhere on the machine. It was not entered.",
+     "es": "Un enlace (junction: enlace de carpeta de Windows) parece estar en el proyecto pero lleva a otro lugar del equipo. No se entró en él."
+    },
+    "what_to_do": {
+     "en": "Confirm the destination is intentional or remove the link.",
+     "es": "Confirma que el destino es intencional o elimina el enlace."
+    }
+   },
+   "TH-7": {
+    "meaning": {
+     "en": "The platform configuration lets the agent do very broad actions (read, edit, run commands or download from the web) without asking.",
+     "es": "La configuración de la plataforma permite al agente acciones muy amplias (leer, editar, ejecutar comandos o descargar de la web) sin pedir confirmación."
+    },
+    "what_to_do": {
+     "en": "Change those rules to «asks first» (the agent asks before acting) or «blocks it» (the agent cannot) wherever they are not needed.",
+     "es": "Cambia esas reglas a «pide confirmación» (el agente pregunta antes) o «lo bloquea» (el agente no puede) donde no sean necesarias."
+    }
+   },
+   "TH-8": {
+    "meaning": {
+     "en": "The agent can run commands on your computer (the command line, called a shell): with that it reaches whatever any of your programs can reach.",
+     "es": "El agente puede ejecutar comandos en tu equipo (la línea de comandos, llamada shell): con eso llega a lo que cualquier programa tuyo pueda tocar."
+    },
+    "what_to_do": {
+     "en": "Restrict the allowed commands or require confirmation before running commands.",
+     "es": "Limita los comandos permitidos o exige confirmación antes de ejecutar comandos."
+    }
+   },
+   "TH-9": {
+    "meaning": {
+     "en": "A script named like a deployment one exists that the agent could launch and that would publish changes. It is recognized by name only, not by content.",
+     "es": "Hay un script con nombre de despliegue que el agente podría lanzar y que publicaría cambios. Se reconoce solo por el nombre, no por su contenido."
+    },
+    "what_to_do": {
+     "en": "Check what the script does and protect its execution so the agent asks first or cannot launch it.",
+     "es": "Comprueba qué hace el script y protege su ejecución para que el agente pregunte antes o no pueda lanzarlo."
+    }
+   },
+   "TH-10": {
+    "meaning": {
+     "en": "The platform has no sandbox (a box that limits what the agent can touch): rules are promises of the platform, not operating system barriers.",
+     "es": "La plataforma no tiene sandbox (una caja que limita lo que el agente puede tocar): las reglas son promesas de la plataforma, no barreras del sistema operativo."
+    },
+    "what_to_do": {
+     "en": "Consider running the agent in an isolated environment, such as a container or a virtual machine.",
+     "es": "Considera ejecutar el agente en un entorno aislado, como un contenedor o una máquina virtual."
+    }
+   },
+   "TH-11": {
+    "meaning": {
+     "en": "A file defines an agent with the tools it is allowed to use. What it can touch depends on those tools and on the platform.",
+     "es": "Un archivo define un agente con las herramientas que tiene permitidas. Lo que puede tocar depende de esas herramientas y de la plataforma."
+    },
+    "what_to_do": {
+     "en": "Review the allowed tools and keep only the necessary ones.",
+     "es": "Revisa las herramientas permitidas y deja solo las necesarias."
+    }
+   },
+   "TH-12": {
+    "meaning": {
+     "en": "An instructions file contains characters that are not drawn on screen (invisible Unicode characters; Unicode is the standard that defines the letters and symbols of all languages) but that an agent does read: there could be an order you cannot see.",
+     "es": "Un archivo de instrucciones contiene caracteres que no se dibujan en pantalla (caracteres Unicode invisibles; Unicode es el estándar que define las letras y símbolos de todos los idiomas) pero que un agente sí lee: podría haber una orden que no ves."
+    },
+    "what_to_do": {
+     "en": "Open the file in an editor that shows hidden characters and remove them.",
+     "es": "Abre el archivo en un editor que muestre los caracteres ocultos y elimínalos."
+    }
+   },
+   "TH-13": {
+    "meaning": {
+     "en": "A loose instructions file sits outside a project: an agent launched from that folder would read it as if it were trusted.",
+     "es": "Hay un archivo de instrucciones suelto fuera de un proyecto: un agente lanzado desde esa carpeta lo leería como si fuera de confianza."
+    },
+    "what_to_do": {
+     "en": "Move it into a project you control or delete it.",
+     "es": "Muévelo a un proyecto que controles o elimínalo."
+    }
+   },
+   "TH-14": {
+    "meaning": {
+     "en": "The project configuration defines a hook (a command a tool launches by itself on an event) or an MCP server (the agent's link to external tools) that starts a program when an event happens, for example when the folder is opened.",
+     "es": "La configuración del proyecto define un hook (comando que una herramienta lanza sola ante un evento) o un servidor MCP (conexión del agente con herramientas externas) que arranca un programa cuando ocurre un evento, por ejemplo al abrir la carpeta."
+    },
+    "what_to_do": {
+     "en": "Review that command and disable any you do not recognize before opening the project.",
+     "es": "Revisa ese comando y desactiva el que no reconozcas antes de abrir el proyecto."
+    }
+   },
+   "TH-15": {
+    "meaning": {
+     "en": "The configuration makes the agent skip permission confirmations: it acts without asking.",
+     "es": "La configuración hace que el agente salte las confirmaciones de permisos: actúa sin pedir permiso."
+    },
+    "what_to_do": {
+     "en": "Remove that option and let the agent ask for confirmation.",
+     "es": "Quita esa opción y deja que el agente pida confirmación."
+    }
+   },
+   "TH-16": {
+    "meaning": {
+     "en": "A task is configured to run by itself when the folder is opened in the editor.",
+     "es": "Hay una tarea configurada para ejecutarse sola al abrir la carpeta en el editor."
+    },
+    "what_to_do": {
+     "en": "Delete the task or turn off automatic tasks in the editor.",
+     "es": "Elimina la tarea o desactiva las tareas automáticas del editor."
+    }
+   },
+   "TH-17": {
+    "meaning": {
+     "en": "A platform or deployment secret, recognized by its name, sits in a file. What that secret allows is not visible.",
+     "es": "Hay un secreto de plataforma o de despliegue, reconocido por su nombre, en un archivo. Lo que ese secreto permite hacer no se ve."
+    },
+    "what_to_do": {
+     "en": "Remove it from the project, rotate it (replace it with a new one and disable the old one) and limit what it allows on the platform.",
+     "es": "Retíralo del proyecto, rótala (rotar es cambiarla por una nueva y desactivar la vieja) y limita lo que permite en la plataforma."
+    }
+   },
+   "TH-18": {
+    "meaning": {
+     "en": "The git configuration (git is the program that keeps the project history), or its hooks (commands git launches by itself on an event) and filters, can run programs during common operations on the repository.",
+     "es": "La configuración de git (el programa que guarda el historial del proyecto), o sus hooks (comandos que git lanza solos ante un evento) y filtros, puede ejecutar programas al hacer operaciones comunes sobre el repositorio."
+    },
+    "what_to_do": {
+     "en": "Review those keys and hooks and remove any you do not recognize.",
+     "es": "Revisa esas claves y hooks y elimina los que no reconozcas."
+    }
+   },
+   "TH-19": {
+    "meaning": {
+     "en": "A git remote or submodule (the address changes are downloaded from or uploaded to) carries a credential inside the address, or a suspicious address.",
+     "es": "Un remoto o submódulo de git (la dirección de donde se bajan o suben los cambios) trae una credencial dentro de la dirección o una dirección sospechosa."
+    },
+    "what_to_do": {
+     "en": "Remove the credential from the address, rotate it (replace it with a new one and disable the old one) and use a credential helper.",
+     "es": "Quita la credencial de la dirección, rótala (rotar es cambiarla por una nueva y desactivar la vieja) y usa un ayudante de credenciales."
+    }
+   },
+   "TH-20": {
+    "meaning": {
+     "en": "The git configuration could not be interpreted by AgentReach's own reader; nothing was run.",
+     "es": "La configuración de git no pudo interpretarse con el lector propio de AgentReach; no se ejecutó nada."
+    },
+    "what_to_do": {
+     "en": "Review the git configuration file by hand.",
+     "es": "Revisa el archivo de configuración de git a mano."
+    }
+   },
+   "TH-17/si": {
+    "meaning": {
+     "en": "A platform or deployment secret, recognized by its name, sits in a file. What that secret allows is not visible. It is in a file unrelated to the task.",
+     "es": "Hay un secreto de plataforma o de despliegue, reconocido por su nombre, en un archivo. Lo que ese secreto permite hacer no se ve. Está en un archivo sin relación con la tarea."
+    },
+    "what_to_do": {
+     "en": "Remove it from the project, rotate it (replace it with a new one and disable the old one) and limit what it allows on the platform.",
+     "es": "Retíralo del proyecto, rótala (rotar es cambiarla por una nueva y desactivar la vieja) y limita lo que permite en la plataforma."
+    }
+   },
+   "TH-17/no_determinado": {
+    "meaning": {
+     "en": "A platform or deployment secret, recognized by its name, sits in a file. What that secret allows is not visible. It cannot be known whether the file is related to the task.",
+     "es": "Hay un secreto de plataforma o de despliegue, reconocido por su nombre, en un archivo. Lo que ese secreto permite hacer no se ve. No se puede saber si el archivo tiene relación con la tarea."
+    },
+    "what_to_do": {
+     "en": "Remove it from the project, rotate it (replace it with a new one and disable the old one) and limit what it allows on the platform.",
+     "es": "Retíralo del proyecto, rótala (rotar es cambiarla por una nueva y desactivar la vieja) y limita lo que permite en la plataforma."
+    }
+   }
+  },
+  "reasons": {
+   "existe_legible_sin_regla": {
+    "en": "It exists, the operating system allows reading it and no agent rule prevents it",
+    "es": "Existe, el sistema operativo permite leerlo y ninguna regla del agente lo impide"
+   },
+   "no_determinado": {
+    "en": "Not determined",
+    "es": "No determinado"
+   },
+   "regla_deny": {
+    "en": "Protected by agent policy, not by an operating system barrier",
+    "es": "Protegido por política del agente, no por barrera del sistema operativo"
+   },
+   "regla_ask": {
+    "en": "The agent must ask for confirmation before reading it",
+    "es": "El agente debe pedir confirmación antes de leerlo"
+   },
+   "existe_no_legible": {
+    "en": "It exists and today the agent cannot read it with the verified permissions",
+    "es": "Existe y hoy el agente no puede leerlo con los permisos verificados"
+   },
+   "sin_fuente_verificada": {
+    "en": "No verified source",
+    "es": "Sin fuente verificada"
+   },
+   "indicio_debil": {
+    "en": "Weak or indirect hint",
+    "es": "Indicio débil o indirecto"
+   },
+   "no_confirmado_independiente": {
+    "en": "Could not be confirmed independently",
+    "es": "No se pudo confirmar de forma independiente"
+   },
+   "sin_certeza_del_archivo": {
+    "en": "Cannot be determined with certainty from the file itself",
+    "es": "No se puede determinar con certeza desde el propio archivo"
+   }
+  },
+  "providers": {
+   "ia": {
+    "en": "AI service",
+    "es": "servicio de inteligencia artificial"
+   },
+   "pagos": {
+    "en": "payments service",
+    "es": "servicio de pagos"
+   },
+   "codigo": {
+    "en": "code hosting service",
+    "es": "servicio de alojamiento de código"
+   },
+   "despliegue": {
+    "en": "deployment platform",
+    "es": "plataforma de despliegue"
+   },
+   "base_de_datos": {
+    "en": "database",
+    "es": "base de datos"
+   },
+   "nube": {
+    "en": "cloud account",
+    "es": "cuenta en la nube"
+   },
+   "ssh": {
+    "en": "remote server access",
+    "es": "acceso remoto a servidores"
+   },
+   "firma": {
+    "en": "application signing",
+    "es": "firma de aplicación"
+   },
+   "no_aplica": {
+    "en": "",
+    "es": ""
+   },
+   "desconocido": {
+    "en": "unknown provider",
+    "es": "proveedor desconocido"
+   }
+  },
+  "postures": {
+   "allow": {
+    "en": "allows it",
+    "es": "lo permite"
+   },
+   "ask": {
+    "en": "asks first",
+    "es": "pide confirmación"
+   },
+   "deny": {
+    "en": "blocks it (rule only)",
+    "es": "lo bloquea (solo por regla)"
+   },
+   "sin_regla": {
+    "en": "no rule",
+    "es": "sin regla"
+   },
+   "no_determinada": {
+    "en": "not determined",
+    "es": "no determinadas"
+   }
+  },
+  "unrelated": {
+   "si": {
+    "en": "yes",
+    "es": "sí"
+   },
+   "no": {
+    "en": "no",
+    "es": "no"
+   },
+   "no_determinado": {
+    "en": "not determined",
+    "es": "no determinado"
+   }
+  },
+  "no_review": {
+   "ubicacion_sensible_sin_activar": {
+    "title": {
+     "en": "Sensitive location not turned on",
+     "es": "Ubicación sensible sin activar"
+    },
+    "how_to_fix": {
+     "en": "If you want AgentReach to look only at the name, size and permissions (never the content) of these folders, run it again with --incluir-ubicaciones-sensibles.",
+     "es": "Si quieres que AgentReach mire solo el nombre, el tamaño y los permisos (nunca el contenido) de estas carpetas, ejecútalo de nuevo con --incluir-ubicaciones-sensibles."
+    }
+   },
+   "archivo_ilegible": {
+    "title": {
+     "en": "The file could not be opened",
+     "es": "No se pudo abrir el archivo"
+    },
+    "how_to_fix": {
+     "en": "Check that the file exists and that your user has read permission; then run it again.",
+     "es": "Comprueba que el archivo existe y que tu usuario tiene permiso de lectura; luego ejecútalo de nuevo."
+    }
+   },
+   "archivo_demasiado_grande": {
+    "title": {
+     "en": "File too large (over 5 MB)",
+     "es": "Archivo demasiado grande (más de 5 MB)"
+    },
+    "how_to_fix": {
+     "en": "For safety AgentReach does not open files this large. If it may hold secrets, review it by hand.",
+     "es": "Por seguridad AgentReach no abre archivos tan grandes. Si puede guardar secretos, revísalo a mano."
+    }
+   },
+   "no_es_archivo_regular": {
+    "title": {
+     "en": "Not a regular file (pipe, device or other)",
+     "es": "No es un archivo normal (tubería, dispositivo u otro)"
+    },
+    "how_to_fix": {
+     "en": "No action needed. If it should not be in the project, remove it.",
+     "es": "No requiere acción. Si no debería estar en el proyecto, retíralo."
+    }
+   },
+   "codificacion_no_utf8": {
+    "title": {
+     "en": "Text in an encoding that could not be read",
+     "es": "Texto en una codificación que no se pudo leer"
+    },
+    "how_to_fix": {
+     "en": "Save it as UTF-8 (a standard text format) and run it again.",
+     "es": "Guárdalo como UTF-8 (un formato de texto estándar) y ejecútalo de nuevo."
+    }
+   },
+   "profundidad_excedida": {
+    "title": {
+     "en": "Too many nesting levels",
+     "es": "Demasiados niveles de anidación"
+    },
+    "how_to_fix": {
+     "en": "Simplify the file or review it by hand.",
+     "es": "Simplifica el archivo o revísalo a mano."
+    }
+   },
+   "ruta_de_red": {
+    "title": {
+     "en": "Network path",
+     "es": "Ruta de red"
+    },
+    "how_to_fix": {
+     "en": "AgentReach does not go onto the network. Copy the folder to this computer and run it again.",
+     "es": "AgentReach no sale a la red. Copia la carpeta al equipo y ejecútalo de nuevo."
+    }
+   },
+   "configuracion_no_interpretable": {
+    "title": {
+     "en": "Configuration AgentReach does not understand",
+     "es": "Configuración que AgentReach no entiende"
+    },
+    "how_to_fix": {
+     "en": "Review that file by hand.",
+     "es": "Revisa ese archivo a mano."
+    }
+   },
+   "version_no_reconocida": {
+    "title": {
+     "en": "Tool version not recognized",
+     "es": "Versión de la herramienta no reconocida"
+    },
+    "how_to_fix": {
+     "en": "Review that configuration by hand.",
+     "es": "Revisa esa configuración a mano."
+    }
+   },
+   "historial_git_fase2": {
+    "title": {
+     "en": "Git history (comes in a future phase)",
+     "es": "Historial de git (llega en una fase futura)"
+    },
+    "how_to_fix": {
+     "en": "This version does not run git. If the history worries you, review it with a separate tool.",
+     "es": "Esta versión no ejecuta git. Si te preocupa el historial, revísalo con una herramienta aparte."
+    }
+   }
+  }
+ },
+ "not_reviewed": [
+  {
+   "path": "data/locked0.example",
+   "reason": "no_es_archivo_regular"
+  },
+  {
+   "path": "data/locked1.example",
+   "reason": "historial_git_fase2"
+  },
+  {
+   "path": "data/locked2.example",
+   "reason": "version_no_reconocida"
+  },
+  {
+   "path": "data/locked3.example",
+   "reason": "archivo_demasiado_grande"
+  },
+  {
+   "path": "data/locked4.example",
+   "reason": "profundidad_excedida"
+  },
+  {
+   "path": "data/locked5.example",
+   "reason": "historial_git_fase2"
+  },
+  {
+   "path": "data/locked6.example",
+   "reason": "configuracion_no_interpretable"
+  }
+ ],
+ "limits": {
+  "en": [
+   "The agent version. Several attacks depend on the agent being a version with the flaw; AgentReach does not assume that version.",
+   "Whether the model would obey. A file with a hidden order is a condition; whether the model follows it depends on the model.",
+   "Malicious instructions in plain language with no formatting tricks. They are only flagged by a simple pattern and at most as a hypothesis.",
+   "MCP tool descriptions. What they say only shows up when the server runs, and AgentReach runs nothing.",
+   "Packages invented by the model. Knowing whether a package exists requires checking the internet, and AgentReach does not go onto the network.",
+   "The real power of a token. AgentReach sees that it exists and of what type, not what it can do with it on the service."
+  ],
+  "es": [
+   "La versión del agente. Varios ataques dependen de que el agente sea de una versión con el defecto; AgentReach no da por sabida esa versión.",
+   "Si el modelo obedecería. Un archivo con una orden escondida es una condición; que el modelo la siga depende del modelo.",
+   "Instrucciones maliciosas en lenguaje natural sin trucos de formato. Solo se marcan por un patrón simple y como máximo como hipótesis.",
+   "Las descripciones de las herramientas MCP. Lo que dicen solo aparece al ejecutar el servidor, y AgentReach no ejecuta nada.",
+   "Paquetes inventados por el modelo. Saber si un paquete existe exige consultar internet, y AgentReach no sale a la red.",
+   "El poder real de un token. AgentReach ve que existe y de qué tipo, no qué puede hacer con él en el servicio."
+  ]
+ },
+ "limits_also": {
+  "en": "Also not checked in this version: the git commit history, changes to a configuration after it was approved, and running processes and ports.",
+  "es": "Tampoco se revisan en esta versión: el historial de commits de git, los cambios de una configuración después de aprobarla y los procesos y puertos en ejecución."
+ }
+}

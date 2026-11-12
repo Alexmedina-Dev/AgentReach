@@ -1,0 +1,984 @@
+[
+ {
+  "id": "PP-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "PP-01a",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 2,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-01b",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 3,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-01c",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 4,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-01d",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 5,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-01e",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 6,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-01f",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "linea": 7,
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): potencial tambien en opencode (antes AgentReach daba comprobado y se aceptaba como diferencia)."
+ },
+ {
+  "id": "PP-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env.example"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "PP-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env.production"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists ; https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "PP-04",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env.staging"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "PP-05",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.env.local"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "AJ-01",
+  "raiz": "contenedora",
+  "rutas": [
+   "proyecto-ajeno/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/config/ ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "nota_confirmacion": "Difiere en Claude Code: la confirmacion dice potencial (el aviso por defecto al leer fuera del directorio de trabajo no es una regla ask escrita, FR-5); el oraculo dice comprobado. Se conserva el oraculo. Decision pendiente de Alex.",
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "EN-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/enlace-externo"
+  ],
+  "tipos": [
+   "TH-6"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "EN-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/enlace-externo/credentials.json"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "nota_confirmacion": "La confirmacion dice 'no se pudo revisar'; el oraculo dice 'no se reporta' el contenido. Sin conflicto real: el PRD (FR-19/FR-26) pone 'no se pudo revisar' en el enlace (EN-01), no en este archivo."
+ },
+ {
+  "id": "EN-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/enlace-simbolico"
+  ],
+  "tipos": null,
+  "esperado": "no_aplicable",
+  "nota": "exige un privilegio que no siempre se tiene",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "HF-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/.ssh/id_ed25519"
+  ],
+  "tipos": [
+   "TH-2"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "HF-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/.ssh/id_ed25519.pub",
+   "home-falso/.ssh/known_hosts"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "HF-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/.aws/credentials"
+  ],
+  "tipos": [
+   "TH-3"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "HF-04",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/.aws/config"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "HF-05",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/.npmrc"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "CA-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/settings.json"
+  ],
+  "tipos": [
+   "TH-7",
+   "TH-8",
+   "TH-10",
+   "TH-15"
+  ],
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "CA-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "(Windows nativo)"
+  ],
+  "tipos": [
+   "TH-10"
+  ],
+  "esperado": "potencial",
+  "solo_windows": true,
+  "fuente_primaria": "https://code.claude.com/docs/en/sandboxing",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "CA-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/settings.json"
+  ],
+  "tipos": [
+   "TH-4"
+  ],
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://code.claude.com/docs/en/env-vars",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "CA-04",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/opencode.json"
+  ],
+  "tipos": [
+   "TH-7",
+   "TH-8"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://opencode.ai/docs/permissions/ ; https://opencode.ai/docs/config/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "CA-05",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/agents/revisor-ejemplo.md"
+  ],
+  "tipos": [
+   "TH-11"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "CX-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/CLAUDE.md"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "NO-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/src/analizador.py"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "NO-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/cola/"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "NO-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/docs/ejemplo-aws.md"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "NO-04",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.github/workflows/deploy.yml"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/config/servicio-rastreado.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "GT-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.git"
+  ],
+  "tipos": null,
+  "esperado": "no_se_pudo_revisar",
+  "motivo": "historial_git_fase2",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.git/config"
+  ],
+  "tipos": [
+   "TH-19"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "EV-01",
+  "raiz": "entorno",
+  "rutas": [
+   "entorno:AGENTREACH_PRUEBA_API_TOKEN",
+   "entorno:AGENTREACH_PRUEBA_DB_PASSWORD"
+  ],
+  "tipos": [
+   "TH-4"
+  ],
+  "esperado": "hipotesis",
+  "fuente_primaria": "https://code.claude.com/docs/en/env-vars ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "PA-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/config/exportacion-abierta.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists ; https://opencode.ai/docs/permissions/",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "decision": "Decision de Alex 2026-11-11 (Historia 27): una variable o clave reconocida solo por su nombre nunca pasa de potencial, en ningun agente. El oraculo original daba comprobado."
+ },
+ {
+  "id": "CX-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/AGENTS.md"
+  ],
+  "tipos": [
+   "TH-5"
+  ],
+  "esperado": "hipotesis",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "NO-05",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.git/hooks/"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "nota": "solo los .sample",
+  "fuente_primaria": "https://git-scm.com/docs/githooks",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "AT-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.cursor/rules/estilo.mdc"
+  ],
+  "tipos": [
+   "TH-12"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "AT-02",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/docs/emoji.md"
+  ],
+  "tipos": null,
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-03",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/Downloads/AGENTS.md"
+  ],
+  "tipos": [
+   "TH-13"
+  ],
+  "esperado": "comprobado",
+  "con_opt_in": true,
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "AT-04",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/settings.json"
+  ],
+  "tipos": [
+   "TH-14"
+  ],
+  "esperado": "potencial",
+  "linea": 20,
+  "fuente_primaria": "https://code.claude.com/docs/en/hooks ; https://code.claude.com/docs/en/settings",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-05",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.mcp.json"
+  ],
+  "tipos": [
+   "TH-14"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/mcp",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-06",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/settings.local.json"
+  ],
+  "tipos": [
+   "TH-15"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/settings ; https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-07",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.vscode/tasks.json"
+  ],
+  "tipos": [
+   "TH-16"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.visualstudio.com/docs/debugtest/tasks",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-08",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/src/estilos/notas-tipografia.txt"
+  ],
+  "tipos": [
+   "TH-17"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "GT-04",
+  "raiz": "trampas-git/fsmonitor-malo",
+  "rutas": [
+   "fsmonitor-malo/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-05",
+  "raiz": "trampas-git/hookspath-dentro",
+  "rutas": [
+   "hookspath-dentro/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://git-scm.com/docs/git-config ; https://git-scm.com/docs/githooks",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-06",
+  "raiz": "trampas-git/filtro-gitattributes",
+  "rutas": [
+   "filtro-gitattributes/.git/config",
+   "filtro-gitattributes/.gitattributes"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/gitattributes ; https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-07",
+  "raiz": "trampas-git/hook-ejecutable",
+  "rutas": [
+   "hook-ejecutable/.git/hooks/post-checkout"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://git-scm.com/docs/githooks",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "GT-08",
+  "raiz": "trampas-git/remoto-relleno",
+  "rutas": [
+   "remoto-relleno/.git/config"
+  ],
+  "tipos": [
+   "TH-19"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "GT-09",
+  "raiz": "trampas-git/config-formato-retorcido",
+  "rutas": [
+   "config-formato-retorcido/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-09",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.github/copilot-instructions.md"
+  ],
+  "tipos": [
+   "TH-12"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "AT-10",
+  "raiz": "proyecto",
+  "rutas": [
+   "home-falso/AGENTS.md"
+  ],
+  "tipos": [
+   "TH-13"
+  ],
+  "esperado": "comprobado",
+  "con_opt_in": true,
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "AT-11",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/enlace-denegado"
+  ],
+  "tipos": [
+   "TH-6"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "AT-12",
+  "raiz": "proyecto",
+  "rutas": [
+   "proyecto/.claude/settings.json"
+  ],
+  "tipos": [
+   "TH-14"
+  ],
+  "esperado": "potencial",
+  "linea": 19,
+  "fuente_primaria": "https://code.claude.com/docs/en/mcp",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-10",
+  "raiz": "trampas-git/fsmonitor-true",
+  "rutas": [
+   "fsmonitor-true/.git/config"
+  ],
+  "tipos": [
+   "TH-18",
+   "TH-19"
+  ],
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-11",
+  "raiz": "trampas-git/fsmonitor-false",
+  "rutas": [
+   "fsmonitor-false/.git/config"
+  ],
+  "tipos": [
+   "TH-18",
+   "TH-19"
+  ],
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-12",
+  "raiz": "trampas-git/filtro-lfs",
+  "rutas": [
+   "filtro-lfs/.gitattributes",
+   "filtro-lfs/.git/config"
+  ],
+  "tipos": [
+   "TH-18",
+   "TH-19"
+  ],
+  "esperado": "no_se_reporta",
+  "fuente_primaria": "https://git-scm.com/docs/gitattributes",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-13",
+  "raiz": "trampas-git/config-retorcida-ciclo",
+  "rutas": [
+   "config-retorcida-ciclo/.git/config",
+   "config-retorcida-ciclo/.git/ciclo-b.config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "potencial",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "GT-14",
+  "raiz": "trampas-git/ssh-command",
+  "rutas": [
+   "ssh-command/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-15",
+  "raiz": "trampas-git/pager",
+  "rutas": [
+   "pager/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-16",
+  "raiz": "trampas-git/alias-shell",
+  "rutas": [
+   "alias-shell/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-17",
+  "raiz": "trampas-git/diff-external",
+  "rutas": [
+   "diff-external/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-18",
+  "raiz": "trampas-git/gpg-program",
+  "rutas": [
+   "gpg-program/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ },
+ {
+  "id": "GT-19",
+  "raiz": "trampas-git/gpg-showsignature",
+  "rutas": [
+   "gpg-showsignature/.git/config"
+  ],
+  "tipos": [
+   "TH-18"
+  ],
+  "esperado": "comprobado",
+  "fuente_primaria": "https://git-scm.com/docs/git-config ; https://git-scm.com/docs/git-log",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": false
+ },
+ {
+  "id": "OC-01",
+  "raiz": "opencode-sin-read",
+  "rutas": [
+   "proyecto-opencode-sin-read/.env"
+  ],
+  "tipos": [
+   "TH-1"
+  ],
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "potencial"
+  },
+  "aceptado": {
+   "claude-code": "comprobado"
+  },
+  "explicacion": "En Claude Code ese proyecto no tiene ninguna regla (ni .claude/): el archivo existe, se puede leer y nada lo impide, asi que FR-5 da comprobado. El 'potencial' del oraculo es el de opencode (el ask base de *.env): la fila OC-01 es un control de opencode. Se anota para que Alex lo confirme.",
+  "fuente_primaria": "https://opencode.ai/docs/permissions/ ; https://code.claude.com/docs/en/permissions",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true,
+  "nota_confirmacion": "La confirmacion da comprobado en Claude Code, igual que el nivel aceptado de esta prueba (el oraculo decia potencial)."
+ },
+ {
+  "id": "TR-01",
+  "raiz": "proyecto",
+  "rutas": [
+   "trampas/PWNED.txt"
+  ],
+  "tipos": null,
+  "esperado": "no_debe_existir",
+  "fuente_primaria": "regla del PRD (sin fuente primaria externa)",
+  "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
+  "verificado_en_fuente": true
+ }
+]

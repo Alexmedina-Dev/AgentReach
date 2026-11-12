@@ -1,0 +1,24 @@
+PS C:\Users\ejemplo\proyectos> agentreach mi-app
+
+AGENT REACH v0.1.0 · Know what your agents can reach.
+Solo lectura: no cambió nada ni ejecutó ningún programa.
+
+Carpeta: C:\Users\ejemplo\proyectos\mi-app
+Idioma: español · Color: 24 bits
+
+Mirando archivos... 41 revisados · 7 hallazgos hasta ahora
+  (una sola línea que se reescribe; sin porcentaje)
+
+Mirando archivos... 41 revisados · 7 hallazgos  √ listo en 1,8 s
+
+RESUMEN
+  41 archivos mirados
+  ■ COMPROBADO        2   se puede leer y ninguna regla lo impide
+  ▲ POTENCIAL         3   puede pasar si el agente ejecuta algo
+  ◊ HIPÓTESIS         2   sugerencias, no accesos comprobados
+  ○ NO SE PUDO REVISAR 1  ver la sección final
+
+... aquí sigue el reporte completo (ver docs/reporte-terminal) ...
+
+→ Para ver el detalle de cada hallazgo: agentreach mi-app --detalle
+Código de salida: 1 (hay hallazgos comprobados).

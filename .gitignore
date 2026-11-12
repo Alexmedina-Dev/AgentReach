@@ -1,0 +1,42 @@
+# Entorno local
+.venv/
+__pycache__/
+*.pyc
+
+# Configuración local de Claude Code (personal, no compartir)
+.claude/settings.local.json
+
+# Secretos locales: nunca subir
+.env
+.env.*
+!.env.example
+
+# Python
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# uv: el entorno .venv ya está ignorado arriba; uv.lock SÍ se versiona
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Memoria local de trabajo (no va al repositorio por seguridad)
+memory/
+memory.md
+
+# Copias aisladas temporales de agentes
+.claude/worktrees/
+
+# Resultados de revisar proyectos reales de trabajo: nunca se suben
+_bmad-output/planning-artifacts/research/*proyecto-real*/

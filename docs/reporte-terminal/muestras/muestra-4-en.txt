@@ -1,0 +1,175 @@
+AGENTREACH  Review report
+=========================
+Folder reviewed: C:\dev\proyecto-prueba-agentreach\proyecto
+Date: 2026-11-09 16:40
+Read-only: AgentReach changed nothing and ran no programs.
+
+(i) No secret values are shown. AgentReach never copies passwords, tokens or
+    keys: it only says where they are and what kind they are.
+
+SUMMARY  (41 files looked at)
+  ■ VERIFIED          2  exposure confirmed; handle first
+  ▲ POTENTIAL         6  probable, something still to confirm; check soon
+  ◊ HYPOTHESIS        1  suggestions, not verified access
+  ○ COULD NOT CHECK   7  coverage gaps, not a verdict
+
+■ VERIFIED (2)
+Exposure confirmed. Handle these first.
+
+.env.local
+  ■ line 2 · Credential in a file (AI service)
+    Level and why: verified. It exists, the operating system allows reading it
+      and no agent rule prevents it.
+    Platform and agent: Claude Code · Agent rules: no rule · Unrelated to the
+      task: not determined
+    → What to do: Move the credential out of the project or into a secrets
+      manager, and rotate the key if it was exposed.
+    What it means: A project file stores a credential (a key or password that
+      grants access to a service). An agent that can read the project could
+      read it.
+
+.env.staging
+  ■ line 3 · Credential in a file (payments service)
+    Level and why: verified. It exists, the operating system allows reading it
+      and no agent rule prevents it.
+    Platform and agent: Claude Code · Agent rules: no rule · Unrelated to the
+      task: not determined
+    → What to do: Move the credential out of the project or into a secrets
+      manager, and rotate the key if it was exposed.
+    What it means: A project file stores a credential (a key or password that
+      grants access to a service). An agent that can read the project could
+      read it.
+
+▲ POTENTIAL (6)
+Probable, but something still needs confirming. Check soon: potential does not
+mean lower risk. The reason is on each finding.
+
+.env
+  ▲ line 2 · Credential in a file (AI service)
+    Level and why: potential. Protected by agent policy, not by an operating
+      system barrier.
+    Platform and agent: Claude Code · Agent rules: blocks it (rule only) ·
+      Unrelated to the task: no
+    → What to do: Move the credential out of the project or into a secrets
+      manager, and rotate the key if it was exposed.
+    What it means: A project file stores a credential (a key or password that
+      grants access to a service). An agent that can read the project could
+      read it.
+
+  ▲ line 3 · Credential in a file (payments service)
+    Level and why: potential. Protected by agent policy, not by an operating
+      system barrier.
+    Platform and agent: Claude Code · Agent rules: blocks it (rule only) ·
+      Unrelated to the task: no
+    What to do / what it means: same as the finding on line 2 of this file
+
+  ▲ line 5 · Credential in a file (deployment platform)
+    Level and why: potential. Protected by agent policy, not by an operating
+      system barrier.
+    Platform and agent: Claude Code · Agent rules: blocks it (rule only) ·
+      Unrelated to the task: no
+    What to do / what it means: same as the finding on line 2 of this file
+
+.env.production
+  ▲ line not determined · Credential in a file (unknown provider)
+    Level and why: potential. It exists and today the agent cannot read it with
+      the verified permissions.
+    Platform and agent: Claude Code · Agent rules: no rule · Unrelated to the
+      task: not determined
+    → What to do: Move the credential out of the project or into a secrets
+      manager, and rotate the key if it was exposed.
+    What it means: A project file stores a credential (a key or password that
+      grants access to a service). An agent that can read the project could
+      read it.
+
+enlace-externo
+  ▲ line not determined · Link that leaves the folder
+    Level and why: potential. Not determined.
+    Platform and agent: not determined · Agent rules: not determined ·
+      Unrelated to the task: not determined
+    → What to do: Confirm the destination is intentional or remove the link.
+    What it means: A link (junction: Windows folder link) looks like part of
+      the project but leads elsewhere on the machine. It was not entered.
+
+src/estilos/notas-tipografia.txt
+  ▲ line 3 · Platform or deployment secret (deployment platform)
+    Level and why: potential. No verified source.
+    Platform and agent: Claude Code · Agent rules: no rule · Unrelated to the
+      task: yes
+    → What to do: Remove it from the project, rotate it and limit its scope on
+      the platform.
+    What it means: A platform or deployment secret, recognized by its name,
+      sits in a file unrelated to the task. What that secret allows is not
+      visible.
+
+◊ HYPOTHESIS (1)
+Suggestions, not verified access.
+
+AGENTS.md
+  ◊ line 7 · Instructions file with suspicious text
+    Level and why: hypothesis. Weak or indirect hint.
+    Platform and agent: Claude Code · Agent rules: no rule · Unrelated to the
+      task: not determined
+    → What to do: Review that file by hand and remove instructions you did not
+      write.
+    What it means: A context file (instructions the agent reads, such as
+      CLAUDE.md or AGENTS.md) contains text that seems to ask to bypass rules
+      or leak data.
+
+○ WHAT AGENTREACH COULD NOT CHECK
+----------------------------------------
+A. In this folder
+Each entry says what happened and how to fix it. Something not being checked
+does not mean it is fine. (~ is your home folder)
+
+○ Sensitive location not turned on (3)
+    ~\.ssh
+    ~\.aws
+    ~\.npmrc
+    How to fix it: If you want AgentReach to look only at the name, size and
+      permissions (never the content) of these folders, run again with
+      --incluir-ubicaciones-sensibles.
+
+○ The file could not be opened (1)
+    docs/nota\u202etxt.exe
+    How to fix it: Check that the file exists and that your user may read it;
+      then run again.
+
+○ File too large (over 5 MB) (1)
+    datos/exportacion-grande.bin
+    How to fix it: For safety AgentReach does not open files this big. If it
+      may hold secrets, check it by hand.
+
+○ Text in an encoding that could not be read (1)
+    notas/viejo-latin1.txt
+    How to fix it: Save it as UTF-8 (a standard text format) and run again.
+
+○ Git history (planned for a later phase) (1)
+    .git
+    How to fix it: This version does not run git. If the history worries you,
+      check it with a separate tool.
+
+Some names had invisible or control characters; they are shown written as
+\uXXXX.
+
+B. Limits of the tool (shown in every report)
+Seeing a condition in a file is not seeing the attack. AgentReach cannot see:
+  1. The agent version. Some attacks depend on the agent having a defect in a
+     certain version; AgentReach does not know it.
+  2. Whether the AI model would obey. A file with a hidden order is a
+     condition; whether the model follows it depends on the model.
+  3. Malicious instructions written in plain language, with no formatting
+     tricks. Only very simple phrases are flagged, at most as a hypothesis.
+  4. The descriptions of MCP tools (the agent's link to external tools). They
+     only appear when the server runs, and AgentReach runs nothing.
+  5. Packages made up by the model. Knowing whether a package exists needs the
+     internet, and AgentReach does not go online.
+  6. The real power of a token. It sees that a token exists and what kind it
+     is, not what it could do on the service.
+Also not checked in this version: git commit history, changes to a
+configuration after it was approved, and running processes and ports.
+
+Exit code: 1 (there are verified findings)
+To see the catalog code, the exact rule and the technical reason of each
+finding, run again with --detalle (the option has the same name in both
+languages).

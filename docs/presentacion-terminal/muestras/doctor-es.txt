@@ -1,0 +1,18 @@
+AGENT REACH  doctor  v0.1.0
+Know what your agents can reach.
+
+Comprobación de solo lectura de este equipo. No analiza ninguna carpeta.
+
+  √ Python                    3.12.4 (se necesita 3.12 o más)
+  √ Permisos de lectura       puede leer la carpeta actual
+  √ Codificación de consola   utf-8
+  √ Color                     24 bits (Windows Terminal)
+  √ Unicode                   puede escribir ■ ▲ ◊ ○ √ →
+  √ Idioma                    español (es-CO)
+  ▲ Ancho de la terminal      58 columnas (se usarán 60 como mínimo)
+      Agrande la ventana para que las líneas no se partan.
+
+√ 6 comprobaciones correctas, ▲ 1 aviso, 0 fallos.
+
+AgentReach no modifica nada ni ejecuta ningún programa.
+Código de salida: 0 (sin fallos). Con fallos sería 1.

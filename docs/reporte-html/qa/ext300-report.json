@@ -1,0 +1,14 @@
+{
+ "file": "C:\\Users\\<usuario>\\AppData\\Local\\Temp\\claude\\c237366b8a8ea80b\\c4ef19e9-3ef1-4d8c-b902-e588f60a4358\\scratchpad\\rh\\ext300.html",
+ "stress": {
+  "goto_s": 0.82,
+  "dcl_ms": 133,
+  "load_ms": 789,
+  "page_height": 104675,
+  "nodes_in_list": 600,
+  "lang_switch_ms": 100,
+  "search_ms": 28,
+  "console": [],
+  "req": []
+ }
+}

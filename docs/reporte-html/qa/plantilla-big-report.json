@@ -1,0 +1,168 @@
+{
+ "file": "C:\\Users\\<usuario>\\AppData\\Local\\Temp\\claude\\c237366b8a8ea80b\\c4ef19e9-3ef1-4d8c-b902-e588f60a4358\\scratchpad\\rh\\t_big.html",
+ "overflow": {
+  "320-dark": {
+   "sw": 320,
+   "W": 320,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 137..382",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577"
+   ],
+   "console": [],
+   "req": []
+  },
+  "320-light": {
+   "sw": 320,
+   "W": 320,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 137..382",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577"
+   ],
+   "console": [],
+   "req": []
+  },
+  "360-dark": {
+   "sw": 360,
+   "W": 360,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 137..382",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577"
+   ],
+   "console": [],
+   "req": []
+  },
+  "360-light": {
+   "sw": 360,
+   "W": 360,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 137..382",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577"
+   ],
+   "console": [],
+   "req": []
+  },
+  "390-dark": {
+   "sw": 390,
+   "W": 390,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577",
+    "BUTTON. 502..567"
+   ],
+   "console": [],
+   "req": []
+  },
+  "390-light": {
+   "sw": 390,
+   "W": 390,
+   "bad": [
+    "TABLE.tbl 25..665",
+    "CAPTION. 25..665",
+    "THEAD. 25..665",
+    "TR. 25..665",
+    "TH. 382..492",
+    "BUTTON. 392..449",
+    "TH. 492..577",
+    "BUTTON. 502..567"
+   ],
+   "console": [],
+   "req": []
+  },
+  "768-dark": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "768-light": {
+   "sw": 768,
+   "W": 768,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-dark": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1024-light": {
+   "sw": 1024,
+   "W": 1024,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-dark": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1440-light": {
+   "sw": 1440,
+   "W": 1440,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-dark": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  },
+  "1920-light": {
+   "sw": 1920,
+   "W": 1920,
+   "bad": [],
+   "console": [],
+   "req": []
+  }
+ },
+ "stress": {
+  "goto_s": 0.11,
+  "dcl_ms": 72,
+  "load_ms": 98,
+  "page_height": 9384,
+  "nodes_in_list": 0,
+  "lang_switch_ms": 14,
+  "search_ms": 10,
+  "console": [],
+  "req": []
+ }
+}

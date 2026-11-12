@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentReach · Reach route report</title>
+<meta name="description" content="Reach route report: what an AI agent can reach in a folder, one agent at a time, with evidence and a confidence level. Read-only, no secret values.">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0B1114; --surf:#121C20;
+  --text:#EAF4F2; --text2:#A9BDB9; --text3:#7C928E;
+  --mint:#3DF5D0; --mint-ui:#3DF5D0; --mint-text:#3DF5D0; --on-mint:#0B1114; --mint-fill:#3DF5D0;
+  --info:#6DB6FF; --violet:#B9A2FF;
+  --lc-v:#FF6B6B; --lc-p:#FFB224; --lc-h:#A9BDB9; --lc-c:#B9A2FF;
+  --lt-v:#FF6B6B; --lt-p:#FFB224; --lt-h:#A9BDB9; --lt-c:#B9A2FF;
+  --ic-v:#FF6B6B; --g-v:#0B1114;
+  --ic-p:#FFB224; --st-p:#FFB224; --g-p:#0B1114;
+  --ic-h:#A9BDB9; --fl-h:rgba(169,189,185,.16);
+  --ic-c:#B9A2FF; --fl-c:rgba(185,162,255,.16);
+  /* glass: low-opacity tint + brightness sheen + noise, over a bright mesh */
+  --glass: linear-gradient(150deg, rgba(255,255,255,.075), rgba(255,255,255,.01) 55%), rgba(11,17,20,.40);
+  --glass-solid:#121C20;
+  --glass-hi: linear-gradient(150deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 60%), rgba(11,17,20,.52);
+  --edge:rgba(255,255,255,.22);
+  --hi-line:linear-gradient(90deg, transparent, rgba(255,255,255,.75) 30%, rgba(255,255,255,.75) 70%, transparent);
+  --inner:inset 0 1px 0 rgba(255,255,255,.20), inset 0 0 32px rgba(255,255,255,.04), inset 0 -18px 30px rgba(0,0,0,.18);
+  --shadow:0 14px 38px rgba(0,0,0,.45);
+  --blur:blur(22px) saturate(170%) brightness(.50);
+  --flow:#EAF4F2; --focus:#3DF5D0; --ctl:#7C928E; --dim:.38;
+  --orb-a:rgba(61,245,208,.74); --orb-a2:rgba(61,245,208,.24);
+  --orb-b:rgba(185,162,255,.70); --orb-b2:rgba(185,162,255,.22);
+  --orb-c:rgba(255,178,36,.64); --orb-c2:rgba(255,178,36,.20);
+  --orb-d:rgba(109,182,255,.58); --orb-d2:rgba(109,182,255,.18);
+  --ring-a:#3DF5D0; --ring-b:#B9A2FF; --ring-c:#FFB224; --ring-o:.55;
+  --row-alt:rgba(255,255,255,.035); --chip:rgba(11,17,20,.94); --sunk:rgba(11,17,20,.66);
+  --f-head:Bahnschrift,"Segoe UI Variable Display","Avenir Next Condensed","DIN Alternate","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --f-mono:"Cascadia Mono","JetBrains Mono",ui-monospace,Consolas,"SF Mono",monospace;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg:#DFF5EF; --surf:#FFFFFF;
+  --text:#0B1114; --text2:#24403B; --text3:#3E5A55;
+  --mint:#00806B; --mint-ui:#00806B; --mint-text:#005F4D; --on-mint:#FFFFFF; --mint-fill:#00806B;
+  --info:#0A58A8; --violet:#5A3DC0;
+  --lc-v:#B3201A; --lc-p:#9A5B00; --lc-h:#3A524D; --lc-c:#5A3DC0;
+  --lt-v:#B3201A; --lt-p:#7A4300; --lt-h:#3A524D; --lt-c:#5A3DC0;
+  --ic-v:#B3201A; --g-v:#FFFFFF;
+  --ic-p:#FFB224; --st-p:#7A4300; --g-p:#0B1114;
+  --ic-h:#3A524D; --fl-h:rgba(58,82,77,.12);
+  --ic-c:#5A3DC0; --fl-c:rgba(90,61,192,.12);
+  --glass: linear-gradient(150deg, rgba(255,255,255,.60), rgba(255,255,255,.32) 70%), rgba(255,255,255,.28);
+  --glass-solid:#FFFFFF;
+  --glass-hi: linear-gradient(150deg, rgba(255,255,255,.92), rgba(255,255,255,.70)), rgba(255,255,255,.5);
+  --edge:rgba(255,255,255,.95);
+  --hi-line:linear-gradient(90deg, transparent, #fff 30%, #fff 70%, transparent);
+  --inner:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 26px rgba(255,255,255,.35);
+  --shadow:0 12px 32px rgba(40,70,110,.20);
+  --blur:blur(22px) saturate(170%);
+  --flow:#FFFFFF; --focus:#0A3FA8; --ctl:#46635E; --dim:.42;
+  --orb-a:rgba(0,200,160,.55); --orb-a2:rgba(0,200,160,.18);
+  --orb-b:rgba(120,150,255,.52); --orb-b2:rgba(120,150,255,.16);
+  --orb-c:rgba(255,160,90,.50); --orb-c2:rgba(255,160,90,.16);
+  --orb-d:rgba(255,200,60,.46); --orb-d2:rgba(255,200,60,.14);
+  --ring-a:#00806B; --ring-b:#5A3DC0; --ring-c:#B86E00; --ring-o:.42;
+  --row-alt:rgba(11,17,20,.035); --chip:rgba(255,255,255,.94); --sunk:rgba(127,160,155,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;position:relative;isolation:isolate;background:var(--bg);color:var(--text);font:16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;background:var(--mint-fill);color:var(--on-mint);padding:8px 14px;border-radius:8px;z-index:50;font-weight:700}
+.skip:focus{top:10px}
+
+/* mesh + orbs + sharp rings: the glass needs something to blur */
+.bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.bg::before{content:"";position:absolute;inset:0;
+  background:
+   radial-gradient(circle 340px at 330px 360px, var(--orb-a), var(--orb-a2) 52%, transparent 100%),
+   radial-gradient(circle 340px at 1250px 400px, var(--orb-b), var(--orb-b2) 52%, transparent 100%),
+   radial-gradient(circle 330px at 420px 1030px, var(--orb-c), var(--orb-c2) 52%, transparent 100%),
+   radial-gradient(circle 340px at 1200px 1040px, var(--orb-d), var(--orb-d2) 52%, transparent 100%),
+   radial-gradient(circle 300px at 800px 700px, var(--orb-a2), transparent 100%);
+  background-size:1600px 1400px;background-repeat:repeat}
+.bg svg.rings{position:absolute;left:0;top:0;width:1600px;height:1400px;opacity:var(--ring-o)}
+.bg svg.rings .ra{stroke:var(--ring-a)}.bg svg.rings .rb{stroke:var(--ring-b)}.bg svg.rings .rc{stroke:var(--ring-c)}
+:root[data-theme="light"] .bg{background:linear-gradient(135deg,#CDF6EA,#D4E4FF 55%,#FFE8C8)}
+
+/* glass */
+.glass,.node,.pill,.chip,.ctl-group,.tab,.kpi{position:relative;background:var(--glass);border:1px solid var(--edge);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.glass{border-radius:16px;box-shadow:var(--shadow),var(--inner)}
+.glass::before,.node::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;background:var(--hi-line);pointer-events:none;border-radius:1px}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass,.node,.pill,.chip,.ctl-group,.tab,.kpi{background:var(--glass-solid)!important}
+}
+@media (prefers-contrast:more){ .glass,.node,.pill,.chip,.ctl-group,.tab,.kpi{background:var(--glass-solid)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important} }
+.nofx .node{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+.wrap{max-width:1560px;margin:0 auto;padding:18px 24px 48px}
+header.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:12px;padding:14px 20px 16px}
+.brand{font:700 13px/1 var(--f-head);letter-spacing:.22em;text-transform:uppercase}
+.brand b{color:var(--mint-text)}
+h1{margin:6px 0 4px;font:700 clamp(28px,4vw,46px)/1.02 var(--f-head);letter-spacing:-.01em}
+h1 span{color:var(--mint-text)}
+.lead{margin:0;color:var(--text2);max-width:70ch}
+.ctls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ctl-group{display:inline-flex;border-radius:12px;padding:3px;gap:2px}
+.ctl-group button{min-height:36px;min-width:44px;padding:4px 12px;border:0;border-radius:9px;background:transparent;cursor:pointer;font-weight:600;color:var(--text)}
+.ctl-group button[aria-pressed="true"]{background:var(--mint-fill);color:var(--on-mint)}
+.ctl-group button:hover:not([aria-pressed="true"]){background:rgba(127,160,155,.25)}
+.ctl-group .gl{align-self:center;padding:0 8px 0 10px;font:700 11.5px/1 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
+
+.notice{display:flex;gap:10px;align-items:flex-start;padding:10px 16px;margin-bottom:12px;border-color:color-mix(in srgb,var(--info) 55%,transparent)}
+.notice p{margin:0}.notice small{color:var(--text2)}
+.ic{width:18px;height:18px;flex:none;display:inline-block;vertical-align:-3px}
+.ic.sm{width:15px;height:15px;vertical-align:-2px}.ic.lg{width:24px;height:24px}
+
+/* agent tabs */
+.agentbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:12px;padding:10px 14px}
+.agentbar .lbl{font:700 12px/1 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{border-color:var(--ctl);min-height:44px;padding:6px 16px;border-radius:12px;cursor:pointer;font-weight:700;display:inline-flex;gap:8px;align-items:center;color:var(--text)}
+.tab .n{font:600 13px var(--f-mono);color:var(--text2)}
+.tab[aria-selected="true"]{background:var(--mint-fill);color:var(--on-mint);border-color:var(--mint-fill)}
+.tab[aria-selected="true"] .n{color:var(--on-mint)}
+.agentnote{color:var(--text2);font-size:14px;flex:1 1 320px}
+.agentnote-box{padding:12px 16px;margin:10px 0}
+
+/* summary */
+.summary{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
+@media (max-width:900px){.summary{grid-template-columns:minmax(0,1fr)}}
+.sum-l{padding:12px 14px}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.kpi{flex:1 1 130px;min-height:64px;padding:8px 12px;border-radius:12px;text-align:left;cursor:pointer;display:grid;gap:2px;align-content:center}
+.kpi .big{font:700 26px/1 var(--f-head)}
+.kpi .nm{display:flex;gap:6px;align-items:center;font-weight:700;font-size:14px}
+.kpi.total{cursor:default}
+.kpi.lv-v{border-color:var(--lc-v);border-width:2.5px}.kpi.lv-p{border-color:var(--lc-p)}.kpi.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
+.kpi[aria-pressed="false"]{background:var(--glass-solid);color:var(--text2)}
+.kpi[aria-pressed="false"] .big{text-decoration:line-through;text-decoration-thickness:2px}
+.stackbar{display:flex;height:12px;border-radius:7px;overflow:hidden;border:1px solid var(--edge);margin-bottom:8px}
+.stackbar i{display:block;height:100%}
+.stackbar i.lv-v{background:var(--lc-v)}.stackbar i.lv-p{background:var(--lc-p)}
+.stackbar i.lv-h{background:repeating-linear-gradient(45deg,var(--lc-h) 0 3px,transparent 3px 6px)}
+.cfg-sub{margin:2px 0 0;font-size:13px;color:var(--text2)}
+.cfg-undet{margin-top:10px;font-size:14px}
+.cfg-undet p{margin:4px 0}
+.ndnote{margin:10px 0 0;font-size:13px;color:var(--text);border-left:3px solid var(--lc-p);padding-left:10px;overflow-wrap:anywhere}
+.facts{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--text2);font-size:14px;margin:0}
+.facts b{color:var(--text)}
+.sum-r{padding:12px 14px}
+.sum-r h2{margin:0 0 6px;font:700 13px/1.2 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.start{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.start button{width:100%;text-align:left;display:flex;gap:8px;align-items:center;min-height:36px;padding:4px 10px;border-radius:10px;border:1.5px solid var(--ctl);background:var(--glass-solid);cursor:pointer;font-size:14px}
+.start button span.p{min-width:0;overflow-wrap:anywhere}
+.start code,.mono{font:12.5px var(--f-mono)}
+
+/* toolbar */
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:10px 14px;margin-bottom:12px}
+.bar .grp{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar .lbl{font:600 12px/1 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.btn{min-height:38px;padding:4px 12px;border-radius:10px;border:1.5px solid var(--ctl);background:var(--glass-solid);cursor:pointer;font-weight:600;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.btn:hover{border-color:var(--text)}
+select,input[type=search]{min-height:38px;border-radius:10px;border:1.5px solid var(--ctl);background:var(--glass-solid);color:var(--text);padding:4px 10px;max-width:100%}
+input[type=search]{min-width:200px}
+.status{margin-left:auto;color:var(--text2);font-size:14px}
+.sizebox{display:inline-flex;gap:2px;align-items:center}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+@media (min-width:1280px){ .main.has-panel{grid-template-columns:minmax(0,1fr) 380px} }
+.stage-card{padding:14px 18px 16px}
+.cols-head{position:relative;height:0}
+.chead{margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.chead .modeinfo{color:var(--text2);font-size:14px;margin:0}
+.chead .gbtns{display:flex;gap:8px;flex-wrap:wrap}
+.colhd{position:relative;height:44px;margin-bottom:6px}
+.colhd div{position:absolute;top:0;font:700 12.5px/1.2 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.colhd small{display:block;margin-top:3px;font:500 12px/1.3 var(--f-body);letter-spacing:0;text-transform:none;color:var(--text2)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center;color:var(--text2);font-size:13px;margin-bottom:10px}
+.legend .li{display:inline-flex;gap:7px;align-items:center}
+.legend svg.ln{width:36px;height:8px;flex:none}
+.stage{position:relative;width:100%}
+.stage svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.e-base{fill:none;stroke-linecap:round}
+.e-dash{stroke-dasharray:7 7}
+.e-flow{fill:none;stroke:var(--flow);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:12 64;opacity:.85;animation:flow 2.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-152}}
+.edge{transition:opacity .2s}
+.edge.on .e-flow{animation-duration:1.4s}
+.edge.lv-v{color:var(--lc-v)}.edge.lv-p{color:var(--lc-p)}.edge.lv-h{color:var(--lc-h)}
+.edge .e-base,.edge polygon{stroke:currentColor}.edge polygon{fill:currentColor;stroke-width:1;stroke-linejoin:round}
+.edge.dim{opacity:.14}
+.nodes{position:absolute;inset:0}
+.node{position:absolute;text-align:left;border-radius:14px;padding:8px 10px 9px;cursor:pointer;
+  border-width:1.5px;box-shadow:var(--shadow),var(--inner);transition:opacity .2s, box-shadow .2s;color:var(--text);display:block}
+.node:hover{background:var(--glass-hi)}
+.node .nt{display:flex;gap:6px;align-items:flex-start}
+.node .ics{display:flex;gap:2px;flex:none;padding-top:1px}
+.node .nm{font:700 14px/1.22 var(--f-head);letter-spacing:.01em;overflow-wrap:anywhere;flex:1;min-width:0}
+.node .cnt{flex:none;font:700 12px/1.3 var(--f-mono);padding:0 6px;border-radius:9px;border:1px solid var(--edge);background:rgba(127,160,155,.2)}
+.node .sub{display:block;margin-top:3px;font:12px/1.3 var(--f-mono);color:var(--text2);overflow-wrap:anywhere}
+.node .sub.nc{font-family:var(--f-body);font-style:italic}
+.node.lv-v{border-color:var(--lc-v);border-width:2.5px}
+.node.lv-p{border-color:var(--lc-p)}
+.node.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
+.node.col3{border-style:dashed}
+.node.folder::after{content:"";position:absolute;right:7px;bottom:6px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--text2)}
+.node.d1{padding:6px 9px 7px;border-radius:12px}.node.d1 .nm{font-size:13px}
+.node.d2{padding:3px 8px 4px;border-radius:10px}.node.d2 .nm{font-size:12.5px;line-height:1.2}.node.d2:not(.file) .sub:not(.nc){display:none}.node.d2 .sub.nc{margin-top:0;font-size:11px}
+.node.on{box-shadow:0 0 0 2px var(--text), 0 0 26px color-mix(in srgb,var(--mint-ui) 45%,transparent), var(--shadow)}
+.node.sel{box-shadow:0 0 0 3px var(--mint-ui), 0 0 0 5px var(--bg), 0 0 30px color-mix(in srgb,var(--mint-ui) 60%,transparent), var(--shadow)}
+.node.dim{opacity:var(--dim)}
+.node.more{border-style:dashed}
+.pill{position:absolute;transform:translate(-50%,-50%);display:flex;gap:5px;align-items:center;padding:2px 8px 2px 6px;border-radius:999px;font:600 11.5px/1.2 var(--f-body);color:var(--text);
+  border-width:1.5px;cursor:pointer;text-align:left;box-shadow:0 3px 10px rgba(0,0,0,.25);transition:opacity .2s;-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%) brightness(.7)}
+.pill.lv-v{border-color:var(--lc-v)}.pill.lv-p{border-color:var(--lc-p)}.pill.lv-h{border-color:var(--lc-h);border-style:dotted}
+.pill.nc{border-style:dashed}
+.pill i{font-style:normal;display:block;font-weight:700;color:var(--text2)}
+.pill.dim{opacity:var(--dim)}
+.pill.on{box-shadow:0 0 0 2px var(--text), 0 3px 12px rgba(0,0,0,.3)}
+.empty{padding:40px 12px;text-align:center;color:var(--text2)}
+
+/* panel */
+.panel{background:var(--glass-hi);padding:16px 18px 18px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+@media (max-width:1279px){.panel{position:relative;top:0;max-height:none}}
+.panel h2{margin:0 0 4px;font:700 20px/1.2 var(--f-head)}
+.panel h3{margin:14px 0 6px;font:700 12px/1.2 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.panel .hint{color:var(--text2);margin:0 0 10px;font-size:14px}
+.panel .tag{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.lvbadge{background:var(--chip);display:inline-flex;gap:6px;align-items:center;font-weight:700;padding:2px 10px 2px 6px;border-radius:999px;border:1.5px solid var(--edge);color:var(--text)}
+.lvbadge.lv-v{border-color:var(--lc-v);color:var(--lt-v);border-width:2.5px}.lvbadge.lv-p{border-color:var(--lc-p);color:var(--lt-p)}
+.lvbadge.lv-h{border-color:var(--lc-h);color:var(--lt-h);border-style:dotted}.lvbadge.lv-c{border-color:var(--lc-c);color:var(--lt-c);border-style:dashed}
+.picklist{display:grid;gap:4px;max-height:190px;overflow:auto;margin-bottom:10px;padding-right:2px}
+.picklist button{display:flex;gap:7px;align-items:center;text-align:left;min-height:34px;padding:3px 9px;border-radius:9px;border:1.5px solid var(--ctl);background:var(--glass-solid);cursor:pointer;font-size:13px}
+.picklist button[aria-pressed="true"]{background:var(--mint-fill);color:var(--on-mint);border-color:var(--mint-fill)}
+.picklist button span{min-width:0;overflow-wrap:anywhere}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.actions .btn{min-height:34px;font-size:13px}
+dl.f{margin:0;display:grid;gap:10px}
+dl.f>div{padding:8px 10px;border-radius:10px;background:var(--sunk);border-left:3px solid var(--ctl)}
+dl.f dt{font:700 11.5px/1.2 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:3px}
+dl.f dt b{display:inline-block;min-width:1.4em;color:var(--text)}
+dl.f dd{margin:0;overflow-wrap:anywhere}
+dl.f dd code{font:13px var(--f-mono)}
+dl.f .act{border-left-color:var(--mint-ui)}
+dl.f .act dt{color:var(--mint-text)}
+.chaincheck{margin:0 0 12px;padding:8px 10px;border-radius:10px;border:1.5px dashed var(--lc-c);font-size:13.5px}
+.unrel-yes{font-weight:800;text-decoration:underline wavy;text-underline-offset:3px}
+.close{float:right;min-height:34px;border-radius:9px;border:1.5px solid var(--ctl);background:transparent;cursor:pointer;padding:2px 10px;font-size:13px}
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.bars button{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;text-align:left;padding:4px 8px;border-radius:9px;border:1.5px solid transparent;background:var(--sunk);cursor:pointer;font-size:13px}
+.bars button:hover{border-color:var(--ctl)}
+.bars .nm{overflow-wrap:anywhere}
+.bars .tr{grid-column:1/3;height:5px;border-radius:3px;background:rgba(127,160,155,.25);overflow:hidden}
+.bars .tr i{display:block;height:100%;background:var(--mint-ui)}
+ul.lvlegend .lvb{background:var(--chip);padding:0 8px;border-radius:8px;display:inline-block;margin-bottom:2px}
+ul.lvlegend{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ul.lvlegend li{display:flex;gap:8px;align-items:flex-start}
+ul.lvlegend span.m{color:var(--text2);font-size:14px}
+
+/* table */
+.tablecard{padding:10px 12px 14px}
+.tools{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:4px 4px 10px}
+.tablewrap{overflow-x:auto}
+table.rt{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+table.rt th,table.rt td{text-align:left;vertical-align:top;padding:var(--cp,8px) 10px;border-bottom:1px solid var(--edge)}
+table.rt thead th{position:sticky;top:0;z-index:2;background:var(--glass-solid);font:700 12px/1.2 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+table.rt thead th button{all:unset;cursor:pointer;display:inline-flex;gap:5px;align-items:center;padding:4px 2px;border-radius:5px}
+table.rt thead th button:focus-visible{outline:3px solid var(--focus)}
+table.rt thead th .arr{font-size:11px;color:var(--text)}
+table.rt tbody tr.r:nth-child(odd) td{background:var(--row-alt)}
+table.rt tr.r.sel td{box-shadow:inset 0 2px 0 var(--mint-ui),inset 0 -2px 0 var(--mint-ui)}
+table.rt td.lvc{white-space:nowrap}
+table.rt .lvname{background:var(--chip);display:inline-flex;gap:6px;align-items:center;font-weight:700;padding:1px 8px 1px 5px;border-radius:999px;border:1.5px solid var(--edge)}
+.lvname.lv-v{border-color:var(--lc-v);color:var(--lt-v);border-width:2.5px}.lvname.lv-p{border-color:var(--lc-p);color:var(--lt-p)}.lvname.lv-h{border-color:var(--lc-h);color:var(--lt-h);border-style:dotted}
+table.rt td.wh{min-width:200px}
+table.rt td.wh code{font:12.5px var(--f-mono);overflow-wrap:anywhere}
+.cp{display:inline-flex;margin-left:6px;min-height:28px;min-width:28px;padding:1px 6px;justify-content:center;align-items:center;border-radius:8px;border:1.5px solid var(--ctl);background:transparent;cursor:pointer;font-size:12px;vertical-align:middle}
+.nclabel{display:block;color:var(--text2);font-size:12.5px;font-style:italic}
+tr.det td{padding:10px 12px 16px}
+tr.det .detbox{max-width:820px}
+tr.grp th{background:var(--sunk);padding:4px 8px}
+tr.grp button{all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;font:700 13px var(--f-head);padding:4px 2px;width:100%}
+tr.grp button:focus-visible{outline:3px solid var(--focus)}
+.t-dense{--cp:3px;font-size:13px}.t-normal{--cp:7px}.t-roomy{--cp:12px;font-size:15px}
+.more-row{display:flex;gap:10px;align-items:center;justify-content:center;padding:12px}
+@media (max-width:760px){
+  table.rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.rt,table.rt tbody,table.rt tr,table.rt td,table.rt th{display:block;width:100%}
+  table.rt tr.r{border:1px solid var(--edge);border-radius:12px;margin-bottom:10px;padding:4px 0;background:var(--glass-solid)}
+  table.rt td{border:0;padding:4px 12px}
+  table.rt td::before{content:attr(data-l);display:block;font:700 11px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text2)}
+  table.rt td.lvc::before{display:none}
+  table.rt td.wh{min-width:0}
+  table.rt td.ag{display:none}
+}
+
+/* list view */
+.listcard{background:var(--glass-hi);padding:10px 14px 14px}
+details.fold{border:1px solid var(--edge);border-radius:12px;margin-bottom:10px;background:var(--glass-solid)}
+details.fold>summary{cursor:pointer;padding:8px 12px;font:700 14px var(--f-head);display:flex;gap:8px;align-items:center;flex-wrap:wrap;list-style-position:inside}
+details.fold>summary .cnt{font:600 12.5px var(--f-mono);color:var(--text2)}
+.pathlist{list-style:none;margin:0;padding:6px 10px 10px;display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:1000px){ .pathlist{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.pathcard{padding:12px 14px;border-width:1.5px;border-radius:14px}
+.pathcard.lv-v{border-color:var(--lc-v);border-width:2.5px}.pathcard.lv-p{border-color:var(--lc-p)}.pathcard.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
+.pc-head{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap}
+.pc-head strong{min-width:0;overflow-wrap:anywhere;font:700 15px/1.25 var(--f-head)}
+ol.chain{list-style:none;margin:0;padding:0}
+ol.chain>li{position:relative;padding:5px 8px 5px 12px;border-left:2px solid var(--ctl);margin-left:9px}
+ol.chain>li .via{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--text2);margin-bottom:2px}
+ol.chain .k{font:700 11px/1.2 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+ol.chain .v{display:block;font-weight:600;overflow-wrap:anywhere}
+ol.chain>li.nc{border-left-style:dashed;border-left-color:var(--lc-c)}
+.pathcard .more{margin-top:10px}
+
+/* limits */
+.howto{padding:16px 20px;margin:0 0 18px}
+.howto>details>summary{cursor:pointer;list-style-position:inside}
+.howto>details>summary h2{display:inline;margin:0;font:700 22px/1.2 var(--f-head)}
+.howto .howlead{margin:8px 0 0;color:var(--text2)}
+.howto .terms{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
+.howto .term{padding:10px 12px;border-radius:12px;border:1px solid var(--edge);background:var(--sunk)}
+.howto .term h3{margin:0 0 4px;font:700 15px/1.3 var(--f-head)}
+.howto .term .tline{margin:0 0 6px;color:var(--text2);font-size:14px}
+.howto dl{margin:0}.howto dt{font:700 13px/1.3 var(--f-head);margin-top:6px}.howto dd{margin:2px 0 0;font-size:14px}
+.howto h3.other{margin:16px 0 8px;font:700 15px/1.3 var(--f-head)}
+.howto details.fold .term{border:0;background:none;padding:2px 12px 10px}
+.limits{background:var(--glass-hi);margin-top:22px;padding:18px 20px}
+.limits h2{margin:0 0 4px;font:700 22px/1.2 var(--f-head);display:flex;gap:10px;align-items:center}
+.limits .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
+.limits .it{padding:10px 12px;border-radius:12px;border:1.5px dashed var(--lc-c);background:var(--sunk)}
+.limits .it h3{margin:0 0 4px;font:700 14px/1.3 var(--f-head)}
+.limits .it p{margin:4px 0 0;font-size:14px}
+.limits .part{font:700 11px/1 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.limits code{display:block;font:12.5px var(--f-mono);overflow-wrap:anywhere}
+.limits details summary{cursor:pointer;font-size:13px;color:var(--text2)}
+footer{margin-top:18px;color:var(--text2);font-size:13px;padding:12px 18px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:8px 16px;border-radius:12px;background:var(--mint-fill);color:var(--on-mint);font-weight:700;z-index:60}
+.toast:empty{display:none}
+
+/* ===== Header band (from the external proposal): logo, radar, aurora, glass ===== */
+.band{position:relative;isolation:isolate;overflow:hidden;color:var(--text);border-bottom:1px solid rgba(61,245,208,.40);--rring:rgba(234,244,242,.22);
+  background:
+    radial-gradient(640px 420px at 82% 18%, rgba(61,245,208,.30), transparent 62%),
+    radial-gradient(520px 420px at 6% 100%, rgba(185,162,255,.24), transparent 62%),
+    radial-gradient(420px 300px at 55% 0%, rgba(255,178,36,.12), transparent 60%),
+    #0B1114}
+.band::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-radial-gradient(circle at 80% 36%, transparent 0 46px, rgba(61,245,208,.08) 46px 47px);
+  -webkit-mask-image:radial-gradient(circle at 80% 36%, #000 0, transparent 72%);mask-image:radial-gradient(circle at 80% 36%, #000 0, transparent 72%)}
+.aurora{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--o);animation:drift 28s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:560px;height:560px;left:-180px;top:-200px;background:#3DF5D0;--o:.34}
+.aurora i:nth-child(2){width:480px;height:480px;right:-140px;top:40px;background:#B9A2FF;--o:.30;animation-duration:34s;animation-delay:-9s}
+.aurora i:nth-child(3){width:420px;height:420px;left:35%;bottom:-260px;background:#FFB224;--o:.18;animation-duration:40s;animation-delay:-4s}
+@keyframes drift{to{transform:translate3d(60px,-40px,0) scale(1.14)}}
+:root[data-theme="light"] .band{background:linear-gradient(135deg,#CDF6EA,#D4E4FF 55%,#FFE8C8);border-bottom-color:rgba(0,128,107,.35);--rring:rgba(11,17,20,.20)}
+:root[data-theme="light"] .band::before{background:repeating-radial-gradient(circle at 80% 36%, transparent 0 46px, rgba(0,128,107,.10) 46px 47px)}
+:root[data-theme="light"] .aurora i:nth-child(1){--o:.60}
+:root[data-theme="light"] .aurora i:nth-child(2){--o:.50}
+:root[data-theme="light"] .aurora i:nth-child(3){--o:.42}
+.hwrap{max-width:1560px;margin:0 auto;padding:18px 24px 36px}
+.hdr-top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-chip{display:inline-flex;border-radius:14px}
+.logo{width:46px;height:46px;display:block}
+:root[data-theme="light"] .logo-chip{background:#0B1114;padding:4px}
+.wm{font:800 20px/1 var(--f-head);letter-spacing:.16em;color:var(--text)}
+.wm span{color:var(--mint-text)}
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:28px;align-items:center;margin-top:26px}
+@media (max-width:759px){:root:not([data-theme="light"]) .aurora i:nth-child(n){--o:.12}  :root:not([data-theme="light"]) .band .lead{color:var(--text)}}  /* en pantalla angosta el texto cae sobre las manchas de color: se atenúan para que se lea */
+.eyebrow{font:600 13px/1.2 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--mint-text);margin:0}
+.hero h1{margin-top:10px}
+.radarbox{justify-self:center;width:min(100%,360px)}
+.radar{position:relative;aspect-ratio:1;width:100%}
+.sweep{position:absolute;inset:2%;border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(61,245,208,0) 0deg, rgba(61,245,208,0) 250deg, rgba(61,245,208,.30) 358deg, rgba(61,245,208,0) 360deg);
+  -webkit-mask-image:radial-gradient(circle, transparent 6%, #000 8%);mask-image:radial-gradient(circle, transparent 6%, #000 8%);
+  animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar svg.plot{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring{fill:none;stroke:var(--rring);stroke-width:1}
+.ring.dash{stroke-dasharray:3 6}
+.spoke{stroke:var(--rring);stroke-width:1;opacity:.5}
+.core{fill:none;stroke:var(--mint-ui);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.radarcap{margin:10px 0 0;text-align:center;font-size:14px;color:var(--text2)}
+@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}.radarbox{width:min(100%,280px)}}
+@media (max-width:1099px){.hwrap{padding:14px 16px 28px}}
+@media (prefers-reduced-motion:reduce){.aurora i,.sweep,.core{animation:none!important}}
+
+/* ===== Qué hacer (what to do) block ===== */
+.rlabel{margin:10px 0 4px;font-size:13px;color:var(--text2)}
+.rulebox{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rulebox code{flex:1 1 220px;min-width:0;display:block;padding:6px 10px;border-radius:10px;border:1.5px solid var(--ctl);background:var(--glass-solid);font:12.5px var(--f-mono);overflow-wrap:anywhere;color:var(--text)}
+.honest{margin-top:10px;font-size:13px;color:var(--text2)}
+.todo{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--sunk);border:1.5px solid var(--mint-ui)}
+.todo-h{margin:0 0 4px;font:700 11.5px/1.2 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--mint-text)}
+.todo p{margin:0;font-size:14.5px}
+
+/* print view (screen preview and real print) */
+.printcard{background:#fff;color:#111;border-radius:6px;padding:28px 34px;max-width:1000px;margin:0 auto;box-shadow:0 10px 40px rgba(0,0,0,.45);font:13px/1.45 var(--f-body)}
+.printcard h1{font:700 24px var(--f-head);margin:0 0 4px;color:#111}
+.printcard h2{font:700 16px var(--f-head);margin:20px 0 6px;color:#111;border-bottom:2px solid #111;padding-bottom:3px}
+.printcard h3{font:700 13px var(--f-head);margin:12px 0 4px;color:#111}
+.printcard p{margin:4px 0;color:#222}
+.printcard table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
+.printcard th,.printcard td{border:1px solid #777;padding:3px 6px;text-align:left;vertical-align:top;color:#111;overflow-wrap:anywhere}
+.printcard th{background:#e8e8e8}
+.printcard tr{break-inside:avoid}
+.printcard thead{display:table-header-group}
+.printcard code{font:11px var(--f-mono)}
+.printcard .lvp{font-weight:700;white-space:nowrap}
+.printcard .lvp svg{width:13px;height:13px;vertical-align:-2px}
+.printcard .det{break-inside:avoid;border:1px solid #777;padding:6px 10px;margin:8px 0}
+.printcard .det dl{margin:4px 0 0;display:grid;grid-template-columns:150px 1fr;gap:2px 10px}
+.printcard .det dt{font-weight:700}.printcard .det dd{margin:0;overflow-wrap:anywhere}
+.printcard .sumline{display:flex;flex-wrap:wrap;gap:4px 18px;font-weight:600}
+.printcard .nb{border:1px solid #111;padding:6px 10px;margin:8px 0;font-weight:600}
+.printcard .nc2{border:1px dashed #111;padding:5px 8px;margin:6px 0}
+.printbar{max-width:1000px;margin:0 auto 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:10px 14px;border-radius:14px;background:var(--glass-solid);border:1px solid var(--edge)}
+.printcard svg .gv{fill:#111}
+
+@media (max-width:1099px){ .wrap{padding:14px 16px 40px} .status{margin-left:0;width:100%} }
+@media (max-width:560px){ input[type=search]{min-width:0;width:100%} .bar .grp{width:100%} }
+@media (prefers-reduced-motion:reduce){ .e-flow{display:none} html{scroll-behavior:auto} .node,.pill,.edge{transition:none} }
+
+[hidden]{display:none!important}
+/* ===== Configured agents (files seen; not whether the agent ran) ===== */
+.cfg{padding:14px 18px 16px;margin-bottom:12px}
+.cfg h2{margin:0 0 8px;font:700 18px/1.2 var(--f-head);display:flex;gap:10px;align-items:center}
+.cfg-list{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.cfg-item{padding:10px 12px;border-radius:12px;border:1.5px solid var(--info);background:var(--sunk)}
+.cfg-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.cfg-badge{font:700 12px/1 var(--f-head);letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:999px;border:1.5px solid var(--info);color:var(--info);background:var(--chip)}
+.cfg-ev{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.cfg-ev li{overflow-wrap:anywhere;font-size:14px}
+.cfg-ev code{font:12.5px var(--f-mono)}
+.cfg-scope{font:700 11px/1 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-right:6px}
+.cfg-note{margin:0;color:var(--text2);font-size:14px}
+.cfg-none{margin:0 0 10px}
+.toolim{margin:6px 0 0;padding-left:20px;font-size:14px}
+.toolim li{margin-bottom:3px}
+/* ===== Route overview: more than 60 findings. Static: nothing to select. ===== */
+.overview{padding:4px 0 6px;cursor:default}
+.ov-start{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1.5px solid var(--ctl);border-radius:12px;background:var(--sunk);margin-bottom:6px}
+.ov-pin{display:inline-flex}
+.oc-row{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:13.5px}
+.oc{display:inline-flex;gap:6px;align-items:center}
+.route{list-style:none;margin:0;padding:0 0 0 14px;position:relative}
+.route::before{content:"";position:absolute;left:25px;top:0;bottom:12px;border-left:2px dotted var(--ctl)}
+.step{position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:6px 0}
+.step .num{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:700 11px var(--f-mono);background:var(--glass-solid);border:1.5px solid var(--ctl);color:var(--text);position:relative}
+.shead{display:flex;gap:10px;justify-content:space-between;align-items:baseline}
+.shead code{font:13px var(--f-mono);overflow-wrap:anywhere}
+.shead .sc{color:var(--text2)}
+.meter{display:flex;height:10px;border-radius:5px;overflow:hidden;background:rgba(127,160,155,.2);border:1px solid var(--edge);margin-top:4px}
+.meter i{display:block;height:100%}
+.meter i.lv-v{background:var(--lc-v)}.meter i.lv-p{background:var(--lc-p)}
+.meter i.lv-h{background:repeating-linear-gradient(45deg,var(--lc-h) 0 3px,transparent 3px 6px)}
+.ov-hint{margin:12px 0 0;color:var(--text2);font-size:13.5px}
+#fatal{max-width:720px;margin:40px auto;padding:20px}
+
+/* ===== Print: what is on screen, in black on white. Only controls and decoration are left out. ===== */
+@media print{
+  @page{margin:14mm}
+  :root{color-scheme:light;
+    --bg:#fff!important;--surf:#fff!important;--text:#111!important;--text2:#333!important;--text3:#444!important;
+    --mint:#005F4D!important;--mint-ui:#005F4D!important;--mint-text:#005F4D!important;--on-mint:#fff!important;--mint-fill:#005F4D!important;
+    --info:#0A58A8!important;--violet:#5A3DC0!important;
+    --lc-v:#B3201A!important;--lc-p:#B86E00!important;--lc-h:#3A524D!important;--lc-c:#5A3DC0!important;
+    --lt-v:#B3201A!important;--lt-p:#7A4300!important;--lt-h:#3A524D!important;--lt-c:#5A3DC0!important;
+    --ic-v:#B3201A!important;--g-v:#fff!important;--ic-p:#FFB224!important;--st-p:#7A4300!important;--g-p:#0B1114!important;--ic-h:#3A524D!important;--ic-c:#5A3DC0!important;
+    --glass:#fff!important;--glass-hi:#fff!important;--glass-solid:#fff!important;--edge:#777!important;--shadow:none!important;--inner:none!important;--blur:none!important;
+    --flow:#555!important;--ctl:#555!important;--sunk:#f2f2f2!important;--chip:#fff!important;--row-alt:#f6f6f6!important;--rring:rgba(0,0,0,.35)!important}
+  html,body{background:#fff!important;color:#111}
+  .bg,.skip,.toast,.ctls,.aurora,.sweep,#filters,.btn,.cp,.close,.gbtns,#kbd,.picklist,.more-row,.tools,.printbar,.band::before{display:none!important}
+  .band{background:#fff!important;border-bottom:1px solid #777;color:#111}
+  .wrap,.hwrap{max-width:none;padding-left:0;padding-right:0}
+  .glass,.node,.pill,.chip,.ctl-group,.tab,.kpi{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important;background:#fff!important}
+  .e-flow{display:none}
+  .main,.main.has-panel{display:block}
+  .panel{position:static;max-height:none;overflow:visible;margin-top:12px}
+  .stage-card{break-inside:auto}
+  .printcard{box-shadow:none;border-radius:0;padding:0;max-width:none;margin:0}
+  .howto .term,.howto details.fold{break-inside:avoid}
+  .pathcard,.printcard tr,.printcard .det,.step,.cfg-item,.limits .it{break-inside:avoid}
+  .core{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><svg class="rings" viewBox="0 0 1600 1400" fill="none" focusable="false"><circle class="ra" cx="140" cy="120" r="190" stroke-width="3"/><circle class="ra" cx="140" cy="120" r="120" stroke-width="2"/><circle class="rb" cx="1480" cy="330" r="210" stroke-width="3"/><path class="rb" d="M1180 40 L1560 420" stroke-width="3"/><circle class="rc" cx="430" cy="980" r="170" stroke-width="3"/><rect class="ra" x="640" y="520" width="320" height="200" rx="28" stroke-width="2"/><circle class="ra" cx="1300" cy="1190" r="200" stroke-width="3"/><path class="rc" d="M30 700 L520 1250" stroke-width="2"/><circle class="rb" cx="900" cy="1260" r="90" stroke-width="3"/></svg></div>
+<p class="glass" id="fatal" role="alert" hidden></p>
+<a class="skip" href="#paths" id="skip">Skip to the routes</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 200 200">
+      <g fill="none" stroke-linecap="round">
+        <circle cx="100" cy="100" r="30" stroke="#3DF5D0" stroke-width="6" stroke-dasharray="120 68.5" transform="rotate(-100 100 100)"/>
+        <circle cx="100" cy="100" r="55" stroke="#3DF5D0" stroke-width="6" stroke-opacity=".6" stroke-dasharray="200 145.6" transform="rotate(-20 100 100)"/>
+        <circle cx="100" cy="100" r="80" stroke="#3DF5D0" stroke-width="6" stroke-opacity=".3" stroke-dasharray="270 232.7" transform="rotate(60 100 100)"/>
+        <line x1="100" y1="100" x2="156.6" y2="43.4" stroke="#3DF5D0" stroke-width="4"/>
+        <line x1="100" y1="100" x2="169.3" y2="140" stroke="#FFB224" stroke-width="4"/>
+        <line x1="100" y1="100" x2="24.8" y2="72.6" stroke="#3DF5D0" stroke-width="4"/>
+      </g>
+      <circle cx="156.6" cy="43.4" r="9" fill="#3DF5D0"/><circle cx="169.3" cy="140" r="9" fill="#FFB224"/>
+      <circle cx="24.8" cy="72.6" r="9" fill="#3DF5D0"/><circle cx="100" cy="100" r="14" fill="#3DF5D0"/>
+    </symbol>
+    <symbol id="i-v" viewBox="0 0 24 24"><polygon points="8,2 16,2 22,8 22,16 16,22 8,22 2,16 2,8" fill="var(--ic-v)"/><rect x="11" y="6" width="2" height="8" rx="1" fill="var(--g-v)"/><circle cx="12" cy="17.5" r="1.3" fill="var(--g-v)"/></symbol>
+    <symbol id="i-p" viewBox="0 0 24 24"><polygon points="12,2.8 22.4,21 1.6,21" fill="var(--ic-p)" stroke="var(--st-p)" stroke-width="1.6" stroke-linejoin="round"/><rect x="11" y="9" width="2" height="6" rx="1" fill="var(--g-p)"/><circle cx="12" cy="18" r="1.2" fill="var(--g-p)"/></symbol>
+    <symbol id="i-h" viewBox="0 0 24 24"><polygon points="12,1.8 22.2,12 12,22.2 1.8,12" fill="var(--fl-h)" stroke="var(--ic-h)" stroke-width="2" stroke-dasharray="3 2"/><path d="M9.4 9.6a2.7 2.7 0 1 1 4.3 2.2c-1 .7-1.7 1.2-1.7 2.3" fill="none" stroke="var(--ic-h)" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.2" fill="var(--ic-h)"/></symbol>
+    <symbol id="i-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.8" fill="var(--fl-c)" stroke="var(--ic-c)" stroke-width="2" stroke-dasharray="3.6 2.6"/><path d="M7.8 12h8.4" stroke="var(--ic-c)" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--info)" stroke-width="2"/><rect x="11" y="10.5" width="2" height="7" rx="1" fill="var(--info)"/><circle cx="12" cy="7.4" r="1.3" fill="var(--info)"/></symbol>
+  </defs>
+</svg>
+
+<header class="band" id="top">
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="hwrap">
+  <div class="hdr-top">
+    <div class="brand">
+      <span class="logo-chip"><svg class="logo" aria-hidden="true" focusable="false"><use href="#logo"/></svg></span>
+      <span class="wm" aria-label="AgentReach">AGENT<span>REACH</span></span>
+    </div>
+    <div class="ctls" role="group" id="gSet">
+      <div class="ctl-group" role="group" id="gLang" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false" lang="es">ES</button>
+      </div>
+      <div class="ctl-group" role="group" id="gTheme">
+        <button type="button" data-theme="dark" aria-pressed="true"></button>
+        <button type="button" data-theme="light" aria-pressed="false"></button>
+      </div>
+    </div>
+  </div>
+  <div class="hero">
+    <div>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="h1"></h1>
+      <p class="lead" id="lead"></p>
+    </div>
+    <div class="radarbox">
+      <div class="radar" aria-hidden="true"><div class="sweep"></div><svg class="plot" viewBox="0 0 360 360" id="plot" focusable="false"></svg></div>
+      <p class="radarcap" id="radarcap"></p>
+    </div>
+  </div>
+</div>
+</header>
+<div class="wrap">
+
+<section class="glass howto" id="howto"></section>
+
+<div class="glass notice" role="note"><svg class="ic lg" aria-hidden="true"><use href="#i-i"/></svg>
+  <div><p id="secrets"></p><small id="meta"></small></div></div>
+
+<section class="glass cfg" id="cfg" aria-labelledby="cfgTitle"></section>
+
+<div class="agentbar glass" id="agentbar">
+  <span class="lbl" id="lblAgents"></span>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="glass agentnote-box"><p class="agentnote" id="agentnote"></p></div>
+</div>
+
+<section class="summary" id="summary" aria-labelledby="sumTitle">
+  <div class="glass sum-l">
+    <h2 class="sr" id="sumTitle"></h2>
+    <div class="kpis" id="kpis"></div>
+    <div class="stackbar" id="stackbar" aria-hidden="true"></div>
+    <p class="facts" id="facts"></p>
+    <p class="ndnote" id="ndnote" hidden></p>
+  </div>
+  <div class="glass sum-r" id="start"></div>
+</section>
+
+<div class="glass bar" id="filters" role="search">
+  <div class="ctl-group" role="group" id="gView"></div>
+  <div class="grp"><label class="lbl" for="selFolder" id="lblFolder"></label><select id="selFolder"></select></div>
+  <div class="grp"><label class="lbl" for="selType" id="lblType"></label><select id="selType"></select></div>
+  <div class="grp"><label class="lbl" for="q" id="lblQ"></label><input id="q" type="search" autocomplete="off"></div>
+  <div class="grp"><button class="btn" type="button" id="btnReset"></button>
+    <button class="btn" type="button" id="btnJson"></button><button class="btn" type="button" id="btnCsv"></button><button class="btn" type="button" id="btnLink"></button></div>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+</div>
+
+<main id="paths" tabindex="-1">
+<div class="main has-panel" id="mainGrid">
+  <section id="graphView" aria-labelledby="h1">
+    <div class="glass stage-card" id="stageCard">
+      <div class="chead"><p class="modeinfo" id="modeinfo"></p><div class="gbtns" id="gbtns"></div></div>
+      <div class="legend" id="legend"></div>
+      <div class="overview" id="overview" hidden></div>
+      <div class="colhd" id="colhd"></div>
+      <div class="stage" id="stage"></div>
+      <p class="hint" id="kbd" style="color:var(--text2);font-size:13px;margin:10px 0 0"></p>
+    </div>
+  </section>
+  <aside class="glass panel" id="panel" aria-live="polite" aria-labelledby="panelTitle"></aside>
+  <section id="tableView" hidden>
+    <div class="glass tablecard" id="tableCard"></div>
+  </section>
+  <section id="listView" hidden>
+    <div class="glass listcard"><div class="legend" id="legend2"></div><div id="folds"></div></div>
+  </section>
+  <section id="printView" hidden></section>
+</div>
+</main>
+
+<section class="glass limits" id="limits" aria-labelledby="limTitle"></section>
+<footer id="foot" class="glass"></footer>
+</div>
+<script type="application/json" id="data">__AGENTREACH_DATA__</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LV = ['verified','potential','hypothesis'];
+const K = {i:'i',verified:'v',potential:'p',hypothesis:'h',could_not_check:'c'};
+const RANK = {verified:0,potential:1,hypothesis:2};
+const LVN = {
+  verified:{en:'Verified',es:'Comprobado'}, potential:{en:'Potential',es:'Potencial'},
+  hypothesis:{en:'Hypothesis',es:'Hipótesis'}, could_not_check:{en:'Could not check',es:'No se pudo revisar'}};
+
+/* ===================== data (read from the JSON block; nothing is invented) ===================== */
+const MARK='__AGENTREACH'+'_DATA__';   // written in two pieces so the marker appears only once in the file
+const MAXLEN=1000;
+const BAD=/[\u0000-\u001f\u007f-\u009f\u00ad\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff\ufff9-\ufffb]|[\u{e0000}-\u{e007f}]|[\ud800-\udfff]/gu;
+function san(x){
+  let s=String(x==null?'':x),cut=0;
+  if(s.length>MAXLEN){cut=s.length-MAXLEN;s=s.slice(0,MAXLEN);}
+  s=s.replace(BAD,c=>{const n=c.codePointAt(0);let h=n.toString(16);while(h.length<(n>0xffff?8:4))h='0'+h;return (n>0xffff?'\\U':'\\u')+h;});
+  return cut?s+'…['+cut+']':s;
+}
+let DATA=null;
+(function(){
+  const raw=($('#data').textContent||'').trim();
+  const es=(navigator.language||'en').toLowerCase().indexOf('es')===0;
+  const fatal=m=>{const f=$('#fatal');f.hidden=false;f.textContent=m;document.querySelector('.wrap').hidden=true;document.querySelector('#top .hero').hidden=true;};
+  if(!raw||raw.indexOf(MARK)===0){fatal(es?'Este archivo es una plantilla. Todavía no tiene datos. Genere el reporte con AgentReach.':'This file is a template. It has no data yet. Generate the report with AgentReach.');return;}
+  try{DATA=JSON.parse(raw);}catch(e){DATA=null;}
+  if(!DATA||typeof DATA!=='object'||Array.isArray(DATA)){DATA=null;fatal(es?'No se pudieron leer los datos de este reporte.':'The data of this report could not be read.');}
+})();
+if(!DATA) return;
+
+const CAT=DATA.catalog||{};
+function cat(kind,key){const k=CAT[kind];return (k&&Object.prototype.hasOwnProperty.call(k,key)&&k[key])||{};}
+/* a sanitized {en,es} from a string, an {en,es} object, or nothing (then the fallback text) */
+function I18(o,fb){
+  if(typeof o==='string')return {en:san(o),es:san(o)};
+  if(o&&typeof o==='object'&&(o.en!=null||o.es!=null)){const en=o.en!=null?san(o.en):san(o.es);return {en,es:o.es!=null?san(o.es):en};}
+  const f=san(fb==null?'':fb);return {en:f,es:f};
+}
+const safeId=x=>san(x).replace(/[^A-Za-z0-9_\-]/g,'_');
+const LV_MEAN={
+  verified:{en:'Confirmed: the agent can reach it today.',es:'Confirmado: el agente puede llegar hoy.'},
+  potential:{en:'Likely reachable, but something is left to confirm.',es:'Probablemente alcanzable; falta confirmar algo.'},
+  hypothesis:{en:'A suggestion only. Not a verified access.',es:'Solo una sugerencia. No es un acceso comprobado.'}};
+const LEVEL_NOTE={en:'Levels belong to this agent only; they are never mixed with another agent.',es:'Los niveles son solo de este agente; nunca se mezclan con los de otro.'};
+/* «Cómo leer este reporte»: los textos viajan en DATA.glossary (con el tono ya aplicado); sin glosario la sección no sale */
+const GLOSS=(()=>{
+  const g=DATA.glossary;if(!g||typeof g!=='object'||!Array.isArray(g.terms)||!g.labels||typeof g.labels!=='object')return null;
+  const terms=g.terms.filter(x=>x&&typeof x==='object').map(x=>({id:safeId(x.id),name:I18(x.name,x.id),line:I18(x.line,''),what_is:I18(x.what_is,''),means:I18(x.means,''),to_do:I18(x.to_do,'')}));
+  return terms.length?{labels:{what_is:I18(g.labels.what_is,''),means:I18(g.labels.means,''),to_do:I18(g.labels.to_do,'')},terms}:null;
+})();
+const HOW_OPEN=['nivel_comprobado','nivel_potencial','nivel_hipotesis','camino_de_alcance'];   // a la vista; el resto, plegado
+const SECRETS=I18(DATA.secrets_notice,'No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.');
+let AGENTS_DEF=[], CFG=[], UNDET=[], F=[], byId={}, AG=null;
+(function(){
+  /* configured agents: files AgentReach saw. Never "run" or "used": it does not know. */
+  UNDET=(Array.isArray(DATA.undetermined_traces)?DATA.undetermined_traces:[]).filter(u=>u&&typeof u==='object').map(u=>({path:san(u.path),cands:(Array.isArray(u.candidates)?u.candidates:[]).map(san)}));
+  (Array.isArray(DATA.configured_agents)?DATA.configured_agents:[]).forEach(c=>{
+    if(!c||typeof c!=='object')return;
+    const ev=(Array.isArray(c.evidence)?c.evidence:[]).filter(e=>e&&typeof e==='object').map(e=>({scope:['project','user','environment'].includes(e.scope)?e.scope:'project',path:san(e.path)}));
+    const conf=['high','potential','hypothesis'].includes(c.confidence)?c.confidence:'high';
+    if(ev.length)CFG.push({id:safeId(c.id),name:san(c.name||c.id),evidence:ev,conf,framework:c.kind==='framework',analyzed:c.analyzed!==false,on:(Array.isArray(c.on)?c.on:[]).map(san)});
+  });
+  const seen=new Set();
+  const ND={};   // por agente: el archivo y la CLAVE que AgentReach no interpreta (nunca un valor)
+  (Array.isArray(DATA.agents)?DATA.agents:[]).forEach(a=>{
+    if(!a||typeof a!=='object')return;
+    const aid=safeId(a.id);
+    ND[aid]=(Array.isArray(a.not_determined)?a.not_determined:[]).filter(x=>x&&typeof x==='object').map(x=>({path:san(x.path),key:san(x.key==null?'':x.key),reason:san(x.reason)}));
+    const list=(Array.isArray(a.findings)?a.findings:[]).filter(f=>f&&typeof f==='object');
+    if(!list.length&&!CFG.some(c=>c.id===aid&&c.analyzed&&!c.framework))return;   // only agents with findings or with configuration evidence
+    const nm=I18(a.name,aid);
+    AGENTS_DEF.push({id:aid,names:nm,levels:['verified','potential','hypothesis'],note:LEVEL_NOTE,meaning:LV_MEAN});
+    list.forEach((raw,i)=>{
+      let id=safeId(raw.id||(aid+'-'+i));while(seen.has(id))id+='_';seen.add(id);
+      const path=san(raw.path),parts=path.split('/'),name=parts.pop();
+      const ln=(typeof raw.line==='number'&&isFinite(raw.line)&&raw.line>=1)?Math.floor(raw.line):null;
+      const level=Object.prototype.hasOwnProperty.call(RANK,raw.level)?raw.level:'hypothesis';
+      const tcode=san(raw.type),tx=cat('texts',san(raw.text||raw.type));
+      const u=san(raw.unrelated),rule=raw.rule==null?'':san(raw.rule);
+      const post=I18(cat('postures',san(raw.posture)),raw.posture);
+      F.push({id,agent:aid,path,line:ln,name,dirParts:parts,dir:parts.join('/')||'.',
+        what:I18(cat('types',tcode).title,tcode),whose:I18(cat('providers',san(raw.provider)),raw.provider),level,
+        why:I18(cat('reasons',san(raw.reason)),raw.reason),
+        unrelated_to_task:u==='si'?'yes':u==='no'?'no':'nd',unrel_txt:I18(cat('unrelated',u),''),
+        agent_rules:rule?{en:post.en+' · '+rule,es:post.es+' · '+rule}:post,
+        what_to_do:I18(tx.what_to_do,''),meaning:I18(tx.meaning,''),
+        nd:(san(raw.reason)==='no_determinado'?ND[aid]:[])});
+    });
+  });
+  CFG.forEach(c=>{if(c.analyzed&&!c.framework&&!AGENTS_DEF.some(a=>a.id===c.id))AGENTS_DEF.push({id:c.id,names:{en:c.name,es:c.name},levels:['verified','potential','hypothesis'],note:LEVEL_NOTE,meaning:LV_MEAN});});
+  if(!AGENTS_DEF.length)AGENTS_DEF.push({id:'none',names:{en:'No agent',es:'Sin agente'},levels:['verified','potential','hypothesis'],note:LEVEL_NOTE,meaning:LV_MEAN,placeholder:true});
+  byId=Object.fromEntries(F.map(f=>[f.id,f]));
+})();
+
+/* what AgentReach could not check: files by reason (this folder) + the fixed tool limits */
+const NOTREV=(()=>{
+  const by={};
+  (Array.isArray(DATA.not_reviewed)?DATA.not_reviewed:[]).forEach(n=>{if(!n||typeof n!=='object')return;const r=san(n.reason);(by[r]||(by[r]=[])).push(san(n.path));});
+  return Object.keys(by).sort().map(r=>{const c=cat('no_review',r);return {reason:r,title:I18(c.title,r),how:I18(c.how_to_fix,''),items:by[r].sort()};});
+})();
+const TOOL_LIMITS={en:(DATA.limits&&Array.isArray(DATA.limits.en)?DATA.limits.en:[]).map(san),es:(DATA.limits&&Array.isArray(DATA.limits.es)?DATA.limits.es:[]).map(san)};
+const LIMITS_ALSO=DATA.limits_also?I18(DATA.limits_also,''):null;
+const META={tool:san(DATA.tool||'AgentReach'),ver:san(DATA.tool_version||''),folder:san(DATA.folder||''),files:san(DATA.files_looked_at==null?'':DATA.files_looked_at),at:san(DATA.generated_at||'')};
+
+const T = {
+ en:{skip:'Skip to the routes',howTitle:'How to read this report',howLead:'What each word in this report means.',howOther:'Other terms',cfgTitle:'Configured agents',cfgBadge:'configured',cfgNone:'No configuration of any known agent was found in this folder or in the user configuration.',cfgNote:'AgentReach saw configuration files; it does not know whether this agent was run.',ndBecause:'AgentReach does not interpret',ndNote:(n,items)=>n+(n===1?' finding has':' findings have')+' no determined level, so none can be Verified. AgentReach does not interpret: '+items+'.',scope:{project:'Project',user:'User',managed:'Managed',environment:'Environment variable (name only)'},confBadge:{high:'configured',potential:'probably configured',hypothesis:'hint only'},frameworkOn:names=>'framework installed on '+(names.length?names.join(', '):'an agent'),notAnalyzed:'AgentReach does not analyze what this agent can reach yet.',undetTitle:'Not determined',undetText:(p,c)=>p+' is read by several agents ('+c.join(', ')+'); it does not say which one is configured.',partFolder:'In this folder',partTool:'Tool limits',noneFolder:'Everything AgentReach tried to open could be read.',folderLbl:'Folder',eyebrow:'Read-only report',readOnly:'Read-only: nothing is changed or saved.',ovLabel:'Folders with findings, in alphabetical order of path',ovDepth:d=>'first '+d+' path levels',ovTop:'top-level folders',ovInfo:(n,g,d)=>n+' findings in '+g+' folders ('+d+'), listed in alphabetical order of path. AgentReach does not record the order in which it visited folders.',ovHint:'With more than 60 findings this overview is a static summary: nothing here can be selected. Use the list, the table or print to see each finding.',title:'Reach <span>route</span>',
+  lead:'One agent at a time: how far can it get? Each finding is a chain from the agent to what it might open. Levels belong to each agent and are never mixed.',
+  
+  dark:'Dark',light:'Light',graph:'Route map',table:'Table',list:'List',print:'Print',view:'View',theme:'Theme',lang:'Language',
+  
+  agents:'Agent',agentsLbl:'Agents',folder:'Folder',type:'Type',search:'Search',allF:'All folders',allT:'All types',searchPh:'file, service, ID, text…',
+  reset:'Reset filters',json:'Export JSON',csv:'Export CSV',link:'Copy link',
+  shown:(n,m)=>n+' of '+m+' routes shown',
+  total:'Routes',files:'files',folders:'folders',types:'types',effects:'effects (not checked)',
+  startHere:'Fix first',startNone:'No Verified findings for this agent. Look at the next level.',moreV:n=>'See all '+n+' in the list',
+  cols:['Agent','Where','What it is','Possible effect'],
+  colsub:['who acts','folder or file, line','what is there','not checked'],
+  lgSolid:'Solid line: AgentReach checked this step.',lgDash:'Dashed line: not checked. AgentReach does not look at what a key can do or whether it is valid.',
+  lgWidth:'Line thickness shows how many routes share it.',
+  contains:'contains',mayReach:'may reach',notChecked:'not checked',rule:'rule',
+  paths:n=>n+(n===1?' route':' routes'),line:n=>n==null?'no line':'line '+n,
+  modePaths:(n)=>'Full detail: '+n+(n===1?' route':' routes')+', one box per place, type and effect.',
+  modeGroups:(n,g,d)=>'Grouped: '+n+' routes in '+g+' folder groups'+(d?' ('+d+')':'')+'. Select a folder, then expand it to see its files.',
+  expand:'Expand folder',collapse:'Collapse folder',expandAll:'Expand all folders',collapseAll:'Collapse all',showMore:n=>'Show '+n+' more',moreIn:n=>'+ '+n+' more',
+  kbd:'Select a route or any box to light up its whole chain and dim the rest. Arrow keys move between boxes (up and down: same column; left and right: along the chain). Enter selects, + and - expand or collapse a folder, Esc clears. Shortcuts: / search, g graph, t table, l list, p print.',
+  noMatch:'No routes match these filters.',noAgent:'This agent has no findings.',
+  panelTitle:'Route details',panelHint:'Select a route, or any box in the graph, to see its eight details here.',
+  sumTitle:'Report summary',levelsOf:'Levels of this agent',topFolders:'Folders with most routes',
+  through:'Routes through this box',clear:'Clear',details:'Details',hide:'Hide details',
+  copyPath:'Copy path:line',copyLink:'Copy link',copied:'Copied',copyFail:'Could not copy. Select the text by hand.',
+  f:['Location and line','What it is and whose','Level and why','Unrelated to the task','Platform and agent','Agent rules','What to do','What it means'],
+  yes:'yes',no:'no',nd:'not determined',
+  chainV:'Checked by AgentReach: the agent can reach the file and the file holds this kind of item. Not checked (dashed): what that item could open, or whether it is valid.',
+  chainO:'The solid steps were seen in files but are not fully confirmed (see the level). The dashed step was not checked at all.',
+  limTitle:'What AgentReach could not check',limLead:'This section always appears. A route with no finding does not mean there is no risk.',
+  part:{'this folder':'In this folder','tool limits':'Tool limits'},fix:'How to fix',moreItems:n=>n+' more files',
+  foot:'Single page. Nothing is loaded from the internet and nothing is stored: language, theme and filters reset when you reload. The address (#) only records the agent, view and finding you opened, so a link reopens it.',
+  th:{lv:'Level',id:'ID',where:'Where',type:'What it is',eff:'Possible effect',agent:'Agent'},
+  sortBy:'Sort by',groupBy:'Group by',gNone:'No grouping',gFolder:'Folder',gType:'Type',gLevel:'Level',
+  rows:(a,b)=>'Rows 1 to '+a+' of '+b,showAllRows:'Show all',collapseG:'Collapse groups',expandG:'Expand groups',
+  lvl:{verified:'Verified',potential:'Potential',hypothesis:'Hypothesis',could_not_check:'Could not check'},
+  via:['rule','contains','may reach (not checked)'],step:'Route',
+  printNow:'Print / save as PDF',printTitle:'AgentReach · Reach route report',printNote:'Prints what is on this screen, in black on white. This view shows the same content as a plain page, with every finding and its eight details.',
+  printFilters:'Filters applied',none:'none',agentLbl:'Agent',generated:'Generated',
+  narrow:'The graph needs a wider window. Showing the list instead.',lvlScale:'Levels reported by this agent',
+  radarCap:'Closer to the center = more certain',copyRule:'Copy rule',ruleLbl:'Example rule (illustrative syntax: adapt it to your agent before using it)',ruleNote:'AgentReach changes no files. Any change is yours to make.',
+  sorted:(k,d)=>'Sorted by '+k+(d>0?', ascending':', descending'),collapsedGroup:'collapsed'},
+ es:{skip:'Saltar a los caminos',howTitle:'Cómo leer este reporte',howLead:'Qué significa cada palabra de este reporte.',howOther:'Otros términos',cfgTitle:'Agentes configurados',cfgBadge:'configurado',cfgNone:'No se encontró configuración de ningún agente conocido en esta carpeta ni en la configuración del usuario.',cfgNote:'AgentReach vio archivos de configuración; no sabe si este agente se ejecutó.',ndBecause:'AgentReach no interpreta',ndNote:(n,items)=>n+(n===1?' hallazgo no tiene':' hallazgos no tienen')+' nivel determinado, por eso ninguno puede ser Comprobado. AgentReach no interpreta: '+items+'.',scope:{project:'Proyecto',user:'Usuario',managed:'Gestionada',environment:'Variable de entorno (solo el nombre)'},confBadge:{high:'configurado',potential:'probablemente configurado',hypothesis:'solo un indicio'},frameworkOn:names=>'marco instalado sobre '+(names.length?names.join(', '):'un agente'),notAnalyzed:'AgentReach todavía no analiza qué puede alcanzar este agente.',undetTitle:'No determinado',undetText:(p,c)=>p+' lo leen varios agentes ('+c.join(', ')+'); no dice cuál está configurado.',partFolder:'En esta carpeta',partTool:'Límites de la herramienta',noneFolder:'Todo lo que AgentReach intentó abrir se pudo leer.',folderLbl:'Carpeta',eyebrow:'Informe de solo lectura',readOnly:'Solo lectura: no se cambia ni se guarda nada.',ovLabel:'Carpetas con hallazgos, en orden alfabético de ruta',ovDepth:d=>'primeros '+d+' niveles de ruta',ovTop:'carpetas de primer nivel',ovInfo:(n,g,d)=>n+' hallazgos en '+g+' carpetas ('+d+'), en orden alfabético de ruta. AgentReach no registra el orden en que visitó las carpetas.',ovHint:'Con más de 60 hallazgos este resumen es estático: aquí no se puede seleccionar nada. Use la lista, la tabla o imprimir para ver cada hallazgo.',title:'Camino de <span>alcance</span>',
+  lead:'Un agente a la vez: ¿hasta dónde puede llegar? Cada hallazgo es una cadena desde el agente hasta lo que podría abrir. Los niveles son de cada agente y nunca se mezclan.',
+  
+  dark:'Oscuro',light:'Claro',graph:'Recorrido',table:'Tabla',list:'Lista',print:'Imprimir',view:'Vista',theme:'Tema',lang:'Idioma',
+  
+  agents:'Agente',agentsLbl:'Agentes',folder:'Carpeta',type:'Tipo',search:'Buscar',allF:'Todas las carpetas',allT:'Todos los tipos',searchPh:'archivo, servicio, ID, texto…',
+  reset:'Quitar filtros',json:'Exportar JSON',csv:'Exportar CSV',link:'Copiar enlace',
+  shown:(n,m)=>n+' de '+m+' caminos mostrados',
+  total:'Caminos',files:'archivos',folders:'carpetas',types:'tipos',effects:'efectos (no comprobados)',
+  startHere:'Corregir primero',startNone:'Este agente no tiene hallazgos Comprobados. Mire el siguiente nivel.',moreV:n=>'Ver los '+n+' en la lista',
+  cols:['Agente','Dónde','Qué es','Efecto posible'],
+  colsub:['quién actúa','carpeta o archivo, línea','qué hay','no comprobado'],
+  lgSolid:'Línea continua: AgentReach comprobó este tramo.',lgDash:'Línea discontinua: no comprobado. AgentReach no mira qué puede hacer una clave ni si es válida.',
+  lgWidth:'El grosor de la línea muestra cuántos caminos la comparten.',
+  contains:'contiene',mayReach:'podría dar acceso a',notChecked:'no comprobado',rule:'regla',
+  paths:n=>n+(n===1?' camino':' caminos'),line:n=>n==null?'sin línea':'línea '+n,
+  modePaths:(n)=>'Detalle completo: '+n+(n===1?' camino':' caminos')+', una caja por lugar, tipo y efecto.',
+  modeGroups:(n,g,d)=>'Agrupado: '+n+' caminos en '+g+' grupos de carpeta'+(d?' ('+d+')':'')+'. Elija una carpeta y expándala para ver sus archivos.',
+  expand:'Expandir carpeta',collapse:'Plegar carpeta',expandAll:'Expandir todas las carpetas',collapseAll:'Plegar todo',showMore:n=>'Ver '+n+' más',moreIn:n=>'+ '+n+' más',
+  kbd:'Elija un camino o cualquier caja para iluminar toda su cadena y atenuar el resto. Las flechas mueven entre cajas (arriba y abajo: misma columna; izquierda y derecha: a lo largo de la cadena). Enter selecciona, + y - expanden o pliegan una carpeta, Esc quita la selección. Atajos: / buscar, g grafo, t tabla, l lista, p imprimir.',
+  noMatch:'Ningún camino coincide con estos filtros.',noAgent:'Este agente no tiene hallazgos.',
+  panelTitle:'Detalle del camino',panelHint:'Elija un camino, o cualquier caja del grafo, para ver aquí sus ocho datos.',
+  sumTitle:'Resumen del informe',levelsOf:'Niveles de este agente',topFolders:'Carpetas con más caminos',
+  through:'Caminos que pasan por esta caja',clear:'Quitar',details:'Detalles',hide:'Ocultar detalles',
+  copyPath:'Copiar ruta:línea',copyLink:'Copiar enlace',copied:'Copiado',copyFail:'No se pudo copiar. Seleccione el texto a mano.',
+  f:['Ubicación y línea','Qué es y de quién','Nivel y por qué','Ajeno a la tarea','Plataforma y agente','Reglas del agente','Qué hacer','Qué significa'],
+  yes:'sí',no:'no',nd:'no determinado',
+  chainV:'Comprobado por AgentReach: el agente puede llegar al archivo y el archivo guarda este tipo de dato. No comprobado (discontinuo): qué podría abrir ese dato o si es válido.',
+  chainO:'Los tramos continuos se vieron en archivos pero no están del todo confirmados (vea el nivel). El tramo discontinuo no se comprobó.',
+  limTitle:'Qué no pudo revisar AgentReach',limLead:'Esta sección siempre aparece. Que no haya hallazgos no significa que no haya riesgo.',
+  part:{'this folder':'En esta carpeta','tool limits':'Límites de la herramienta'},fix:'Cómo resolverlo',moreItems:n=>n+' archivos más',
+  foot:'Una sola página. No se carga nada de internet y no se guarda nada: el idioma, el tema y los filtros vuelven al inicial al recargar. La dirección (#) solo anota el agente, la vista y el hallazgo abierto, para que un enlace lo reabra.',
+  th:{lv:'Nivel',id:'ID',where:'Dónde',type:'Qué es',eff:'Efecto posible',agent:'Agente'},
+  sortBy:'Ordenar por',groupBy:'Agrupar por',gNone:'Sin agrupar',gFolder:'Carpeta',gType:'Tipo',gLevel:'Nivel',
+  rows:(a,b)=>'Filas 1 a '+a+' de '+b,showAllRows:'Ver todas',collapseG:'Plegar grupos',expandG:'Expandir grupos',
+  lvl:{verified:'Comprobado',potential:'Potencial',hypothesis:'Hipótesis',could_not_check:'No se pudo revisar'},
+  via:['regla','contiene','podría dar acceso a (no comprobado)'],step:'Camino',
+  printNow:'Imprimir / guardar como PDF',printTitle:'AgentReach · Informe de camino de alcance',printNote:'Imprime lo que se ve en esta pantalla, en negro sobre blanco. Esta vista muestra el mismo contenido como página simple, con todos los hallazgos y sus ocho datos.',
+  printFilters:'Filtros aplicados',none:'ninguno',agentLbl:'Agente',generated:'Generado',
+  narrow:'El grafo necesita una ventana más ancha. Se muestra la lista.',lvlScale:'Niveles que reporta este agente',
+  radarCap:'Más cerca del centro = más seguro',copyRule:'Copiar regla',ruleLbl:'Regla de ejemplo (sintaxis ilustrativa: ajústela a su agente antes de usarla)',ruleNote:'AgentReach no cambia ningún archivo. Cualquier cambio es suyo.',
+  sorted:(k,d)=>'Orden: '+k+(d>0?', ascendente':', descendente'),collapsedGroup:'plegado'}
+};
+
+/* ===================== state ===================== */
+let lang=(DATA.initial_language==='es'||DATA.initial_language==='en')?DATA.initial_language:((navigator.language||'en').toLowerCase().indexOf('es')===0?'es':'en');
+const S={agent:'',levels:new Set(),folder:'all',type:'all',q:'',view:'graph',sel:null,pf:null,expanded:new Set(),cap:{},focusId:null,
+  sort:{key:'level',dir:1},group:'none',open:new Set(),collapsedG:new Set(),limit:100,listLimit:200,pageGroupSet:false};
+const t=()=>T[lang];
+/* a level "not determined" says WHY: the file and the key AgentReach does not interpret (no values) */
+const ndText=(nd,lg)=>nd.map(x=>x.path+(x.key?' · '+x.key:'')).join('; ');
+F.forEach(f=>{if(f.nd&&f.nd.length){['en','es'].forEach(lg=>{f.why[lg]=f.why[lg]+' — '+T[lg].ndBecause+': '+ndText(f.nd);});}});
+const L=o=>o==null?'':(typeof o==='string'?o:o[lang]);
+const lvName=l=>LVN[l][lang];
+const ico=(l,cls)=>'<svg class="ic '+(cls||'')+'" aria-hidden="true" focusable="false"><use href="#i-'+K[l]+'"/></svg>';
+const nat=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+
+function load(){
+  S.sel=null;S.pf=null;S.expanded=new Set();S.cap={};S.open=new Set();S.collapsedG=new Set();S.limit=100;S.listLimit=200;
+  setAgent(S.agent,true);
+}
+function agentName(id){const a=agentDef(id);return a?L(a.names):'';}
+function AGN(){return AG?agentName(AG.id):'';}
+function agentDef(id){return AGENTS_DEF.find(a=>a.id===id);}
+function agentF(){return F.filter(f=>f.agent===S.agent);}
+function setAgent(id,keep){
+  S.agent=id; AG=agentDef(id); S.levels=new Set(AG.levels); S.folder='all';S.type='all';S.q=''; if(!keep){S.sel=null;S.open=new Set();}
+  S.expanded=new Set();S.cap={};S.limit=100;S.group=agentF().length>60?'folder':'none';
+}
+
+/* ===================== filtering ===================== */
+function matches(f){
+  if(!S.levels.has(f.level)) return false;
+  if(S.folder!=='all' && f.dir!==S.folder) return false;
+  if(S.type!=='all' && f.what.en!==S.type) return false;
+  const q=S.q.trim().toLowerCase();
+  if(q){const hay=[f.id,f.path,L(f.what),L(f.whose),L(f.meaning),L(f.agent_rules),L(f.why),lvName(f.level)].join(' ').toLowerCase(); if(!hay.includes(q)) return false;}
+  return true;
+}
+function visible(){
+  return agentF().filter(matches).sort((a,b)=>RANK[a.level]-RANK[b.level]||nat(a.path,b.path)||(a.line||0)-(b.line||0)||nat(a.id,b.id));
+}
+
+/* ===================== graph model (adapts to the number of paths) ===================== */
+function buildModel(fs){
+  const mode=fs.length<=12?'paths':'groups';
+  let depth=1;
+  if(mode==='groups'){
+    const maxd=Math.max(1,...fs.map(f=>f.dirParts.length));
+    for(depth=maxd;depth>1;depth--){ if(new Set(fs.map(f=>f.dirParts.slice(0,depth).join('/'))).size<=14) break; }
+  }
+  const folderOf=f=>f.dirParts.slice(0,depth).join('/')||'(root)';
+  const fcount={};fs.forEach(f=>{const k=folderOf(f);fcount[k]=(fcount[k]||0)+1;});
+  const rank={};
+  const nodes=new Map();
+  const mk=(col,key,kind,extra)=>{let n=nodes.get(key); if(!n){n=Object.assign({id:col+'|'+key,col,key,kind,fs:[],f0:null},extra||{});nodes.set(key,n);} return n;};
+  const chain={};
+  fs.forEach(f=>{
+    const a=mk(0,'agent','agent');
+    let w;
+    const fk='f|'+f.path+':'+f.line;
+    if(mode==='paths') w=mk(1,fk,'file');
+    else{
+      const fo=folderOf(f);
+      if(fcount[fo]===1) w=mk(1,fk,'file');
+      else if(S.expanded.has(fo)){ const r=rank[fo]=(rank[fo]==null?0:rank[fo]+1); const cap=S.cap[fo]||8; w=r<cap?mk(1,fk,'file',{folder:fo}):mk(1,'m|'+fo,'more',{folder:fo}); }
+      else w=mk(1,'g|'+fo,'folder',{folder:fo});
+    }
+    const ty=mk(2,'t|'+f.what.en,'type'), ef=mk(3,'e|'+f.whose.en,'effect');
+    const ch=[a,w,ty,ef]; chain[f.id]=ch; ch.forEach(n=>{n.fs.push(f); if(!n.f0)n.f0=f;});
+  });
+  const cols=[[],[],[],[]]; nodes.forEach(n=>cols[n.col].push(n));
+  const best=n=>Math.min(...n.fs.map(f=>RANK[f.level]));
+  cols[1].sort((p,q)=>(p.folder||p.f0.dir).localeCompare(q.folder||q.f0.dir)||(p.kind==='more')-(q.kind==='more')||best(p)-best(q)||nat(p.f0.path,q.f0.path));
+  // groups sorted by urgency when not expanded mixes: keep folder alphabetical for predictability
+  cols[1].forEach((n,i)=>n.idx=i);
+  const bary=(col,prev)=>{cols[col].forEach(n=>{n.b=n.fs.reduce((s,f)=>s+chain[f.id][prev].idx,0)/n.fs.length;}); cols[col].sort((p,q)=>p.b-q.b||best(p)-best(q)||String(p.key).localeCompare(q.key)); cols[col].forEach((n,i)=>n.idx=i);};
+  bary(2,1); bary(3,2);
+  const edges=new Map();
+  fs.forEach(f=>{const ch=chain[f.id]; for(let c=0;c<3;c++){const k=ch[c].id+'>'+ch[c+1].id; let e=edges.get(k); if(!e){e={a:ch[c],b:ch[c+1],c,fs:[],key:k};edges.set(k,e);} e.fs.push(f);} });
+  return {mode,depth,cols,chain,edges:[...edges.values()],nFolders:Object.keys(fcount).length};
+}
+function nodeText(n){
+  const T_=t(); const lv=[...new Set(n.fs.map(x=>x.level))].sort((a,b)=>RANK[a]-RANK[b]); const f=n.f0;
+  let nm,sub,subCls='',cnt=n.fs.length;
+  if(n.kind==='agent'){nm=AGN();sub=T_.paths(cnt);}
+  else if(n.kind==='file'){nm=f.name;sub=(f.dir?f.dir+' · ':'')+T_.line(f.line)+(G&&G.mode==='paths'?' · '+T_.rule+': '+L(f.agent_rules):'');}
+  else if(n.kind==='folder'){nm=n.folder+'/';sub=T_.paths(cnt);}
+  else if(n.kind==='more'){nm=T_.moreIn(cnt);sub=n.folder+'/';}
+  else if(n.kind==='type'){nm=L(f.what);sub=T_.paths(cnt);}
+  else {nm=L(f.whose);sub=T_.notChecked;subCls=' nc';}
+  const label=T_.cols[n.col]+': '+nm+'. '+(n.kind==='effect'?T_.notChecked+'. ':sub+'. ')+lv.map(lvName).join(', ')+'.';
+  return {lv,nm,sub,subCls,cnt,label,top:lv[0]};
+}
+function activeSet(){ if(!S.sel) return null; return S.sel.kind==='f'?new Set([S.sel.id]):new Set(S.sel.fs); }
+
+let G=null, nodeEls={}, FS=[];
+function renderGraph(){
+  const T_=t(), stage=$('#stage');
+  const isOv=agentF().length>60;
+  $('#overview').hidden=!isOv;['#stage','#colhd','#kbd'].forEach(x=>{$(x).hidden=isOv;});
+  if(isOv){G=null;nodeEls={};$('#colhd').innerHTML='';$('#gbtns').innerHTML='';renderOverview(visible());return;}
+  const keepFocus=stage.contains(document.activeElement)?document.activeElement.dataset.id:null;
+  FS=visible(); stage.innerHTML=''; nodeEls={}; G=null;
+  $('#colhd').innerHTML=''; $('#gbtns').innerHTML='';
+  if(!FS.length){stage.style.height='auto';stage.innerHTML='<p class="empty">'+esc(agentF().length?T_.noMatch:T_.noAgent)+'</p>';$('#modeinfo').textContent='';return;}
+  G=buildModel(FS);
+  const W=stage.clientWidth||900;
+  const nmax=Math.max(...G.cols.map(c=>c.length));
+  const dens=nmax<=6?0:nmax<=14?1:2;
+  const minGap=[22,12,6][dens];
+  // column width from available width; wider gaps when many edges
+  let colW=Math.round(Math.max(118,Math.min(dens===0?230:dens===1?200:190,W*(dens===0?.2:.19))));
+  const minG=G.mode==='paths'?96:44; if(W-4*colW<3*minG) colW=Math.floor((W-3*minG)/4);
+  const gap=(W-4*colW)/3;
+  const colX=[0,1,2,3].map(c=>Math.round(c*(colW+gap)));
+  const nl=document.createElement('div');nl.className='nodes';stage.appendChild(nl);
+  stage.classList.toggle('nofx',G.cols.reduce((s,c)=>s+c.length,0)>40);
+  const all=[];
+  G.cols.forEach((col,c)=>col.forEach(n=>{
+    const x=nodeText(n); n.x=x;
+    const b=document.createElement('button');b.type='button';
+    b.className='node col'+c+' d'+dens+' '+n.kind+' lv-'+K[x.top];
+    b.dataset.id=n.id;b.setAttribute('aria-label',x.label);b.title=x.nm+' · '+x.sub;b.setAttribute('aria-pressed','false');b.tabIndex=-1;
+    b.style.width=colW+'px';b.style.left=colX[c]+'px';b.style.top='0px';
+    const showCnt=dens===2&&n.kind!=='effect'&&n.kind!=='file'&&n.kind!=='agent';
+    b.innerHTML='<span class="nt"><span class="ics">'+x.lv.map(l=>ico(l,'sm')).join('')+'</span><span class="nm">'+esc(x.nm).replace(/([._\-\/])/g,'$1<wbr>')+'</span>'+(showCnt?'<span class="cnt">'+x.cnt+'</span>':'')+'</span><span class="sub'+x.subCls+'">'+esc(x.sub)+'</span>';
+    nl.appendChild(b);n.el=b;nodeEls[n.id]=b;all.push(n);
+  }));
+  // heights are measured, never assumed
+  G.cols.forEach(col=>col.forEach(n=>{n.h=n.el.offsetHeight;}));
+  const PAD=10;
+  const colSum=col=>col.reduce((s,n)=>s+n.h,0)+(col.length-1)*minGap;
+  const nonAgent=[1,2,3].map(c=>colSum(G.cols[c]));
+  let H=Math.max(...nonAgent)+2*PAD;
+  const agent=G.cols[0][0];
+  const outN=G.edges.filter(e=>e.a===agent).length;
+  if(G.mode==='groups'){ agent.h=Math.max(agent.h,Math.min(H-2*PAD,outN*9+24)); agent.el.style.height=agent.h+'px'; }
+  H=Math.max(H,agent.h+2*PAD,120);
+  G.cols.forEach(col=>{
+    const n=col.length; const sum=col.reduce((s,x)=>s+x.h,0);
+    const g=n>1?Math.min((H-2*PAD-sum)/(n-1),minGap*3+36):0;
+    const total=sum+g*(n-1); let y=(H-total)/2;
+    col.forEach(x=>{x.cy=y+x.h/2;x.el.style.top=Math.round(y)+'px';y+=x.h+g;});
+  });
+  stage.style.height=H+'px';
+  // header per column, aligned to actual x
+  $('#colhd').innerHTML=T_.cols.map((c,i)=>'<div style="left:'+colX[i]+'px;width:'+(colW+(i===3?0:Math.max(0,gap-10)))+'px">'+esc(c)+'<small>'+esc(T_.colsub[i])+'</small></div>').join('');
+  // edges
+  const NS='http:'+'//www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','edges');svg.setAttribute('width',W);svg.setAttribute('height',H);svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('aria-hidden','true');
+  stage.insertBefore(svg,nl);
+  const outs=new Map(),ins=new Map();
+  G.edges.forEach(e=>{(outs.get(e.a)||outs.set(e.a,[]).get(e.a)).push(e);(ins.get(e.b)||ins.set(e.b,[]).get(e.b)).push(e);});
+  const slot=(list,key,other)=>{list.sort((p,q)=>p[other].cy-q[other].cy); list.forEach((e,i)=>{const own=key==='dy0'?e.a:e.b; const step=list.length>1?Math.min(10,Math.max(2,(own.h-16)/(list.length-1))):0; e[key]=(i-(list.length-1)/2)*step;});};
+  outs.forEach(l=>slot(l,'dy0','b'));ins.forEach(l=>slot(l,'dy1','a'));
+  const showPills=G.mode==='paths';
+  const pills=document.createElement('div');pills.className='nodes';pills.style.pointerEvents='none';stage.appendChild(pills);
+  const animate=G.edges.length<=40;
+  G.edges.forEach(e=>{
+    const topF=e.fs.reduce((m,f)=>RANK[f.level]<RANK[m.level]?f:m,e.fs[0]);
+    const x0=colX[e.c]+colW,x1=colX[e.c+1],y0=e.a.cy+(e.dy0||0),y1=e.b.cy+(e.dy1||0),xm=(x0+x1)/2;
+    const sw=G.mode==='paths'?(topF.level==='hypothesis'?1.8:2.4):Math.min(e.c===1?6:9,1.4+1.7*Math.log2(1+e.fs.length));
+    e.sw=sw;
+    const g=document.createElementNS(NS,'g');g.setAttribute('class','edge lv-'+K[topF.level]);g.dataset.fs=e.fs.map(f=>f.id).join(' ');
+    const d='M'+x0+' '+y0+' C'+xm+' '+y0+','+xm+' '+y1+','+(x1-8)+' '+y1;
+    const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('class','e-base'+(e.c===2?' e-dash':''));p.setAttribute('stroke-width',sw);if(G.mode==='groups')p.setAttribute('stroke-opacity',e.c===1?'.55':'.8');g.appendChild(p);
+    if(e.c<2&&animate){const fl=document.createElementNS(NS,'path');fl.setAttribute('d',d);fl.setAttribute('class','e-flow');g.appendChild(fl);}
+    const ar=document.createElementNS(NS,'polygon');ar.setAttribute('points',x1+','+y1+' '+(x1-9)+','+(y1-5)+' '+(x1-9)+','+(y1+5));g.appendChild(ar);
+    svg.appendChild(g); e.g=g;
+    if(showPills&&e.c===2){
+      const pb=document.createElement('button');pb.type='button';pb.tabIndex=-1;pb.setAttribute('aria-hidden','true');
+      pb.className='pill lv-'+K[topF.level]+(e.c===2?' nc':'');pb.dataset.f=topF.id;pb.dataset.fs=e.fs.map(f=>f.id).join(' ');pb.style.pointerEvents='auto';
+      pb.style.left=Math.round(xm)+'px';pb.style.top=Math.round((y0+y1)/2)+'px';pb.style.maxWidth=Math.max(80,Math.floor(gap)-8)+'px';
+      pb.innerHTML=ico(topF.level,'sm')+'<span>'+esc(T_.notChecked)+'</span>';
+      pills.appendChild(pb);
+    }
+  });
+  // mode info and buttons
+  const depthTxt=G.mode==='groups'?(G.depth>1?(lang==='es'?'primeros '+G.depth+' niveles de ruta':'first '+G.depth+' path levels'):(lang==='es'?'carpeta raíz':'top-level folders')):'';
+  $('#modeinfo').textContent=G.mode==='paths'?T_.modePaths(FS.length):T_.modeGroups(FS.length,G.nFolders,depthTxt);
+  if(G.mode==='groups'){
+    $('#gbtns').innerHTML='<button class="btn" type="button" data-act="expandAll">'+esc(T_.expandAll)+'</button><button class="btn" type="button" data-act="collapseAll">'+esc(T_.collapseAll)+'</button>';
+  }
+  // roving tab stop
+  const ids=Object.keys(nodeEls);
+  const fid=(keepFocus&&nodeEls[keepFocus])?keepFocus:(S.focusId&&nodeEls[S.focusId]?S.focusId:G.cols[0][0].id);
+  S.focusId=fid;nodeEls[fid].tabIndex=0; if(keepFocus&&nodeEls[keepFocus])nodeEls[keepFocus].focus({preventScroll:true});
+  window.__lastLayout={dens,mode:G.mode,W,H,colW,gap,nodes:all.length,edges:G.edges.length};
+}
+function expandAll(){ if(!G)return; G.cols[1].forEach(n=>{if(n.kind==='folder'||n.kind==='more')S.expanded.add(n.folder);}); render(); }
+function toggleFolder(fo){ if(S.expanded.has(fo)){S.expanded.delete(fo);delete S.cap[fo];}else S.expanded.add(fo); S.sel=null; render(); }
+
+function applySel(){
+  const act=activeSet(); const stage=$('#stage');
+  if(G){
+    G.edges.forEach(e=>{const on=act&&e.fs.some(f=>act.has(f.id)); e.g.classList.toggle('on',!!on); e.g.classList.toggle('dim',!!act&&!on); if(on)e.g.querySelector('.e-base').setAttribute('stroke-width',(e.sw+1.4).toFixed(1)); else e.g.querySelector('.e-base').setAttribute('stroke-width',e.sw);});
+    stage.querySelectorAll('.pill').forEach(p=>{const ids=p.dataset.fs.split(' ');const on=act&&ids.some(i=>act.has(i)); p.classList.toggle('on',!!on); p.classList.toggle('dim',!!act&&!on);});
+    G.cols.forEach(col=>col.forEach(n=>{
+      const on=act&&n.fs.some(f=>act.has(f.id)); n.el.classList.toggle('on',!!on); n.el.classList.toggle('dim',!!act&&!on);
+      const isSel=S.sel&&((S.sel.kind==='n'&&S.sel.id===n.id)||(S.sel.kind==='f'&&G.chain[S.sel.id]&&G.chain[S.sel.id][n.col]===n&&n.col===1));
+      n.el.classList.toggle('sel',!!isSel); n.el.setAttribute('aria-pressed',isSel?'true':'false');
+    }));
+  }
+  document.querySelectorAll('tr.r').forEach(tr=>tr.classList.toggle('sel',!!(S.sel&&S.sel.kind==='f'&&S.sel.id===tr.dataset.f)));
+  renderPanel(); syncHash();
+}
+
+/* ===================== details ===================== */
+function lvBadge(l){return '<span class="lvbadge lv-'+K[l]+'">'+ico(l,'sm')+esc(lvName(l))+'</span>';}
+function detailHTML(f,skipHow){
+  const T_=t(),F8=T_.f;
+  const un=f.unrelated_to_task==='yes'?'<span class="unrel-yes">'+esc(unrelText(f))+'</span>':esc(unrelText(f));
+  const lines=['<code>'+esc(f.path)+'</code> · '+esc(T_.line(f.line)),esc(L(f.what))+' · '+esc(L(f.whose)),lvBadge(f.level)+' '+esc(L(f.why)),un,esc(agentName(f.agent)),esc(L(f.agent_rules)),howHTML(f),esc(L(f.meaning))];
+  const note=f.level==='verified'?T_.chainV:T_.chainO;
+  return '<div class="actions"><span class="mono" style="align-self:center"><b>'+esc(f.id)+'</b></span><button type="button" class="btn" data-copy-path="'+f.id+'">'+esc(T_.copyPath)+'</button><button type="button" class="btn" data-copy-link="'+f.id+'">'+esc(T_.copyLink)+'</button></div><p class="chaincheck">'+esc(note)+'</p><dl class="f">'+lines.map((h,i)=>(skipHow&&i===6)?'':'<div'+(i===6?' class="act"':'')+'><dt><b>'+(i+1)+'</b> '+esc(F8[i])+'</dt><dd>'+h+'</dd></div>').join('')+'</dl>';
+}
+function sideSummary(fs){
+  const T_=t();
+  const byF={};fs.forEach(f=>{byF[f.dir]=(byF[f.dir]||0)+1;});
+  const top=Object.entries(byF).sort((a,b)=>b[1]-a[1]||nat(a[0],b[0])).slice(0,6); const mx=top.length?top[0][1]:1;
+  return '<h3>'+esc(T_.levelsOf)+'</h3><ul class="lvlegend">'+AG.levels.map(l=>'<li>'+ico(l)+'<span><b class="lvb" style="color:var(--lt-'+K[l]+')">'+esc(lvName(l))+'</b><br><span class="m">'+esc(L(AG.meaning[l]))+'</span></span></li>').join('')+'<li>'+ico('could_not_check')+'<span><b style="color:var(--lt-c)">'+esc(lvName('could_not_check'))+'</b><br><span class="m">'+esc(lang==='es'?'AgentReach no pudo mirar esto (vea abajo).':'AgentReach could not look at this (see below).')+'</span></span></li></ul>'+
+   (top.length?'<h3>'+esc(T_.topFolders)+'</h3><ul class="bars">'+top.map(([k,n])=>'<li><button type="button" data-setfolder="'+esc(k)+'"><span class="nm">'+esc(k)+'</span><span class="mono">'+n+'</span><span class="tr"><i style="width:'+Math.round(100*n/mx)+'%"></i></span></button></li>').join('')+'</ul>':'');
+}
+function renderPanel(){
+  const p=$('#panel'),T_=t();
+  if(!S.sel){p.innerHTML='<h2 id="panelTitle">'+esc(T_.panelTitle)+'</h2><p class="hint">'+esc(T_.panelHint)+'</p>'+sideSummary(visible());return;}
+  let ids,fid;
+  if(S.sel.kind==='f'){ids=[S.sel.id];fid=S.sel.id;}else{ids=S.sel.fs;fid=ids.includes(S.pf)?S.pf:ids[0];}
+  const f=byId[fid]; if(!f){p.innerHTML='';return;}
+  let h='<button type="button" class="close" id="btnClear">'+esc(T_.clear)+'</button><h2 id="panelTitle">'+esc(T_.panelTitle)+'</h2><div class="tag">'+lvBadge(f.level)+'</div>';
+  if(S.sel.kind==='n'){
+    const n=G&&G.cols.flat().find(x=>x.id===S.sel.id);
+    if(n&&(n.kind==='folder'||n.kind==='more')) h+='<div class="actions">'+(n.kind==='folder'?'<button type="button" class="btn" data-fold="'+esc(n.folder)+'">'+esc(T_.expand)+'</button>':'<button type="button" class="btn" data-more="'+esc(n.folder)+'">'+esc(T_.showMore(8))+'</button><button type="button" class="btn" data-fold="'+esc(n.folder)+'">'+esc(T_.collapse)+'</button>')+'</div>';
+    else if(n&&n.kind==='file'&&n.folder&&S.expanded.has(n.folder)) h+='<div class="actions"><button type="button" class="btn" data-fold="'+esc(n.folder)+'">'+esc(T_.collapse)+'</button></div>';
+  }
+  if(ids.length>1){h+='<h3>'+esc(T_.through)+' ('+ids.length+')</h3><div class="picklist">'+ids.map(id=>{const x=byId[id];return '<button type="button" data-pick="'+id+'" aria-pressed="'+(id===fid)+'">'+ico(x.level,'sm')+'<span>'+esc(x.name)+' · '+esc(x.id)+'</span></button>';}).join('')+'</div>';}
+  h+=detailHTML(f); p.innerHTML=h;
+}
+
+/* ===================== table ===================== */
+const SORTS={level:(a,b)=>RANK[a.level]-RANK[b.level]||nat(a.path,b.path)||(a.line||0)-(b.line||0),
+  id:(a,b)=>nat(a.id,b.id),file:(a,b)=>nat(a.path,b.path)||(a.line||0)-(b.line||0),
+  type:(a,b)=>L(a.what).localeCompare(L(b.what))||nat(a.path,b.path),eff:(a,b)=>L(a.whose).localeCompare(L(b.whose)),
+  agent:(a,b)=>a.agent.localeCompare(b.agent)||RANK[a.level]-RANK[b.level]};
+function groupKeyOf(f){return S.group==='folder'?f.dir:S.group==='type'?L(f.what):S.group==='level'?lvName(f.level):'';}
+function renderTable(){
+  const T_=t(),fs=visible(); const n=fs.length;
+  const cmp=SORTS[S.sort.key]; const gcmp=(x,y)=>S.group==='none'?0:S.group==='level'?RANK[x.level]-RANK[y.level]:groupKeyOf(x).localeCompare(groupKeyOf(y)); fs.sort((a,b)=>gcmp(a,b)||S.sort.dir*cmp(a,b)||nat(a.id,b.id));
+  const dens=n<=20?'t-roomy':n<=60?'t-normal':'t-dense';
+  const arr=k=>S.sort.key===k?(S.sort.dir>0?'▲':'▼'):'↕';
+  const th=(k,lbl)=>'<th scope="col" aria-sort="'+(S.sort.key===k?(S.sort.dir>0?'ascending':'descending'):'none')+'"><button type="button" data-sort="'+k+'" title="'+esc(T_.sortBy+' '+lbl)+'">'+esc(lbl)+' <span class="arr" aria-hidden="true">'+arr(k)+'</span></button></th>';
+  let h='<div class="tools"><label class="lbl" style="font:600 12px var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)" for="selGroup">'+esc(T_.groupBy)+'</label><select id="selGroup">'+['none','folder','type','level'].map(g=>'<option value="'+g+'"'+(S.group===g?' selected':'')+'>'+esc(T_['g'+g[0].toUpperCase()+g.slice(1)])+'</option>').join('')+'</select>'+
+    (S.group!=='none'?'<button class="btn" type="button" data-act="collapseG">'+esc(T_.collapseG)+'</button><button class="btn" type="button" data-act="expandG">'+esc(T_.expandG)+'</button>':'')+
+    '<span class="mono" style="color:var(--text2)" id="sortinfo">'+esc(T_.sorted(T_.th[S.sort.key]||S.sort.key,S.sort.dir))+'</span></div>';
+  if(!n){$('#tableCard').innerHTML=h+'<p class="empty">'+esc(agentF().length?T_.noMatch:T_.noAgent)+'</p>';return;}
+  h+='<div class="tablewrap"><table class="rt '+dens+'"><caption class="sr">'+esc(AGN()+' · '+T_.paths(n))+'</caption><thead><tr>'+th('level',T_.th.lv)+th('id',T_.th.id)+th('file',T_.th.where)+th('type',T_.th.type)+th('eff',T_.th.eff)+th('agent',T_.th.agent)+'<th scope="col"><span class="sr">'+esc(T_.details)+'</span></th></tr></thead><tbody>';
+  const lim=Math.min(n,S.limit); let lastG=null;
+  for(let i=0;i<lim;i++){
+    const f=fs[i];
+    if(S.group!=='none'){const gk=groupKeyOf(f); if(gk!==lastG){lastG=gk;const cnt=fs.filter(x=>groupKeyOf(x)===gk).length;const col=S.collapsedG.has(gk);
+      h+='<tr class="grp"><th colspan="7" scope="colgroup"><button type="button" data-g="'+esc(gk)+'" aria-expanded="'+(!col)+'"><span aria-hidden="true">'+(col?'▸':'▾')+'</span> '+esc(gk||'(root)')+' <span class="mono" style="color:var(--text2)">'+cnt+(col?' · '+T_.collapsedGroup:'')+'</span></button></th></tr>';}
+      if(S.collapsedG.has(gk)) continue; }
+    const open=S.open.has(f.id)||(S.sel&&S.sel.kind==='f'&&S.sel.id===f.id&&S.open.has(f.id));
+    h+='<tr class="r'+(S.sel&&S.sel.id===f.id?' sel':'')+'" data-f="'+f.id+'"><td class="lvc" data-l="'+esc(T_.th.lv)+'"><span class="lvname lv-'+K[f.level]+'">'+ico(f.level,'sm')+esc(lvName(f.level))+'</span></td>'+
+      '<td data-l="'+esc(T_.th.id)+'"><span class="mono">'+esc(f.id)+'</span></td>'+
+      '<td class="wh" data-l="'+esc(T_.th.where)+'"><code>'+esc(f.path)+':'+(f.line==null?'–':f.line)+'</code><button type="button" class="cp" data-copy-path="'+f.id+'" aria-label="'+esc(T_.copyPath+': '+f.path+':'+(f.line==null?'':f.line))+'" title="'+esc(T_.copyPath)+'">⧉</button></td>'+
+      '<td data-l="'+esc(T_.th.type)+'">'+esc(L(f.what))+'</td>'+
+      '<td data-l="'+esc(T_.th.eff)+'">'+esc(L(f.whose))+'<span class="nclabel">'+esc(T_.notChecked)+'</span></td>'+
+      '<td class="ag" data-l="'+esc(T_.th.agent)+'">'+esc(AGN())+'</td>'+
+      '<td><button type="button" class="btn" data-row="'+f.id+'" aria-expanded="'+open+'" aria-controls="det-'+f.id+'" style="min-height:32px">'+esc(open?T_.hide:T_.details)+'</button></td></tr>';
+    if(open) h+='<tr class="det" id="det-'+f.id+'"><td colspan="7"><div class="detbox">'+detailHTML(f)+'</div></td></tr>';
+  }
+  h+='</tbody></table></div>';
+  h+='<div class="more-row"><span class="mono" style="color:var(--text2)">'+esc(T_.rows(lim,n))+'</span>'+(lim<n?'<button class="btn" type="button" data-act="moreRows">'+esc(T_.showMore(Math.min(100,n-lim)))+'</button><button class="btn" type="button" data-act="allRows">'+esc(T_.showAllRows)+'</button>':'')+'</div>';
+  $('#tableCard').innerHTML=h;
+}
+
+/* ===================== list (accessible outline) ===================== */
+function renderList(){
+  const T_=t(),all=visible(),fs=all.slice(0,S.listLimit),box=$('#folds');
+  if(!fs.length){box.innerHTML='<p class="empty">'+esc(agentF().length?T_.noMatch:T_.noAgent)+'</p>';return;}
+  const groups=new Map();fs.forEach(f=>{(groups.get(f.dir)||groups.set(f.dir,[]).get(f.dir)).push(f);});
+  const many=groups.size>3;let gi=0;
+  box.innerHTML=[...groups.entries()].map(([dir,list])=>{
+    const open=!many||gi++===0||list.some(f=>S.open.has(f.id));
+    return '<details class="fold"'+(open?' open':'')+'><summary>'+esc(dir)+'/ <span class="cnt">'+list.length+'</span></summary><ol class="pathlist">'+list.map((f,i)=>{
+      const o=S.open.has(f.id);
+      const steps=[[AGN(),''],[f.path+' · '+T_.line(f.line),T_.via[0]+': '+L(f.agent_rules)],[L(f.what),T_.via[1]],[L(f.whose),T_.via[2]]];
+      return '<li class="glass pathcard lv-'+K[f.level]+'" data-f="'+f.id+'"><div class="pc-head"><strong>'+ico(f.level)+' '+esc(f.id+' · '+L(f.what))+'</strong><button type="button" class="btn" data-row="'+f.id+'" aria-expanded="'+o+'" aria-controls="ldet-'+f.id+'">'+esc(o?T_.hide:T_.details)+'</button></div>'+
+       '<ol class="chain">'+steps.map((s,k)=>'<li class="'+(k===3?'nc':'')+'">'+(s[1]?'<span class="via">'+ico(f.level,'sm')+'<span>'+esc(s[1])+'</span></span>':'')+'<span class="k">'+esc(T_.cols[k])+' </span><span class="v">'+esc(s[0])+'</span></li>').join('')+'</ol>'+
+       '<div class="todo"><p class="todo-h">'+esc(T_.f[6])+'</p>'+howHTML(f)+'</div>'+'<div class="more" id="ldet-'+f.id+'"'+(o?'':' hidden')+'>'+(o?detailHTML(f,true):'')+'</div></li>';}).join('')+'</ol></details>';
+  }).join('')+(all.length>fs.length?'<div class="more-row"><span class="mono" style="color:var(--text2)">'+esc(T_.rows(fs.length,all.length))+'</span><button class="btn" type="button" data-act="moreList">'+esc(T_.showMore(Math.min(200,all.length-fs.length)))+'</button></div>':'');
+}
+
+/* ===================== configured agents (files seen; NOT whether the agent ran) ===================== */
+function scopeName(s){const T_=t();return T_.scope[s]||s;}
+function renderCfg(){
+  const T_=t(),box=$('#cfg');
+  let h='<h2 id="cfgTitle">'+ico('i','lg')+esc(T_.cfgTitle)+'</h2>';
+  if(!CFG.length){
+    h+='<p class="cfg-none">'+esc(T_.cfgNone)+'</p>';
+  }else{
+    h+='<ul class="cfg-list">'+CFG.map(c=>'<li class="cfg-item"><div class="cfg-head"><strong>'+esc(c.name)+'</strong><span class="cfg-badge">'+esc(T_.confBadge[c.conf])+'</span></div>'+
+      (c.framework?'<p class="cfg-sub">'+esc(T_.frameworkOn(c.on))+'</p>':(c.analyzed?'':'<p class="cfg-sub">'+esc(T_.notAnalyzed)+'</p>'))+
+      '<ul class="cfg-ev">'+c.evidence.map(e=>'<li><span class="cfg-scope">'+esc(scopeName(e.scope))+'</span> <code>'+esc(e.path)+'</code></li>').join('')+'</ul></li>').join('')+'</ul>';
+  }
+  if(UNDET.length)h+='<div class="cfg-undet"><strong>'+esc(T_.undetTitle)+'</strong>'+UNDET.map(u=>'<p>'+esc(T_.undetText(u.path,u.cands))+'</p>').join('')+'</div>';
+  if(CFG.length)h+='<p class="cfg-note">'+esc(T_.cfgNote)+'</p>';
+  box.innerHTML=h;
+}
+
+/* ===================== how to read this report (first block, open by default, foldable) ===================== */
+function renderHowto(){
+  const box=$('#howto');
+  if(!GLOSS){box.hidden=true;box.innerHTML='';box.removeAttribute('aria-labelledby');return;}
+  const T_=t(),prev=box.querySelector('details');
+  const wasOpen=prev?prev.open:true;                                  // se conserva lo que la persona plegó o abrió
+  const openIds=new Set([...box.querySelectorAll('details.fold[open]')].map(d=>d.dataset.term));
+  const card=(x,head)=>(head===false?'':'<h3>'+esc(L(x.name))+'</h3>')+'<p class="tline">'+esc(L(x.line))+'</p><dl><dt>'+esc(L(GLOSS.labels.what_is))+'</dt><dd>'+esc(L(x.what_is))+'</dd><dt>'+esc(L(GLOSS.labels.means))+'</dt><dd>'+esc(L(x.means))+'</dd><dt>'+esc(L(GLOSS.labels.to_do))+'</dt><dd>'+esc(L(x.to_do))+'</dd></dl>';
+  const shown=HOW_OPEN.map(id=>GLOSS.terms.find(x=>x.id===id)).filter(Boolean),rest=GLOSS.terms.filter(x=>!HOW_OPEN.includes(x.id));
+  box.hidden=false;box.setAttribute('aria-labelledby','howTitle');
+  box.innerHTML='<details id="howDetails"'+(wasOpen?' open':'')+'><summary><h2 id="howTitle">'+esc(T_.howTitle)+'</h2></summary><p class="howlead">'+esc(T_.howLead)+'</p>'+
+    '<div class="terms">'+shown.map(x=>'<article class="term" id="term-'+x.id+'">'+card(x)+'</article>').join('')+'</div>'+
+    (rest.length?'<h3 class="other">'+esc(T_.howOther)+'</h3>'+rest.map(x=>'<details class="fold" id="term-'+x.id+'" data-term="'+x.id+'"'+(openIds.has(x.id)?' open':'')+'><summary>'+esc(L(x.name))+'</summary><div class="term">'+card(x,false)+'</div></details>').join(''):'')+'</details>';
+}
+
+/* ===================== what AgentReach could not check ===================== */
+function renderLimits(){
+  const T_=t();
+  const tool=TOOL_LIMITS[lang].length?TOOL_LIMITS[lang]:TOOL_LIMITS.en;
+  return '<h2 id="limTitle">'+ico('could_not_check','lg')+esc(T_.limTitle)+'</h2><p style="margin:0;color:var(--text2)">'+esc(T_.limLead)+'</p><div class="grid">'+
+    NOTREV.map(l=>{const it=l.items,shown=it.slice(0,5),rest=it.slice(5);
+      return '<div class="it"><span class="part">'+esc(T_.partFolder)+'</span><h3>'+esc(L(l.title))+' ('+it.length+')</h3>'+shown.map(i=>'<code>'+esc(i)+'</code>').join('')+(rest.length?'<details><summary>'+esc(T_.moreItems(rest.length))+'</summary>'+rest.map(i=>'<code>'+esc(i)+'</code>').join('')+'</details>':'')+(L(l.how)?'<p><b>'+esc(T_.fix)+':</b> '+esc(L(l.how))+'</p>':'')+'</div>';}).join('')+
+    (NOTREV.length?'':'<div class="it"><span class="part">'+esc(T_.partFolder)+'</span><p>'+esc(T_.noneFolder)+'</p></div>')+
+    '<div class="it"><span class="part">'+esc(T_.partTool)+'</span><ol class="toolim">'+tool.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+(LIMITS_ALSO?'<p>'+esc(L(LIMITS_ALSO))+'</p>':'')+'</div></div>';
+}
+
+/* ===================== route overview: more than 60 findings (static, nothing to select) ===================== */
+function renderOverview(fs){
+  const T_=t(),ov=$('#overview');
+  if(!fs.length){ov.innerHTML='<p class="empty">'+esc(agentF().length?T_.noMatch:T_.noAgent)+'</p>';$('#modeinfo').textContent='';return;}
+  const maxd=Math.max(1,...fs.map(f=>f.dirParts.length));let depth=maxd;
+  for(depth=maxd;depth>1;depth--){if(new Set(fs.map(f=>f.dirParts.slice(0,depth).join('/'))).size<=24)break;}
+  const folderOf=f=>f.dirParts.slice(0,depth).join('/')||'.';
+  const map=new Map();fs.forEach(f=>{const k=folderOf(f);let e=map.get(k);if(!e){e={k,v:0,p:0,h:0};map.set(k,e);}e[K[f.level]]++;});
+  const rows=[...map.values()].sort((a,b)=>nat(a.k,b.k));
+  const mx=Math.max(1,...rows.map(r=>r.v+r.p+r.h));
+  const tot={v:0,p:0,h:0};fs.forEach(f=>{tot[K[f.level]]++;});
+  const cn=(r)=>AG.levels.map(l=>'<span class="oc lv-'+K[l]+'">'+ico(l,'sm')+'<span>'+esc(lvName(l))+' <b>'+r[K[l]]+'</b></span></span>').join('');
+  const seg=(r)=>AG.levels.map(l=>r[K[l]]?'<i class="lv-'+K[l]+'" style="width:'+(100*r[K[l]]/mx).toFixed(2)+'%"></i>':'').join('');
+  const depthTxt=depth>1?T_.ovDepth(depth):T_.ovTop;
+  $('#modeinfo').textContent=T_.ovInfo(fs.length,rows.length,depthTxt);
+  ov.innerHTML='<div class="ov-start"><span class="ov-pin" aria-hidden="true">'+ico('i')+'</span><div><strong>'+esc(AGN())+'</strong><div class="oc-row">'+cn(tot)+'</div></div></div>'+
+    '<ol class="route" aria-label="'+esc(T_.ovLabel)+'">'+rows.map((r,i)=>'<li class="step"><span class="num" aria-hidden="true">'+(i+1)+'</span><div class="sbody"><div class="shead"><code>'+esc(r.k)+'/</code><span class="mono sc">'+(r.v+r.p+r.h)+'</span></div>'+
+      '<div class="meter" aria-hidden="true">'+seg(r)+'</div><div class="oc-row">'+cn(r)+'</div></div></li>').join('')+'</ol>'+
+    '<p class="hint ov-hint">'+esc(T_.ovHint)+'</p>';
+}
+function levelLegend(){return AG.levels.map(l=>'<span class="li">'+ico(l,'sm')+esc(lvName(l))+'</span>').join('');}
+
+/* ===================== print (what is on screen; the Print view is the same content as a plain page) ===================== */
+function renderPrint(){
+  const T_=t(),fs=visible().sort(SORTS.level),n=fs.length;
+  const counts=AG.levels.map(l=>lvName(l)+': '+agentF().filter(f=>f.level===l).length).join(' · ');
+  const filt=[];if(S.levels.size<AG.levels.length)filt.push(T_.th.lv+': '+AG.levels.filter(l=>S.levels.has(l)).map(lvName).join(', '));if(S.folder!=='all')filt.push(T_.folder+': '+S.folder);if(S.type!=='all')filt.push(T_.type+': '+S.type);if(S.q)filt.push(T_.search+': '+S.q);
+  const pico=l=>'<svg class="ic sm" aria-hidden="true"><use href="#i-'+K[l]+'"/></svg>';
+  let h='<div class="printbar"><button class="btn" type="button" data-act="doPrint">'+esc(T_.printNow)+'</button><span style="color:var(--text2)">'+esc(T_.printNote)+'</span></div>';
+  h+='<article class="printcard"><h1>'+esc(T_.printTitle)+'</h1><p><b>'+esc(T_.agentLbl)+':</b> '+esc(AGN())+' · <b>'+esc(T_.folderLbl)+':</b> <code>'+esc(META.folder)+'</code> · '+esc(META.files)+' '+esc(T_.files)+(META.at?' · '+esc(T_.generated)+': '+esc(META.at):'')+'</p>';
+  h+='<div class="nb">'+esc(L(SECRETS))+'</div>';
+  h+='<h2>'+esc(T_.cfgTitle)+'</h2>'+(CFG.length?CFG.map(c=>'<div class="det"><b>'+esc(c.name)+' · '+esc(T_.confBadge[c.conf])+'</b>'+(c.framework?'<br><i>'+esc(T_.frameworkOn(c.on))+'</i>':'')+'<ul>'+c.evidence.map(e=>'<li>'+esc(scopeName(e.scope))+': <code>'+esc(e.path)+'</code></li>').join('')+'</ul></div>').join(''):'<p>'+esc(T_.cfgNone)+'</p>')+(UNDET.length?UNDET.map(u=>'<p><b>'+esc(T_.undetTitle)+':</b> '+esc(T_.undetText(u.path,u.cands))+'</p>').join(''):'')+(CFG.length?'<p><i>'+esc(T_.cfgNote)+'</i></p>':'');
+  h+='<h2>'+esc(T_.sumTitle)+'</h2><p class="sumline"><span>'+esc(T_.total)+': '+agentF().length+'</span><span>'+esc(counts)+'</span><span>'+esc(T_.shown(n,agentF().length))+'</span></p><p>'+esc(T_.printFilters)+': '+esc(filt.length?filt.join(' · '):T_.none)+'</p>';
+  h+='<h2>'+esc(T_.table)+'</h2><table><thead><tr><th>'+esc(T_.th.lv)+'</th><th>'+esc(T_.th.id)+'</th><th>'+esc(T_.th.where)+'</th><th>'+esc(T_.th.type)+'</th><th>'+esc(T_.th.eff)+'</th></tr></thead><tbody>'+
+    fs.map(f=>'<tr><td class="lvp">'+pico(f.level)+' '+esc(lvName(f.level))+'</td><td><code>'+esc(f.id)+'</code></td><td><code>'+esc(f.path)+':'+(f.line==null?'–':f.line)+'</code></td><td>'+esc(L(f.what))+'</td><td>'+esc(L(f.whose))+' <i>('+esc(T_.notChecked)+')</i></td></tr>').join('')+'</tbody></table>';
+  h+='<h2>'+esc(T_.details)+' ('+n+')</h2>'+fs.map(f=>'<div class="det"><b>'+esc(f.id)+' · '+esc(lvName(f.level))+'</b><dl>'+T_.f.map((k,i)=>{const v=[f.path+' · '+T_.line(f.line),L(f.what)+' · '+L(f.whose),lvName(f.level)+'. '+L(f.why),unrelText(f),AGN(),L(f.agent_rules),howText(f),L(f.meaning)][i];return '<dt>'+(i+1)+'. '+esc(k)+'</dt><dd>'+esc(v)+'</dd>';}).join('')+'</dl></div>').join('');
+  const tool=TOOL_LIMITS[lang].length?TOOL_LIMITS[lang]:TOOL_LIMITS.en;
+  h+='<h2>'+esc(T_.limTitle)+'</h2><p>'+esc(T_.limLead)+'</p>'+NOTREV.map(l=>'<div class="nc2"><b>'+esc(T_.partFolder)+' · '+esc(L(l.title))+' ('+l.items.length+')</b><br><code>'+l.items.map(esc).join(', ')+'</code>'+(L(l.how)?'<br>'+esc(T_.fix)+': '+esc(L(l.how)):'')+'</div>').join('')+
+    '<div class="nc2"><b>'+esc(T_.partTool)+'</b><ol>'+tool.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+(LIMITS_ALSO?esc(L(LIMITS_ALSO)):'')+'</div></article>';
+  $('#printView').innerHTML=h;
+}
+function unrelText(f){const T_=t();const c=L(f.unrel_txt);return c||(f.unrelated_to_task==='yes'?T_.yes:f.unrelated_to_task==='no'?T_.no:T_.nd);}
+
+/* ===================== static + summary ===================== */
+function legendBar(){
+  const T_=t();
+  return '<span class="li"><svg class="ln" viewBox="0 0 36 8" aria-hidden="true"><path d="M1 4h34" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'+esc(T_.lgSolid)+'</span>'+
+  '<span class="li"><svg class="ln" viewBox="0 0 36 8" aria-hidden="true"><path d="M1 4h34" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="6 6"/></svg>'+esc(T_.lgDash)+'</span>'+
+  AG.levels.map(l=>'<span class="li">'+ico(l,'sm')+esc(lvName(l))+'</span>').join('');
+}
+function renderStatic(){
+  const T_=t();document.documentElement.lang=lang;
+  $('#h1').innerHTML=T_.title;$('#lead').textContent=T_.lead;$('#eyebrow').textContent=T_.eyebrow;$('#secrets').textContent=L(SECRETS);$('#meta').textContent=T_.folderLbl+': '+META.folder+' · '+META.files+' '+T_.files+(META.at?' · '+T_.generated+': '+META.at:'')+' · '+META.tool+(META.ver?' '+META.ver:'')+' · '+T_.readOnly;
+  document.title='AgentReach · '+(lang==='es'?'Informe de camino de alcance':'Reach route report');
+  $('#skip').textContent=T_.skip;
+  $('#gTheme [data-theme=dark]').textContent=T_.dark;$('#gTheme [data-theme=light]').textContent=T_.light;
+  $('#gTheme').setAttribute('aria-label',T_.theme);$('#gLang').setAttribute('aria-label',T_.lang);
+  $('#gView').setAttribute('aria-label',T_.view);
+  $('#gView').innerHTML=['graph','table','list','print'].map(v=>'<button type="button" data-view="'+v+'" aria-pressed="'+(S.view===v)+'">'+esc(T_[v])+'</button>').join('');
+  $('#lblAgents').textContent=T_.agentsLbl;$('#lblFolder').textContent=T_.folder;$('#lblType').textContent=T_.type;$('#lblQ').textContent=T_.search;$('#q').placeholder=T_.searchPh;
+  $('#btnReset').textContent=T_.reset;$('#btnJson').textContent=T_.json;$('#btnCsv').textContent=T_.csv;$('#btnLink').textContent=T_.link;
+  $('#sumTitle').textContent=T_.sumTitle;
+  $('#kbd').textContent=T_.kbd;
+  $('#limits').innerHTML=renderLimits();
+  $('#foot').textContent=T_.foot;
+  renderTabsAndFilters();renderCfg();renderHowto();
+}
+function renderTabsAndFilters(){
+  const T_=t();
+  $('#agentbar').hidden=!!AGENTS_DEF[0].placeholder;
+  $('#tabs').innerHTML=AGENTS_DEF.map(a=>'<button type="button" class="tab" role="tab" data-agent="'+a.id+'" aria-selected="'+(a.id===S.agent)+'" tabindex="'+(a.id===S.agent?0:-1)+'"><span>'+esc(L(a.names))+'</span><span class="n">'+F.filter(f=>f.agent===a.id).length+'</span></button>').join('');
+  $('#agentnote').textContent=L(AG.note);
+  const af=agentF();
+  const dirs=[...new Set(af.map(f=>f.dir))].sort(nat), types=[...new Set(af.map(f=>f.what.en))].sort();
+  $('#selFolder').innerHTML='<option value="all">'+esc(T_.allF)+'</option>'+dirs.map(d=>'<option value="'+esc(d)+'">'+esc(d)+'</option>').join('');$('#selFolder').value=S.folder;
+  const tmap=Object.fromEntries(af.map(f=>[f.what.en,L(f.what)]));
+  $('#selType').innerHTML='<option value="all">'+esc(T_.allT)+'</option>'+types.map(x=>'<option value="'+esc(x)+'">'+esc(tmap[x])+'</option>').join('');$('#selType').value=S.type;
+  $('#q').value=S.q;
+}
+function renderSummary(){
+  const T_=t(),af=agentF(),fs=visible();
+  $('#kpis').innerHTML='<div class="kpi glass total" style="border-color:var(--edge)"><span class="big">'+af.length+'</span><span class="nm">'+esc(T_.total)+'</span></div>'+
+    AG.levels.map(l=>{const n=af.filter(f=>f.level===l).length;return '<button type="button" class="kpi lv-'+K[l]+'" data-lv="'+l+'" aria-pressed="'+S.levels.has(l)+'"><span class="big">'+n+'</span><span class="nm">'+ico(l,'sm')+esc(lvName(l))+'</span></button>';}).join('');
+  const tot=af.length||1;
+  $('#stackbar').innerHTML=AG.levels.map(l=>'<i class="lv-'+K[l]+'" style="width:'+(100*af.filter(f=>f.level===l).length/tot)+'%"></i>').join('');
+  $('#facts').innerHTML='<span><b>'+new Set(af.map(f=>f.path)).size+'</b> '+esc(T_.files)+'</span><span><b>'+new Set(af.map(f=>f.dir)).size+'</b> '+esc(T_.folders)+'</span><span><b>'+new Set(af.map(f=>f.what.en)).size+'</b> '+esc(T_.types)+'</span><span><b>'+new Set(af.map(f=>f.whose.en)).size+'</b> '+esc(T_.effects)+'</span>';
+  const top=AG.levels[0]; const first=af.filter(f=>f.level===top).sort(SORTS.level);
+  $('#start').innerHTML='<h2>'+esc(T_.startHere)+' · '+esc(lvName(top))+'</h2>'+(first.length?'<ul class="start">'+first.slice(0,3).map(f=>'<li><button type="button" data-open="'+f.id+'">'+ico(f.level,'sm')+'<span class="p"><b>'+esc(L(f.what))+'</b> · <code>'+esc(f.name)+'</code> <span class="mono" style="color:var(--text2)">'+esc(f.id)+'</span></span></button></li>').join('')+(first.length>3?'<li><button type="button" data-lvonly="'+top+'">'+esc(T_.moreV(first.length))+'</button></li>':'')+'</ul>':'<p style="margin:0;color:var(--text2)">'+esc(T_.startNone)+'</p>');
+  const nds=af.filter(f=>f.nd&&f.nd.length),nb=$('#ndnote');
+  if(nds.length){const seenK=[];nds[0].nd.forEach(x=>{const k=x.path+(x.key?' · '+x.key:'');if(!seenK.includes(k))seenK.push(k);});nb.hidden=false;nb.textContent=T_.ndNote(nds.length,seenK.join('; '));}else{nb.hidden=true;nb.textContent='';}
+  $('#status').textContent=T_.shown(fs.length,af.length);
+}
+
+/* ===================== what to do (Qué hacer) ===================== */
+function howHTML(f){const T_=t();return '<p>'+esc(L(f.what_to_do))+'</p><p class="honest">'+esc(T_.ruleNote)+'</p>';}
+function howText(f){const T_=t();return L(f.what_to_do)+' · '+T_.ruleNote;}
+
+/* ===================== radar (header): rings and dots of the selected agent only ===================== */
+function renderRadar(){
+  const C=180, RAD={verified:56,potential:104,hypothesis:152}, lv=AG.levels.filter(l=>RAD[l]), all=agentF(), small=all.length<=60;
+  let svg='';
+  [...new Set(lv.map(l=>RAD[l]))].forEach(r=>{svg+='<circle class="ring" cx="'+C+'" cy="'+C+'" r="'+r+'"/>';});
+  svg+='<circle class="ring dash" cx="'+C+'" cy="'+C+'" r="174"/>';
+  for(let k=0;k<8;k++){const a=k*Math.PI/4;svg+='<line class="spoke" x1="'+C+'" y1="'+C+'" x2="'+(C+174*Math.cos(a)).toFixed(1)+'" y2="'+(C+174*Math.sin(a)).toFixed(1)+'"/>';}
+  lv.forEach((l,li)=>{
+    const list=all.filter(f=>f.level===l);
+    list.forEach((f,i)=>{
+      const a=(i/list.length)*2*Math.PI+li*0.95-Math.PI/2, x=C+RAD[l]*Math.cos(a), y=C+RAD[l]*Math.sin(a);
+      svg+=small?'<use href="#i-'+K[l]+'" x="'+(x-13).toFixed(1)+'" y="'+(y-13).toFixed(1)+'" width="26" height="26"/>'
+        :'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.6" style="fill:var(--lc-'+K[l]+')"/>';
+    });
+  });
+  svg+='<circle class="core" cx="'+C+'" cy="'+C+'" r="13"/><use href="#logo" x="'+(C-24)+'" y="'+(C-24)+'" width="48" height="48"/>';
+  $('#plot').innerHTML=svg;
+  $('#radarcap').textContent=t().radarCap;
+}
+
+/* ===================== render ===================== */
+const mqWide=window.matchMedia('(min-width:760px)');
+function effView(){ if(S.view==='graph'&&!mqWide.matches&&agentF().length<=60) return 'list'; return S.view; }
+function render(){
+  const v=effView(), fs=visible(), ov=v==='graph'&&agentF().length>60;
+  document.querySelectorAll('#gView button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===S.view));
+  $('#graphView').hidden=v!=='graph';$('#panel').hidden=v!=='graph'||ov;$('#tableView').hidden=v!=='table';$('#listView').hidden=v!=='list';$('#printView').hidden=v!=='print';
+  $('#mainGrid').classList.toggle('has-panel',v==='graph'&&!ov);
+  $('#limits').hidden=v==='print';
+  document.body.dataset.view=v;
+  if(S.sel){const ok=S.sel.kind==='f'?fs.some(f=>f.id===S.sel.id):(S.sel.fs=S.sel.fs.filter(id=>fs.some(f=>f.id===id))).length>0;if(!ok)S.sel=null;}
+  renderSummary();
+  renderRadar();
+  $('#legend').innerHTML=ov?levelLegend():legendBar()+'<span class="li">'+esc(t().lgWidth)+'</span>';$('#legend2').innerHTML=legendBar();
+  if(v==='graph')renderGraph();
+  else if(v==='table')renderTable();
+  else if(v==='list')renderList();
+  else if(v==='print')renderPrint();
+  applySel();
+}
+function fullRender(){renderStatic();render();}
+
+/* ===================== selection + copy + export + hash ===================== */
+function selectFinding(id){ if(S.sel&&S.sel.kind==='f'&&S.sel.id===id)S.sel=null; else S.sel={kind:'f',id}; S.pf=id; applySel(); }
+function selectNode(n){
+  if(n.kind==='file'&&n.fs.length===1) return selectFinding(n.fs[0].id);
+  if(S.sel&&S.sel.kind==='n'&&S.sel.id===n.id)S.sel=null; else {S.sel={kind:'n',id:n.id,fs:n.fs.map(f=>f.id)};S.pf=n.fs[0].id;}
+  applySel();
+}
+function nodeById(id){return G?G.cols.flat().find(n=>n.id===id):null;}
+let toastT=0;
+function toast(msg){const e=$('#toast');e.textContent=msg;clearTimeout(toastT);toastT=setTimeout(()=>{e.textContent='';},2200);}
+async function copyText(s){
+  try{ await navigator.clipboard.writeText(s); toast(t().copied); return true; }catch(e){}
+  try{ const ta=document.createElement('textarea');ta.value=s;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();toast(ok?t().copied:t().copyFail);return ok;}catch(e){toast(t().copyFail);return false;}
+}
+function linkFor(id){const u=location.href.split('#')[0];return u+'#'+new URLSearchParams({agent:S.agent,view:S.view,f:id||''}).toString().replace(/&f=$/,'');}
+function syncHash(){ try{ const p=new URLSearchParams({agent:S.agent,view:S.view}); if(S.sel&&S.sel.kind==='f')p.set('f',S.sel.id); history.replaceState(null,'','#'+p.toString()); }catch(e){} }
+function dl(name,mime,text){const b=new Blob([text],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function exportRows(){return visible().map(f=>({id:f.id,agent:AGN(),level:f.level,path:f.path,line:f.line,type:f.what.en,effect_not_checked:f.whose.en,agent_rules:f.agent_rules.en,unrelated_to_task:f.unrelated_to_task,why:f.why.en,what_to_do:f.what_to_do.en,meaning:f.meaning.en,not_determined_by:(f.nd||[]).map(x=>x.path+(x.key?' · '+x.key:'')).join('; ')}));}
+function csvCell(v){let s=v==null?'':String(v); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return '"'+s.replace(/"/g,'""')+'"';}
+function toCSV(rows){const keys=Object.keys(rows[0]||{id:1});return keys.join(',')+'\n'+rows.map(r=>keys.map(k=>csvCell(r[k])).join(',')).join('\n');}
+function openFinding(id){ const f=byId[id]; if(!f)return; if(f.agent!==S.agent)setAgent(f.agent,true); S.levels=new Set(AG.levels);S.folder='all';S.type='all';S.q=''; S.sel={kind:'f',id};S.pf=id;S.open.add(id); renderTabsAndFilters(); render(); const el=document.querySelector('[data-f="'+id+'"]'); if(el&&el.scrollIntoView)el.scrollIntoView({block:'center'}); }
+
+/* ===================== events ===================== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const d=b.dataset;
+  if(d.lang){lang=d.lang;document.querySelectorAll('#gLang button').forEach(x=>x.setAttribute('aria-pressed',x===b));fullRender();return;}
+  if(d.theme){document.documentElement.dataset.theme=d.theme;document.querySelectorAll('#gTheme button').forEach(x=>x.setAttribute('aria-pressed',x===b));fullRender();return;}
+  if(d.view){S.view=d.view;render();return;}
+  if(d.agent){setAgent(d.agent);renderTabsAndFilters();render();return;}
+  if(d.lv){const l=d.lv;if(S.levels.has(l)){if(S.levels.size>1)S.levels.delete(l);}else S.levels.add(l);render();return;}
+  if(d.lvonly){S.levels=new Set([d.lvonly]);S.view='table';render();return;}
+  if(d.open){openFinding(d.open);return;}
+  if(d.setfolder){S.folder=d.setfolder;$('#selFolder').value=S.folder;render();return;}
+  if(d.act==='expandAll'){expandAll();return;}
+  if(d.act==='collapseAll'){S.expanded=new Set();S.cap={};S.sel=null;render();return;}
+  if(d.act==='moreRows'){S.limit+=100;renderTable();applySel();return;}
+  if(d.act==='moreList'){S.listLimit+=200;renderList();applySel();return;}
+  if(d.act==='allRows'){S.limit=1e9;renderTable();applySel();return;}
+  if(d.act==='collapseG'){visible().forEach(f=>S.collapsedG.add(groupKeyOf(f)));renderTable();return;}
+  if(d.act==='expandG'){S.collapsedG=new Set();renderTable();return;}
+  if(d.act==='doPrint'){window.print();return;}
+  if(b.id==='btnReset'){S.levels=new Set(AG.levels);S.folder='all';S.type='all';S.q='';renderTabsAndFilters();render();return;}
+  if(b.id==='btnJson'){dl('agentreach-'+S.agent+'.json','application/json',JSON.stringify({tool:META.tool,agent:AGN(),findings:exportRows()},null,2));return;}
+  if(b.id==='btnCsv'){dl('agentreach-'+S.agent+'.csv','text/csv',toCSV(exportRows()));return;}
+  if(b.id==='btnLink'){copyText(linkFor(S.sel&&S.sel.kind==='f'?S.sel.id:''));return;}
+  if(b.id==='btnClear'){S.sel=null;applySel();return;}
+  if(d.copyPath){const f=byId[d.copyPath];copyText(f.path+(f.line==null?'':':'+f.line));return;}
+  if(d.copyLink){copyText(linkFor(d.copyLink));return;}
+  if(d.sort){if(S.sort.key===d.sort)S.sort.dir=-S.sort.dir;else S.sort={key:d.sort,dir:1};renderTable();const nb=document.querySelector('[data-sort="'+d.sort+'"]');if(nb)nb.focus();return;}
+  if(d.g!==undefined&&b.closest('tr.grp')){const k=d.g;if(S.collapsedG.has(k))S.collapsedG.delete(k);else S.collapsedG.add(k);renderTable();const nb=[...document.querySelectorAll('tr.grp button')].find(x=>x.dataset.g===k);if(nb)nb.focus();return;}
+  if(d.row){const id=d.row;if(S.open.has(id)){S.open.delete(id);if(S.sel&&S.sel.id===id)S.sel=null;}else{S.open.add(id);S.sel={kind:'f',id};S.pf=id;}
+    if(effView()==='table')renderTable();else renderList();applySel();const nb=document.querySelector('[data-row="'+id+'"]');if(nb)nb.focus();return;}
+  if(d.pick){S.pf=d.pick;renderPanel();const pb=document.querySelector('[data-pick="'+d.pick+'"]');if(pb)pb.focus();return;}
+  if(d.fold){toggleFolder(d.fold);return;}
+  if(d.more){S.cap[d.more]=(S.cap[d.more]||8)+8;S.sel=null;render();return;}
+  if(b.classList.contains('pill')){selectFinding(b.dataset.f);return;}
+  if(b.classList.contains('node')){S.focusId=b.dataset.id;setRoving(b.dataset.id,false);selectNode(nodeById(b.dataset.id));return;}
+});
+document.addEventListener('dblclick',e=>{const b=e.target.closest('.node');if(!b||!G)return;const n=nodeById(b.dataset.id);if(n&&(n.kind==='folder'||n.kind==='more'||(n.kind==='file'&&n.folder)))toggleFolder(n.folder);});
+$('#selFolder').addEventListener('change',e=>{S.folder=e.target.value;render();});
+$('#selType').addEventListener('change',e=>{S.type=e.target.value;render();});
+document.addEventListener('change',e=>{if(e.target.id==='selGroup'){S.group=e.target.value;S.collapsedG=new Set();renderTable();$('#selGroup').focus();}});
+$('#q').addEventListener('input',e=>{S.q=e.target.value;render();});
+$('#tabs').addEventListener('keydown',e=>{
+  const tabs=[...document.querySelectorAll('.tab')];const i=tabs.indexOf(document.activeElement);if(i<0)return;
+  let j=i;if(e.key==='ArrowRight')j=(i+1)%tabs.length;else if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;else if(e.key==='Home')j=0;else if(e.key==='End')j=tabs.length-1;else return;
+  e.preventDefault();const id=tabs[j].dataset.agent;setAgent(id);renderTabsAndFilters();render();document.querySelector('.tab[data-agent="'+id+'"]').focus();
+});
+function setRoving(id,focus){Object.values(nodeEls).forEach(el=>el.tabIndex=-1);const el=nodeEls[id];if(!el)return;el.tabIndex=0;S.focusId=id;if(focus)el.focus();}
+$('#stage').addEventListener('keydown',e=>{
+  const el=e.target.closest('.node');if(!el||!G)return;
+  const n=nodeById(el.dataset.id);const col=G.cols[n.col];const i=col.indexOf(n);let tgt=null;
+  if(e.key==='ArrowDown')tgt=col[Math.min(col.length-1,i+1)];
+  else if(e.key==='ArrowUp')tgt=col[Math.max(0,i-1)];
+  else if(e.key==='Home')tgt=col[0];else if(e.key==='End')tgt=col[col.length-1];
+  else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+    const nc=n.col+(e.key==='ArrowRight'?1:-1);if(nc<0||nc>3)return e.preventDefault();
+    const act=activeSet();const f=n.fs.find(x=>act&&act.has(x.id))||n.fs[0];tgt=G.chain[f.id][nc];
+  }
+  else if(e.key==='Escape'){S.sel=null;applySel();return;}
+  else if((e.key==='+'||e.key==='=')&&n.folder&&!S.expanded.has(n.folder)){e.preventDefault();toggleFolder(n.folder);return;}
+  else if((e.key==='-'||e.key==='_')&&n.folder&&S.expanded.has(n.folder)){e.preventDefault();toggleFolder(n.folder);return;}
+  else return;
+  e.preventDefault();if(tgt)setRoving(tgt.id,true);
+});
+document.addEventListener('keydown',e=>{
+  const tg=e.target;const typing=tg.closest&&tg.closest('input,select,textarea');
+  if(e.key==='Escape'&&S.sel&&!tg.closest('#stage')&&tg.id!=='q'){S.sel=null;applySel();return;}
+  if(typing||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key==='/'){e.preventDefault();$('#q').focus();}
+  else if(e.key==='g'){S.view='graph';render();}
+  else if(e.key==='t'){S.view='table';render();}
+  else if(e.key==='l'){S.view='list';render();}
+  else if(e.key==='p'){S.view='print';render();}
+});
+let rz=0;window.addEventListener('resize',()=>{cancelAnimationFrame(rz);rz=requestAnimationFrame(()=>{if(effView()==='graph'){renderGraph();applySel();}});});
+mqWide.addEventListener('change',()=>render());
+let howWas=[];
+window.addEventListener('beforeprint',()=>{
+  if(!howWas.length)howWas=[...document.querySelectorAll('#howto details')].map(d=>[d,d.open]);howWas.forEach(([d])=>{d.open=true;});   // en papel, «Cómo leer este reporte» sale abierto
+  if(effView()==='print')renderPrint();
+  const sc=$('#stageCard');if(effView()==='graph'&&!$('#stage').hidden){const w=sc.offsetWidth;if(w>680){sc.style.width=w+'px';sc.style.zoom=String(680/w);}}
+});
+window.addEventListener('afterprint',()=>{howWas.forEach(([d,o])=>{if(d.isConnected)d.open=o;});howWas=[];const sc=$('#stageCard');sc.style.width='';sc.style.zoom='';});
+
+/* ===================== boot ===================== */
+(function boot(){
+  const p=new URLSearchParams(location.hash.replace(/^#/,''));
+  const th=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  document.documentElement.dataset.theme=th;
+  document.querySelectorAll('#gTheme button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.theme===th));
+  document.querySelectorAll('#gLang button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.lang===lang));
+  const ag=p.get('agent');
+  S.agent=(ag&&agentDef(ag))?ag:(AGENTS_DEF.find(a=>F.some(f=>f.agent===a.id))||AGENTS_DEF[0]).id;
+  load();
+  const fid=p.get('f'); if(fid&&byId[fid]){ setAgent(byId[fid].agent,true); S.sel={kind:'f',id:fid};S.pf=fid;S.open.add(fid);}
+  // view: an explicit #view wins; a link with an agent opens the list; otherwise 12 or fewer findings open the full path graph, more open the list
+  const hv=p.get('view');
+  if(['graph','table','list','print'].includes(hv)) S.view=hv;
+  else if(p.get('agent')) S.view='list';
+  else S.view=agentF().length>12?'list':'graph';
+  fullRender();
+  window.__ar={S,setView:v=>{S.view=v;render();},setLang:l=>{document.querySelector('[data-lang='+l+']').click();},setTheme:x=>{document.querySelector('[data-theme='+x+']').click();},layout:()=>window.__lastLayout,
+    exportRows,toCSV,visible,setAgent:id=>{setAgent(id);renderTabsAndFilters();render();},renderTable,renderGraph,select:selectFinding,expandAll};
+})();
+})();
+/* A new #hash on an open page does not reload it: reload so the link opens the view it names */
+window.addEventListener('hashchange',()=>location.reload());
+</script>
+</body>
+</html>
