@@ -181,7 +181,7 @@ Open the report in the browser? (S/N):
 
 Each finding in the visual report has the same eight fields: where it is and the line, what it is and whose it is, level and why, unrelated to the task, platform and agent, agent rules, what to do, and what it means. It also has a fixed section with what AgentReach **could not check**. A level of "potential" always says why it is not "verified".
 
-You can try the design without running anything: open the [report sketch](https://github.com/Alexmedina-Dev/AgentReach/blob/development/docs/boceto-reporte/reporte-final/reporte-final.html) in a browser (it is in the `development` branch). It uses invented data.
+You can try the design without running anything: open the [report sketch](docs/boceto-reporte/reporte-final/reporte-final.html) in a browser. It uses invented data.
 
 ## Installation
 
@@ -341,7 +341,7 @@ To report a vulnerability, read [`SECURITY.md`](SECURITY.md) and use **Security 
 
 - [`docs/vocabulario-es-en.md`](docs/vocabulario-es-en.md): Spanish and English vocabulary of the project.
 - [`docs/diagrama/`](docs/diagrama/): editable source of the architecture diagram.
-- Design sketches of the visual report are in the [`development` branch](https://github.com/Alexmedina-Dev/AgentReach/tree/development/docs/boceto-reporte).
+- [`docs/boceto-reporte/`](docs/boceto-reporte/): design sketches of the visual report.
 
 ## Contributing
 
