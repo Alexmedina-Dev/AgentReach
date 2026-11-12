@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentReach Reach Map</title>
+<style>
+:root{
+  --bg:#0B1114;--surf:#121C20;--sunk:#0F181B;--line:#2F4044;--dash:#4A5C5F;--ctl:#7C928E;
+  --text:#EAF4F2;--soft:#A9BDB9;--mute:#7C928E;
+  --mint:#3DF5D0;--mint-t:#3DF5D0;--on-mint:#0B1114;--amber:#FFB224;
+  --ver:#FF6B6B;--ver-bg:#2A1517;--pot:#FFB224;--pot-bg:#2A2111;--hyp:#A9BDB9;--hyp-bg:#1B2528;
+  --unc:#B9A2FF;--unc-bg:#1E1A33;--info:#6DB6FF;--info-bg:#12233A;
+  --grid:rgba(61,245,208,.07);--halo:rgba(61,245,208,.10);--grain:.07;
+  --display:Bahnschrift,"Segoe UI Variable Display","Segoe UI","Gill Sans","Gill Sans MT",system-ui,sans-serif;
+  --mono:"Cascadia Code","Cascadia Mono",Consolas,"SF Mono","Liberation Mono",monospace;
+  --body:"Segoe UI Variable Text","Segoe UI","Gill Sans MT",system-ui,sans-serif;
+}
+:root[data-theme="light"]{
+  --bg:#DFF5EF;--surf:#FFFFFF;--sunk:#EEFAF6;--line:#9CC8BE;--dash:#7FB3A8;--ctl:#46635E;
+  --text:#0B1114;--soft:#2A4540;--mute:#46635E;
+  --mint:#00806B;--mint-t:#005F4D;--on-mint:#FFFFFF;--amber:#B86E00;
+  --ver:#B3201A;--ver-bg:#FDE5E3;--pot:#7A4300;--pot-bg:#FFEFD0;--hyp:#3A524D;--hyp-bg:#E8EFEE;
+  --unc:#5A3DC0;--unc-bg:#ECE6FF;--info:#0A58A8;--info-bg:#E1EEFC;
+  --grid:rgba(0,95,77,.10);--halo:rgba(0,128,107,.16);--grain:.05;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{overflow-x:clip}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font:16px/1.55 var(--body);min-height:100vh;position:relative}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 70% 30%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 70% 30%,#000 20%,transparent 75%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:var(--grain);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+.glow{position:absolute;right:0;top:-8vw;width:70vw;height:70vw;max-width:900px;max-height:900px;border-radius:50%;background:radial-gradient(circle,var(--halo),transparent 65%);pointer-events:none;z-index:0}
+a{color:var(--mint-t)}
+.mono{font-family:var(--mono)}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:4px}
+:root[data-theme="light"] :focus-visible{outline-color:#005F4D}
+.skip{position:absolute;left:12px;top:-60px;background:var(--mint);color:var(--on-mint);padding:10px 14px;border-radius:8px;z-index:100;font-weight:700}
+.skip:focus{top:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* top bar: always brand-dark */
+.top{position:sticky;top:0;z-index:40;background:#0B1114;border-bottom:3px solid #3DF5D0;color:#EAF4F2}
+.top .in{max-width:1480px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.wm{font:700 1.15rem/1 var(--display);letter-spacing:.2em;color:#EAF4F2}
+.wm b{color:#3DF5D0}
+.brand small{display:block;font:.7rem/1.2 var(--mono);color:#A9BDB9;letter-spacing:.08em;margin-top:4px;text-transform:uppercase}
+.tools{display:flex;gap:10px;align-items:center}
+.seg{display:inline-flex;border:1.5px solid #7C928E;border-radius:10px;overflow:hidden}
+.seg button{background:transparent;color:#EAF4F2;border:0;padding:0 16px;min-height:44px;min-width:48px;font:700 .9rem var(--mono);cursor:pointer;transition:background .15s,color .15s}
+.seg button:hover{background:#1A2A2F}
+.seg button[aria-pressed=true]{background:#3DF5D0;color:#0B1114}
+.btn{background:transparent;color:inherit;border:1.5px solid var(--ctl);border-radius:10px;padding:0 14px;min-height:44px;font:600 .92rem var(--body);cursor:pointer;transition:transform .15s,background .15s,border-color .15s}
+.top .btn{color:#EAF4F2;border-color:#7C928E}
+.btn:hover{border-color:var(--mint);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.pri{background:var(--mint);color:var(--on-mint);border-color:var(--mint)}
+
+.page{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:0 20px 60px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;padding-top:28px}
+@media(min-width:1040px){.stage{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:36px;padding-top:44px}.mapcol{position:sticky;top:84px;align-self:start;grid-column:2;grid-row:1/3}.textcol{grid-column:1;grid-row:1}.detail{grid-column:1;grid-row:2}}
+.eyebrow{font:600 .78rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mint-t);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.eyebrow i{width:36px;height:2px;background:var(--mint);display:inline-block}
+h1{font:700 clamp(2.4rem,6.4vw,5rem)/.95 var(--display);margin:14px 0 0;letter-spacing:-.02em;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--mint-t);position:relative;display:inline-block}
+h1 em::after{content:"";position:absolute;left:0;right:0;bottom:-.06em;height:.09em;background:var(--amber);transform-origin:left;animation:draw .9s .8s both cubic-bezier(.2,.8,.2,1)}
+.lead{font-size:1.08rem;color:var(--soft);max-width:36em;margin:18px 0 0}
+.note{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;margin:20px 0 0;padding:12px 14px;border:1.5px solid var(--line);border-left:6px solid var(--mint);background:var(--surf);border-radius:10px}
+.note svg{margin-top:2px;color:var(--mint-t)}
+.note p{margin:0}
+.note.info{border-left-color:var(--info)}
+.note.info svg{color:var(--info)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 0}
+.stat{background:var(--surf);border:1.5px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:10px 12px;position:relative;overflow:hidden}
+.stat b{display:block;font:700 2.2rem/1 var(--display);color:var(--c)}
+.stat span{font-size:.8rem;color:var(--soft);display:flex;gap:6px;align-items:center;margin-top:4px;line-height:1.2}
+.stat svg{flex:none;color:var(--c)}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* map */
+.mapwrap{position:relative;background:radial-gradient(circle at 50% 50%,var(--sunk),transparent 72%);border:1.5px solid var(--line);border-radius:28px;padding:6px;overflow:hidden}
+.mapwrap::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,var(--halo),transparent 60%);pointer-events:none}
+#map{display:block;width:100%;height:auto;position:relative}
+.ring{fill:none;stroke:var(--dash);stroke-width:1.5;stroke-dasharray:3 7}
+.ring.solid{stroke:var(--line);stroke-dasharray:none;stroke-width:1}
+.ringtag{font:600 15px var(--mono);fill:var(--mute);letter-spacing:.1em;paint-order:stroke;stroke:var(--bg);stroke-width:7px;stroke-linejoin:round;text-anchor:middle}
+.sweep{transform-box:view-box;transform-origin:400px 400px;animation:spin 10s linear infinite}
+.spoke{stroke:var(--c);stroke-width:2;stroke-opacity:.55;transition:stroke-opacity .2s,stroke-width .2s}
+.node{cursor:pointer;outline:none}
+.node .shape{fill:var(--bgc);stroke:var(--c);stroke-width:4;transition:transform .2s,filter .2s;transform-box:fill-box;transform-origin:center}
+.node[data-lv=hypothesis] .shape{stroke-dasharray:7 5}
+.node .num{font:700 26px var(--mono);fill:var(--c);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.node .halo{fill:none;stroke:var(--c);stroke-width:2;opacity:.5;transform-box:fill-box;transform-origin:center}
+.node[data-lv=verified] .halo{animation:pulse 2.4s ease-out infinite}
+.node[data-lv=potential] .halo{opacity:.55}
+.node:hover .shape,.node:focus-visible .shape{transform:scale(1.18)}
+.node:focus-visible .shape{stroke-width:6;filter:drop-shadow(0 0 8px var(--c))}
+.node.sel .shape{transform:scale(1.22);fill:var(--c);}
+.node.sel .num{fill:var(--bg)}
+.node.dim{opacity:.18}
+.node.dim,.spoke.dim{pointer-events:none}
+.spoke.dim{stroke-opacity:.08}
+.node.sel ~ .x{}
+.tip{opacity:0;pointer-events:none;transition:opacity .15s}
+.tip text{font:600 17px var(--mono);fill:var(--text);paint-order:stroke;stroke:var(--bg);stroke-width:8px;stroke-linejoin:round;text-anchor:middle}
+.node:hover .tip,.node:focus-visible .tip{opacity:1}
+.limnode{cursor:pointer;outline:none}
+.limnode circle{fill:var(--unc-bg);stroke:var(--unc);stroke-width:2.5;stroke-dasharray:4 3}
+.limnode text{font:700 14px var(--mono);fill:var(--unc);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.limnode:hover circle,.limnode:focus-visible circle{fill:var(--unc);}
+.limnode:hover text,.limnode:focus-visible text{fill:var(--bg)}
+.core text{font:700 13px var(--mono);fill:var(--on-mint);text-anchor:middle;letter-spacing:.08em}
+.maplegend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:10px 14px 12px;font-size:.82rem;color:var(--soft)}
+.maplegend span{display:inline-flex;align-items:center;gap:6px}
+.maplegend svg{flex:none}
+.hint{font:.75rem var(--mono);color:var(--mute);padding:0 16px 12px;margin:0}
+
+/* levels */
+.lv{--c:var(--ver);--bgc:var(--ver-bg)}
+[data-lv=potential]{--c:var(--pot);--bgc:var(--pot-bg)}
+[data-lv=hypothesis]{--c:var(--hyp);--bgc:var(--hyp-bg)}
+[data-lv=verified]{--c:var(--ver);--bgc:var(--ver-bg)}
+.badge{display:inline-flex;align-items:center;gap:6px;color:var(--c);background:var(--bgc);border:2px solid var(--c);border-radius:999px;padding:2px 12px 2px 8px;font:700 .82rem var(--mono);letter-spacing:.04em;text-transform:uppercase}
+[data-lv=verified] .badge{border-width:3px}
+[data-lv=hypothesis] .badge{border-style:dashed}
+.badge svg{flex:none}
+
+/* detail */
+.detail{margin-top:0;background:var(--surf);border:1.5px solid var(--line);border-left:8px solid var(--c);border-radius:14px;padding:18px 20px;position:relative;animation:rise .45s both}
+.detail h2{font:700 1.45rem/1.15 var(--display);margin:10px 0 4px}
+.detail .loc{font:.88rem var(--mono);color:var(--soft);word-break:break-all}
+dl.f{display:grid;gap:0;margin:14px 0 0}
+dl.f>div{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:4px 14px;padding:9px 0;border-top:1px dashed var(--line)}
+dl.f dt{font:600 .74rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding-top:3px}
+dl.f dd{margin:0;overflow-wrap:anywhere}
+dl.f dd.act{border-left:4px solid var(--mint);padding-left:10px;font-weight:600}
+@media(max-width:560px){dl.f>div{grid-template-columns:1fr}}
+.wavy{text-decoration:underline wavy var(--c);text-underline-offset:4px;font-weight:700}
+.detail .acts{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* list */
+.sec{margin-top:56px}
+.sec h2{font:700 clamp(1.6rem,3.6vw,2.4rem)/1.05 var(--display);margin:0;text-transform:uppercase;letter-spacing:-.01em}
+.sec h2 small,h2.sec small{display:block;font:600 .75rem var(--mono);letter-spacing:.14em;color:var(--mint-t);margin-bottom:8px}
+.filters{margin:18px 0 6px;background:var(--surf);border:1.5px solid var(--line);border-radius:14px;padding:12px}
+.frow{display:grid;gap:10px;grid-template-columns:2fr 1fr 1fr 1fr auto;align-items:end}
+@media(max-width:900px){.frow{grid-template-columns:1fr 1fr}.frow .f:first-child{grid-column:1/-1}}
+@media(max-width:480px){.frow{grid-template-columns:1fr}}
+.f label{display:block;font:600 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.f input,.f select{width:100%;min-height:44px;background:var(--bg);color:var(--text);border:1.5px solid var(--ctl);border-radius:10px;padding:0 12px;font:1rem var(--body)}
+.count{margin:10px 2px 0;font:.82rem var(--mono);color:var(--soft)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:16px;margin-top:16px}
+.card{background:var(--surf);border:1.5px solid var(--line);border-top:6px solid var(--c);border-radius:14px;padding:14px 16px;scroll-margin-top:100px;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
+.card:hover{transform:translateY(-3px)}
+.card.sel{box-shadow:0 0 0 3px var(--c);transform:translateY(-3px)}
+.card[hidden]{display:none}
+.card .n{position:absolute;right:12px;top:10px;font:700 2.2rem/1 var(--display);color:var(--c);opacity:.35}
+.card h3{font:700 1.08rem/1.25 var(--display);margin:10px 40px 2px 0}
+.card .loc{font:.82rem var(--mono);color:var(--soft);word-break:break-all}
+.card dl.f>div{grid-template-columns:1fr;padding:7px 0}
+.card .acts{margin-top:8px}
+.btn.sm{min-height:44px;font-size:.88rem}
+.empty{padding:24px;text-align:center;color:var(--soft);border:1.5px dashed var(--dash);border-radius:14px;margin-top:16px}
+
+/* limits */
+.limits{margin-top:56px;background:var(--unc-bg);border:2px dashed var(--unc);border-left:10px dashed var(--unc);border-radius:18px;padding:8px 20px 22px}
+.limits h2{color:var(--unc)}
+.limits>p{color:var(--soft);max-width:46em}
+.limits ul{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}
+.limits li{background:var(--surf);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:10px;scroll-margin-top:100px}
+.limits li:target,.limits li.hl{border-color:var(--unc);box-shadow:0 0 0 3px var(--unc)}
+.limits li .k{font:700 1.4rem var(--mono);color:var(--unc)}
+.limits li b{display:block}
+.limits li small{display:block;font:.72rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.limits li .it{font:.82rem var(--mono);color:var(--soft);word-break:break-all}
+footer{margin-top:50px;font:.78rem var(--mono);color:var(--mute);border-top:1px dashed var(--line);padding-top:14px}
+
+/* motion */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ringin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
+@keyframes lineg{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.rise{animation:rise .7s both cubic-bezier(.2,.8,.2,1);animation-delay:calc(var(--d,0)*90ms)}
+.ring{transform-box:view-box;transform-origin:400px 400px;animation:ringin .8s both cubic-bezier(.2,.8,.2,1);animation-delay:calc(var(--d,0)*120ms + 150ms)}
+.spoke{stroke-dasharray:var(--len);animation:lineg .8s both ease-out;animation-delay:calc(var(--d,0)*100ms + 700ms)}
+.nodewrap{transform-box:fill-box;transform-origin:center;animation:pop .5s both cubic-bezier(.3,1.5,.5,1);animation-delay:calc(var(--d,0)*100ms + 1000ms)}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .sweep{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#list" data-i="skip">Skip the map and go to the list</a>
+<div class="glow" aria-hidden="true"></div>
+<header class="top">
+  <div class="in">
+    <div class="brand">
+      <svg width="44" height="44" viewBox="0 0 200 200" role="img" aria-label="AgentReach symbol"><g fill="none" stroke-linecap="round"><circle cx="100" cy="100" r="30" stroke="#3DF5D0" stroke-width="6" stroke-dasharray="120 68.5" transform="rotate(-100 100 100)"/><circle cx="100" cy="100" r="55" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.6" stroke-dasharray="200 145.6" transform="rotate(-20 100 100)"/><circle cx="100" cy="100" r="80" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.3" stroke-dasharray="270 232.7" transform="rotate(60 100 100)"/><line x1="100" y1="100" x2="156.6" y2="43.4" stroke="#3DF5D0" stroke-width="4"/><line x1="100" y1="100" x2="169.3" y2="140" stroke="#FFB224" stroke-width="4"/><line x1="100" y1="100" x2="24.8" y2="72.6" stroke="#3DF5D0" stroke-width="4"/></g><circle cx="156.6" cy="43.4" r="9" fill="#3DF5D0"/><circle cx="169.3" cy="140" r="9" fill="#FFB224"/><circle cx="24.8" cy="72.6" r="9" fill="#3DF5D0"/><circle cx="100" cy="100" r="14" fill="#3DF5D0"/></svg>
+      <div><div class="wm">AGENT<b>REACH</b></div><small data-i="brandsub">Read-only reach report</small></div>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Language / Idioma">
+        <button type="button" id="lang-en" aria-pressed="true" lang="en" aria-label="English" title="English">EN</button>
+        <button type="button" id="lang-es" aria-pressed="false" lang="es" aria-label="Español" title="Español">ES</button>
+      </div>
+      <button type="button" class="btn" id="theme"></button>
+    </div>
+  </div>
+</header>
+
+<main class="page" id="top">
+  <div class="stage">
+    <div class="textcol">
+      <div class="eyebrow rise" style="--d:0"><i></i><span data-i="eyebrow">Reach map</span><span class="mono" id="meta"></span></div>
+      <h1 class="rise" style="--d:1" id="h1"></h1>
+      <p class="lead rise" style="--d:2" data-i="lead"></p>
+      <div class="stats rise" style="--d:3" id="stats" role="group"></div>
+      <div class="note rise" style="--d:4" role="note">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.2-8 11-4.6-1.8-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p><strong data-i="safeT">No secret values are shown.</strong> <span id="safeB"></span></p>
+      </div>
+      <div class="note info rise" style="--d:5" role="note">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.3" fill="currentColor"/></svg>
+        <p data-i="demo"></p>
+      </div>
+    </div>
+
+    <div class="mapcol rise" style="--d:2">
+      <div class="mapwrap">
+        <svg id="map" viewBox="0 0 800 800" role="group" aria-labelledby="mapT"><title id="mapT"></title></svg>
+        <div class="maplegend" id="maplegend"></div>
+        <p class="hint" data-i="hint"></p>
+      </div>
+    </div>
+    <section class="detail" id="detail" aria-live="polite" aria-labelledby="dh"></section>
+  </div>
+
+  <section class="sec" id="list" aria-labelledby="listH">
+    <h2 id="listH"><small data-i="listK">02 / List view</small><span data-i="listH">All findings</span></h2>
+    <div class="filters" role="search">
+      <div class="frow">
+        <div class="f"><label for="q" data-i="fSearch">Search</label><input id="q" type="search" autocomplete="off"></div>
+        <div class="f"><label for="fl" data-i="fLevel">Level</label><select id="fl"></select></div>
+        <div class="f"><label for="fa" data-i="fAgent">Agent</label><select id="fa"></select></div>
+        <div class="f"><label for="ft" data-i="fType">Type</label><select id="ft"></select></div>
+        <div class="f"><button type="button" class="btn" id="reset" style="min-height:44px" data-i="reset">Clear</button></div>
+      </div>
+      <p class="count" id="count" role="status" aria-live="polite"></p>
+    </div>
+    <div class="cards" id="cards"></div>
+    <p class="empty" id="empty" hidden></p>
+  </section>
+
+  <section class="limits" id="limits" aria-labelledby="limH">
+    <h2 class="sec" style="margin-top:20px" id="limH"><small data-i="limK">03 / Blind spots</small><span data-i="limH">What AgentReach could not check</span></h2>
+    <p data-i="limP"></p>
+    <ul id="limlist"></ul>
+  </section>
+  <footer data-i="foot"></footer>
+</main>
+
+<script type="application/json" id="data">{"_note": "100% fictional sample data. Not from any real machine, person or repository. No secret values.", "tool": "AgentReach (demo)", "folder_reviewed": "demo-app", "files_looked_at": 41, "levels": {"verified": {"en": "Verified", "es": "Comprobado", "meaning_en": "Confirmed: the agent can reach it today.", "meaning_es": "Confirmado: el agente puede llegar hoy."}, "potential": {"en": "Potential", "es": "Potencial", "meaning_en": "Likely reachable, but not fully confirmed.", "meaning_es": "Probablemente alcanzable, sin confirmar del todo."}, "hypothesis": {"en": "Hypothesis", "es": "Hipótesis", "meaning_en": "A suggestion only. Not a confirmed access.", "meaning_es": "Solo una sugerencia. No es un acceso comprobado."}, "could_not_check": {"en": "Could not check", "es": "No se pudo revisar", "meaning_en": "AgentReach could not look at this.", "meaning_es": "AgentReach no pudo mirar esto."}}, "secrets_notice": {"en": "No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.", "es": "No se muestran valores de secretos. AgentReach nunca copia contraseñas, tokens ni claves: solo dice dónde están y de qué tipo son."}, "findings": [{"id": "f1", "location": "demo-app/config/settings.example", "line": 2, "what": {"en": "Credential in a file", "es": "Credencial en un archivo"}, "whose": {"en": "payments service (demo)", "es": "servicio de pagos (demo)"}, "level": "verified", "why": {"en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide."}, "unrelated_to_task": "no", "platform_agent": "Demo Agent A", "agent_rules": {"en": "no rule", "es": "sin regla"}, "what_to_do": {"en": "Move the credential out of the project, or keep it in a secrets manager (a safe vault for passwords and keys). Replace it with a new one if it was ever exposed.", "es": "Saque la credencial del proyecto o guárdela en un gestor de secretos (una bóveda segura para claves). Cámbiela por una nueva si estuvo expuesta."}, "meaning": {"en": "A project file holds a credential (a key or password that gives access to a service). An agent that can read the project could read it.", "es": "Un archivo del proyecto guarda una credencial (una clave o contraseña que da acceso a un servicio). Un agente que pueda leer el proyecto podría leerla."}}, {"id": "f2", "location": "demo-app/config/staging.example", "line": 5, "what": {"en": "Credential in a file", "es": "Credencial en un archivo"}, "whose": {"en": "database (demo)", "es": "base de datos (demo)"}, "level": "verified", "why": {"en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide."}, "unrelated_to_task": "not determined", "platform_agent": "Demo Agent A", "agent_rules": {"en": "asks first", "es": "pide confirmación"}, "what_to_do": {"en": "Keep database access out of files in the project. Use a safer place and replace the old access.", "es": "Mantenga el acceso a la base de datos fuera de los archivos del proyecto. Use un lugar más seguro y cambie el acceso anterior."}, "meaning": {"en": "A file stores database access. The agent asks before reading it, but it is still reachable if you say yes.", "es": "Un archivo guarda acceso a una base de datos. El agente pregunta antes de leerlo, pero sigue siendo alcanzable si usted dice que sí."}}, {"id": "f3", "location": "demo-app/deploy/publish-demo.sh", "line": 12, "what": {"en": "Deployment script (publishes changes)", "es": "Script de despliegue (publica cambios)"}, "whose": {"en": "deployment platform (demo)", "es": "plataforma de despliegue (demo)"}, "level": "potential", "why": {"en": "The script exists and the agent may run programs, but we did not confirm it can reach the platform.", "es": "El script existe y el agente puede ejecutar programas, pero no se confirmó que llegue a la plataforma."}, "unrelated_to_task": "no", "platform_agent": "Demo Agent B", "agent_rules": {"en": "allows it", "es": "lo permite"}, "what_to_do": {"en": "Require a human to approve any publish step. Remove the agent's permission to run this script.", "es": "Exija que una persona apruebe todo paso de publicación. Quite al agente el permiso de ejecutar este script."}, "meaning": {"en": "An agent could start a script that publishes your changes to a live place.", "es": "Un agente podría iniciar un script que publica sus cambios en un lugar real."}}, {"id": "f4", "location": "demo-app/.agent/rules.example", "line": 3, "what": {"en": "Agent rule that is too permissive", "es": "Regla del agente demasiado permisiva"}, "whose": {"en": "agent settings (demo)", "es": "configuración del agente (demo)"}, "level": "potential", "why": {"en": "The rule allows many actions without asking.", "es": "La regla permite muchas acciones sin preguntar."}, "unrelated_to_task": "not determined", "platform_agent": "Demo Agent B", "agent_rules": {"en": "allows it", "es": "lo permite"}, "what_to_do": {"en": "Change the rule so the agent asks first for risky actions.", "es": "Cambie la regla para que el agente pregunte antes de acciones riesgosas."}, "meaning": {"en": "The agent can do more than it needs, and nobody is asked to confirm.", "es": "El agente puede hacer más de lo necesario y nadie debe confirmar."}}, {"id": "f5", "location": "demo-app/docs/notes-style.txt", "line": 27, "what": {"en": "Platform or deployment secret", "es": "Secreto de plataforma o de despliegue"}, "whose": {"en": "code hosting service (demo)", "es": "servicio de alojamiento de código (demo)"}, "level": "potential", "why": {"en": "A secret-like label sits in a file that looks unrelated to the work.", "es": "Una etiqueta parecida a un secreto está en un archivo que parece ajeno al trabajo."}, "unrelated_to_task": "yes", "platform_agent": "Demo Agent A", "agent_rules": {"en": "no rule", "es": "sin regla"}, "what_to_do": {"en": "Check if this file needs that item. If not, remove it.", "es": "Revise si este archivo necesita ese dato. Si no, quítelo."}, "meaning": {"en": "A sensitive item is in a place where nobody expects it, so it is easy to forget.", "es": "Un dato sensible está donde nadie lo espera, y es fácil olvidarlo."}}, {"id": "f6", "location": "demo-app/AGENTS.example", "line": 8, "what": {"en": "Instructions file with suspicious text", "es": "Archivo de instrucciones con texto sospechoso"}, "whose": {"en": "agent instructions (demo)", "es": "instrucciones del agente (demo)"}, "level": "hypothesis", "why": {"en": "The text looks like it tries to steer the agent, but we cannot be sure.", "es": "El texto parece querer dirigir al agente, pero no podemos estar seguros."}, "unrelated_to_task": "not determined", "platform_agent": "Demo Agent C", "agent_rules": {"en": "not determined", "es": "no determinadas"}, "what_to_do": {"en": "Read the file yourself and remove lines you do not recognise.", "es": "Lea el archivo usted mismo y quite las líneas que no reconozca."}, "meaning": {"en": "An instructions file could change what the agent does. This is only a suggestion to look.", "es": "Un archivo de instrucciones podría cambiar lo que hace el agente. Es solo una sugerencia para revisar."}}, {"id": "f7", "location": "demo-app/links/shared-folder", "line": null, "what": {"en": "Link that leaves the folder", "es": "Enlace que sale de la carpeta"}, "whose": {"en": "unknown (demo)", "es": "desconocido (demo)"}, "level": "hypothesis", "why": {"en": "The link points outside the project, but we did not follow it.", "es": "El enlace apunta fuera del proyecto, pero no lo seguimos."}, "unrelated_to_task": "not determined", "platform_agent": "Demo Agent C", "agent_rules": {"en": "no rule", "es": "sin regla"}, "what_to_do": {"en": "Check where the link goes. Remove it if you do not need it.", "es": "Revise a dónde lleva el enlace. Quítelo si no lo necesita."}, "meaning": {"en": "An agent might follow the link and reach files outside the project.", "es": "Un agente podría seguir el enlace y llegar a archivos fuera del proyecto."}}, {"id": "f8", "location": "demo-app/.tasks/auto-start.example", "line": 4, "what": {"en": "Task that starts when the folder is opened", "es": "Tarea que arranca al abrir la carpeta"}, "whose": {"en": "editor settings (demo)", "es": "configuración del editor (demo)"}, "level": "potential", "why": {"en": "A task is set to start by itself; we did not confirm it runs.", "es": "Hay una tarea configurada para arrancar sola; no se confirmó que se ejecute."}, "unrelated_to_task": "no", "platform_agent": "Demo Agent B", "agent_rules": {"en": "asks first", "es": "pide confirmación"}, "what_to_do": {"en": "Remove the auto-start, or make sure you know what the task does.", "es": "Quite el arranque automático, o asegúrese de saber qué hace la tarea."}, "meaning": {"en": "A program could start just by opening the folder.", "es": "Un programa podría arrancar con solo abrir la carpeta."}}, {"id": "f9", "location": "demo-app/config/cloud.example", "line": 1, "what": {"en": "Cloud account credentials", "es": "Credenciales de una cuenta en la nube"}, "whose": {"en": "cloud account (demo)", "es": "cuenta en la nube (demo)"}, "level": "hypothesis", "why": {"en": "The file name suggests cloud access, but we did not confirm it is readable.", "es": "El nombre del archivo sugiere acceso a la nube, pero no se confirmó que sea legible."}, "unrelated_to_task": "no", "platform_agent": "Demo Agent A", "agent_rules": {"en": "blocks it (rule only)", "es": "lo bloquea (solo por regla)"}, "what_to_do": {"en": "Keep this access as small as possible. Give it only the rights the work needs.", "es": "Mantenga este acceso lo más pequeño posible. Dele solo los permisos que el trabajo necesita."}, "meaning": {"en": "A rule blocks the agent today, but a rule is not a lock: someone can change it.", "es": "Una regla bloquea al agente hoy, pero una regla no es un candado: alguien puede cambiarla."}}], "limits": [{"id": "l1", "part": "this folder", "reason": {"en": "Could not open the file", "es": "No se pudo abrir el archivo"}, "items": ["demo-app/data/locked-file.example"], "how_to_fix": {"en": "Check that the file exists and that you can read it. Then run again.", "es": "Compruebe que el archivo existe y que usted puede leerlo. Luego ejecute de nuevo."}}, {"id": "l2", "part": "this folder", "reason": {"en": "File too large (over 5 MB)", "es": "Archivo demasiado grande (más de 5 MB)"}, "items": ["demo-app/data/big-export.example"], "how_to_fix": {"en": "AgentReach does not open files this big. Check it by hand if it may hold secrets.", "es": "AgentReach no abre archivos tan grandes. Revíselo a mano si puede guardar secretos."}}, {"id": "l3", "part": "tool limits", "reason": {"en": "Commit history is not checked", "es": "El historial de commits no se revisa"}, "items": [], "how_to_fix": {"en": "This version does not look at old versions of files. Use another tool for that.", "es": "Esta versión no mira versiones antiguas de los archivos. Use otra herramienta para eso."}}, {"id": "l4", "part": "tool limits", "reason": {"en": "Changes after you approve a setting are not tracked", "es": "No se vigilan los cambios después de aprobar una configuración"}, "items": [], "how_to_fix": {"en": "Run AgentReach again after any change to agent settings.", "es": "Ejecute AgentReach de nuevo tras cualquier cambio en la configuración del agente."}}, {"id": "l5", "part": "tool limits", "reason": {"en": "Running programs and open ports are not checked", "es": "No se revisan los programas en ejecución ni los puertos abiertos"}, "items": [], "how_to_fix": {"en": "AgentReach only reads files. Use a different tool to look at what is running.", "es": "AgentReach solo lee archivos. Use otra herramienta para ver qué se está ejecutando."}}, {"id": "l6", "part": "tool limits", "reason": {"en": "Network locations are not visited", "es": "No se visitan ubicaciones de red"}, "items": ["demo-app/shared/network-share.example"], "how_to_fix": {"en": "AgentReach never goes to the network. Copy the folder to this computer and run again.", "es": "AgentReach nunca sale a la red. Copie la carpeta a este equipo y ejecute de nuevo."}}]}</script>
+<script>
+(function(){
+"use strict";
+var D=JSON.parse(document.getElementById("data").textContent);
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+var T={
+en:{skip:"Skip the map and go to the list",brandsub:"Read-only reach report",eyebrow:"Reach map",
+ lead:"Every dot is something an AI agent could touch from the folder you scanned. The closer to the center, the closer it is to the task the agent was given.",
+ safeT:"No secret values are shown.",demo:"Demo data. Everything here is fictional, so no real machine, person or secret is involved.",
+ hint:"Tip: click or press Enter on a dot to open its details. Arrow keys are not needed, just Tab.",
+ listK:"02 / List view",listH:"All findings",limK:"03 / Blind spots",limH:"What AgentReach could not check",
+ limP:"A clean result does not mean safe. These areas were out of reach in this scan. Violet dashed dots on the outer edge of the map point here.",
+ fSearch:"Search",fLevel:"Level",fAgent:"Agent",fType:"Type",reset:"Clear",all:"All",
+ theme:{dark:"Theme: dark",light:"Theme: light"},
+ f:["Location and line","What it is and whose","Level and why","Unrelated to the task","Platform and agent","Agent rules","What to do","What it means"],
+ unrel:{no:"No, related",yes:"Yes, unrelated","not determined":"Not determined"},
+ line:"line",showing:"Showing {a} of {b} findings",none:"No findings match these filters.",
+ locate:"Locate on map",card:"Open list card",files:"files read",folder:"Scanned",
+ rings:["Related to task","Not determined","Unrelated","Outside folder"],
+ ringsLong:["Related to the task","Relation not determined","Unrelated to the task","Outside the folder"],
+ ring:"Distance",fnd:"Finding",sum:"Summary",
+ h1:"What can your <em>agent</em> reach?",
+ mapT:"Reach map: the agent at the center, findings placed by how far they are from the task",
+ core:"AGENT",lim:"Not checked",
+ foot:"AgentReach is read-only: it reads, it never changes anything. Sample data is fictional.",
+ legLv:"Level",legUnc:"Could not check"},
+es:{skip:"Saltar el mapa e ir a la lista",brandsub:"Informe de alcance de solo lectura",eyebrow:"Mapa de alcance",
+ lead:"Cada punto es algo que un agente de IA podría tocar desde la carpeta analizada. Cuanto más cerca del centro, más cerca de la tarea que se le dio al agente.",
+ safeT:"No se muestran valores de secretos.",demo:"Datos de ejemplo. Todo aquí es ficticio: no hay ninguna máquina, persona ni secreto reales.",
+ hint:"Consejo: haga clic o pulse Enter en un punto para abrir su detalle. No hacen falta flechas, basta con Tab.",
+ listK:"02 / Vista de lista",listH:"Todos los hallazgos",limK:"03 / Puntos ciegos",limH:"Lo que AgentReach no pudo revisar",
+ limP:"Un resultado limpio no significa seguro. Estas zonas quedaron fuera de alcance en este análisis. Los puntos violeta discontinuos del borde del mapa apuntan aquí.",
+ fSearch:"Buscar",fLevel:"Nivel",fAgent:"Agente",fType:"Tipo",reset:"Limpiar",all:"Todos",
+ theme:{dark:"Tema: oscuro",light:"Tema: claro"},
+ f:["Ubicación y línea","Qué es y de quién","Nivel y por qué","Ajeno a la tarea","Plataforma y agente","Reglas del agente","Qué hacer","Qué significa"],
+ unrel:{no:"No, relacionado",yes:"Sí, ajeno","not determined":"No determinado"},
+ line:"línea",showing:"Mostrando {a} de {b} hallazgos",none:"Ningún hallazgo coincide con estos filtros.",
+ locate:"Ubicar en el mapa",card:"Abrir tarjeta de la lista",files:"archivos leídos",folder:"Analizado",
+ rings:["Ligado a la tarea","No determinado","Ajeno","Fuera de la carpeta"],
+ ringsLong:["Ligado a la tarea","Relación no determinada","Ajeno a la tarea","Fuera de la carpeta"],
+ ring:"Distancia",fnd:"Hallazgo",sum:"Resumen",
+ h1:"¿Hasta dónde llega su <em>agente</em>?",
+ mapT:"Mapa de alcance: el agente al centro y los hallazgos según su distancia a la tarea",
+ core:"AGENTE",lim:"Sin revisar",
+ foot:"AgentReach es de solo lectura: lee, nunca cambia nada. Los datos de ejemplo son ficticios.",
+ legLv:"Nivel",legUnc:"No se pudo revisar"}
+};
+var lang="en",theme="dark",selId=null;
+var F=D.findings,L=D.limits;
+/* ring + position (deg clockwise from top, radius) derived from the "unrelated to task" field; link leaving the folder = outer ring */
+var POS={f1:[0,40],f3:[0,130],f8:[0,235],f9:[0,295],f2:[1,80],f4:[1,200],f6:[1,320],f5:[2,150],f7:[3,250]};
+var RAD=[105,180,255,330];
+F.forEach(function(f,i){f.n=i+1;var p=POS[f.id]||[1,i*40];f.ring=p[0];f.deg=p[1]});
+function lv(f){return f.level}
+function lvName(k){return D.levels[k][lang]}
+var SVG16='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">';
+var IC={
+ verified:SVG16+'<path fill="currentColor" fill-rule="evenodd" d="M5.2 1h5.6L15 5.2v5.6L10.8 15H5.2L1 10.8V5.2zM7.2 4h1.6v5.2H7.2zM8 10.5a1.05 1.05 0 100 2.1 1.05 1.05 0 000-2.1z"/></svg>',
+ potential:SVG16+'<path d="M8 1.6l6.8 12.2H1.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 6v3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="11.7" r="1" fill="currentColor"/></svg>',
+ hypothesis:SVG16+'<path d="M8 1l7 7-7 7-7-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="2.4 2"/><path d="M6.3 6.4a1.8 1.8 0 113 1.2c-.6.5-1.3.8-1.3 1.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.4" r=".9" fill="currentColor"/></svg>',
+ could_not_check:SVG16+'<circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3 2"/><path d="M3.6 12.4l8.8-8.8" stroke="currentColor" stroke-width="1.8"/></svg>'
+};
+function shapePts(k,R){var p=[],i,a;
+ if(k==="verified"){for(i=0;i<8;i++){a=(22.5+45*i)*Math.PI/180;p.push((R*Math.cos(a)).toFixed(1)+","+(R*Math.sin(a)).toFixed(1))}}
+ else if(k==="potential"){p=["0,"+(-R*1.1).toFixed(1),(R*1.05).toFixed(1)+","+(R*.78).toFixed(1),(-R*1.05).toFixed(1)+","+(R*.78).toFixed(1)]}
+ else{p=["0,"+(-R*1.15).toFixed(1),(R*1.15).toFixed(1)+",0","0,"+(R*1.15).toFixed(1),(-R*1.15).toFixed(1)+",0"]}
+ return p.join(" ")}
+function shortName(loc){return loc.split("/").pop()}
+function loc(f){return f.location+(f.line?":"+f.line:"")}
+
+function applyLang(){
+ var t=T[lang];document.documentElement.lang=lang;
+ $$("[data-i]").forEach(function(e){var k=e.getAttribute("data-i");if(typeof t[k]==="string")e.textContent=t[k]});
+ $("#h1").innerHTML=t.h1;$("#safeB").textContent=D.secrets_notice[lang].replace(/^[^.]*\.\s*/,"");
+ $("#meta").textContent="demo-app · "+D.files_looked_at+" "+t.files;
+ $("#lang-en").setAttribute("aria-pressed",lang==="en");$("#lang-es").setAttribute("aria-pressed",lang==="es");
+ $("#theme").textContent=t.theme[theme];
+ $("#q").placeholder=lang==="en"?"Path, owner, label...":"Ruta, dueño, etiqueta...";
+ buildFilters();buildStats();buildMap();buildCards();buildLimits();applyFilter();select(selId||F[0].id,true);
+}
+function buildFilters(){
+ var t=T[lang],keep={l:$("#fl").value,a:$("#fa").value,t:$("#ft").value};
+ var o='<option value="">'+t.all+'</option>';
+ ["verified","potential","hypothesis"].forEach(function(k){o+='<option value="'+k+'">'+esc(lvName(k))+'</option>'});
+ $("#fl").innerHTML=o;
+ var ag={},ty={};F.forEach(function(f){ag[f.platform_agent]=1;ty[f.what.en]=f.what[lang]});
+ $("#fa").innerHTML='<option value="">'+t.all+'</option>'+Object.keys(ag).sort().map(function(a){return '<option>'+esc(a)+'</option>'}).join("");
+ $("#ft").innerHTML='<option value="">'+t.all+'</option>'+Object.keys(ty).map(function(k){return '<option value="'+esc(k)+'">'+esc(ty[k])+'</option>'}).join("");
+ $("#fl").value=keep.l;$("#fa").value=keep.a;$("#ft").value=keep.t;
+}
+function buildStats(){
+ var t=T[lang],c={verified:0,potential:0,hypothesis:0};F.forEach(function(f){c[f.level]++});
+ var h="";["verified","potential","hypothesis"].forEach(function(k,i){h+='<div class="stat" data-lv="'+k+'"><b>'+c[k]+'</b><span>'+IC[k]+esc(lvName(k))+'</span></div>'});
+ h+='<div class="stat" style="--c:var(--unc)"><b>'+L.length+'</b><span>'+IC.could_not_check+esc(lvName("could_not_check"))+'</span></div>';
+ $("#stats").innerHTML=h;$("#stats").setAttribute("aria-label",t.sum);
+ var lg='';["verified","potential","hypothesis"].forEach(function(k){lg+='<span data-lv="'+k+'" style="color:var(--c)">'+IC[k]+'<span style="color:var(--soft)">'+esc(lvName(k))+'</span></span>'});
+ lg+='<span style="color:var(--unc)">'+IC.could_not_check+'<span style="color:var(--soft)">'+esc(lvName("could_not_check"))+'</span></span>';
+ lg+='<span style="flex-basis:100%;font-family:var(--mono);font-size:.78rem;color:var(--mute)">'+t.ring+': '+t.ringsLong.map(function(x,i){return 'R'+(i+1)+' '+x}).join(' · ')+'</span>';
+ $("#maplegend").innerHTML=lg;
+}
+function buildMap(){
+ var t=T[lang],s='';var cx=400,cy=400;
+ $("#mapT").textContent=t.mapT;
+ s+='<defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3DF5D0" stop-opacity="0"/><stop offset="1" stop-color="#3DF5D0" stop-opacity=".30"/></linearGradient></defs>';
+ s+='<g class="sweep" aria-hidden="true"><path d="M400 400 L400 60 A340 340 0 0 1 700 230 Z" fill="url(#sg)" transform="rotate(-60 400 400)"/></g>';
+ RAD.forEach(function(r,i){s+='<circle class="ring'+(i%2?"":" solid")+'" style="--d:'+i+'" cx="400" cy="400" r="'+r+'" aria-hidden="true"/>'});
+ for(var a=0;a<360;a+=30){var rr=a*Math.PI/180;s+='<line x1="'+(400+RAD[0]*Math.sin(rr)).toFixed(1)+'" y1="'+(400-RAD[0]*Math.cos(rr)).toFixed(1)+'" x2="'+(400+350*Math.sin(rr)).toFixed(1)+'" y2="'+(400-350*Math.cos(rr)).toFixed(1)+'" stroke="var(--line)" stroke-width="1" opacity=".5" aria-hidden="true"/>'}
+ RAD.forEach(function(r,i){s+='<text class="ringtag" x="400" y="'+(400-r+5)+'" aria-hidden="true">'+'R'+(i+1)+'</text>'});
+ var pos={};
+ F.forEach(function(f,i){var r=RAD[f.ring],a=f.deg*Math.PI/180,x=cx+r*Math.sin(a),y=cy-r*Math.cos(a);pos[f.id]=[x,y];
+  var len=Math.round(r-30);
+  s+='<line class="spoke" data-id="'+f.id+'" data-lv="'+f.level+'" style="--d:'+i+';--len:'+len+'" x1="400" y1="400" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'" aria-hidden="true"/>'});
+ F.forEach(function(f,i){var p=pos[f.id],R=26;
+  var al=f.n+". "+f.what[lang]+", "+lvName(f.level)+", "+t.ringsLong[f.ring];
+  s+='<g class="nodewrap" style="--d:'+i+'"><g class="node" data-id="'+f.id+'" data-lv="'+f.level+'" transform="translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" tabindex="0" role="button" aria-pressed="false" aria-label="'+esc(al)+'">'
+   +'<polygon class="halo" points="'+shapePts(f.level,R+10)+'"/>'
+   +'<polygon class="shape" points="'+shapePts(f.level,R)+'"/><text class="num">'+f.n+'</text>'
+   +'<g class="tip"><text y="'+(p[1]<400?-(R+16):(R+30))+'">'+esc(shortName(f.location))+'</text></g></g></g>'});
+ /* limit nodes on the outer edge */
+ L.forEach(function(l,i){var a=(20+i*(320/(L.length-1)))*Math.PI/180,x=400+374*Math.sin(a),y=400-374*Math.cos(a);
+  s+='<g class="limnode" transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" data-lim="'+l.id+'" tabindex="0" role="link" aria-label="'+esc(t.lim+" "+(i+1)+": "+l.reason[lang])+'"><circle r="13"/><text>'+(i+1)+'</text></g>'});
+ s+='<g class="core" aria-hidden="true"><circle cx="400" cy="400" r="38" fill="#3DF5D0"/><circle cx="400" cy="400" r="50" fill="none" stroke="#3DF5D0" stroke-opacity=".35" stroke-width="2"/><text x="400" y="405">'+t.core+'</text></g>';
+ $("#map").innerHTML=s;
+ $$(".node").forEach(function(n){n.addEventListener("click",function(){select(n.dataset.id)});n.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();select(n.dataset.id)}})});
+ $$(".limnode").forEach(function(n){function go(){var el=document.getElementById("lim-"+n.dataset.lim);el.scrollIntoView({block:"center"});el.classList.add("hl");el.setAttribute("tabindex","-1");el.focus({preventScroll:true});setTimeout(function(){el.classList.remove("hl")},2200)}
+  n.addEventListener("click",go);n.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})});
+}
+function dlHtml(f){
+ var t=T[lang];
+ var rows=[
+  '<span class="mono">'+esc(f.location)+(f.line?'</span> · '+t.line+' <b class="mono">'+f.line+'</b>':'</span>'),
+  esc(f.what[lang])+' <span style="color:var(--soft)">/ '+esc(f.whose[lang])+'</span>',
+  '<span data-lv="'+f.level+'" style="display:inline-block"><span class="badge">'+IC[f.level]+esc(lvName(f.level))+'</span></span> '+esc(f.why[lang]),
+  f.unrelated_to_task==="yes"?'<span class="wavy" data-lv="potential">'+t.unrel.yes+'</span>':esc(t.unrel[f.unrelated_to_task]),
+  esc(f.platform_agent),esc(f.agent_rules[lang]),esc(f.what_to_do[lang]),esc(f.meaning[lang])];
+ var h='<dl class="f">';
+ rows.forEach(function(r,i){h+='<div><dt>'+t.f[i]+'</dt><dd'+(i===6?' class="act"':'')+'>'+r+'</dd></div>'});
+ return h+'</dl>';
+}
+function buildCards(){
+ var t=T[lang],h="";
+ F.forEach(function(f){
+  h+='<article class="card" id="card-'+f.id+'" data-id="'+f.id+'" data-lv="'+f.level+'"><span class="n" aria-hidden="true">'+String(f.n).padStart(2,"0")+'</span>'
+   +'<span class="badge">'+IC[f.level]+esc(lvName(f.level))+'</span><h3>'+esc(f.what[lang])+'</h3><div class="loc">'+esc(loc(f))+'</div>'+dlHtml(f)
+   +'<div class="acts"><button type="button" class="btn sm" data-loc="'+f.id+'">'+t.locate+' &uarr;</button></div></article>'});
+ $("#cards").innerHTML=h;
+ $$("[data-loc]").forEach(function(b){b.addEventListener("click",function(){select(b.dataset.loc);var n=$('.node[data-id="'+b.dataset.loc+'"]');$("#map").scrollIntoView({block:"center"});n.focus({preventScroll:true})})});
+}
+function buildLimits(){
+ var t=T[lang],h="";
+ L.forEach(function(l,i){h+='<li id="lim-'+l.id+'"><span class="k" aria-hidden="true">'+(i+1)+'</span><div><small>'+esc(l.part==="tool limits"?(lang==="en"?"Tool limit":"Límite de la herramienta"):(lang==="en"?"This folder":"Esta carpeta"))+'</small><b>'+esc(l.reason[lang])+'</b>'
+  +(l.items.length?'<div class="it">'+l.items.map(esc).join("<br>")+'</div>':'')+'<div style="color:var(--soft);font-size:.92rem;margin-top:4px">'+esc(l.how_to_fix[lang])+'</div></div></li>'});
+ $("#limlist").innerHTML=h;
+}
+function select(id,quiet){
+ selId=id;var f=F.filter(function(x){return x.id===id})[0],t=T[lang];
+ $$(".node").forEach(function(n){var on=n.dataset.id===id;n.classList.toggle("sel",on);n.setAttribute("aria-pressed",on)});
+ $$(".card").forEach(function(c){c.classList.toggle("sel",c.dataset.id===id)});
+ var d=$("#detail");d.setAttribute("data-lv",f.level);d.style.animation="none";void d.offsetWidth;d.style.animation="";
+ d.innerHTML='<span class="badge">'+IC[f.level]+esc(lvName(f.level))+'</span> <span class="mono" style="color:var(--mute);font-size:.8rem;margin-left:6px">'+t.fnd+' '+f.n+' / '+F.length+' · '+esc(t.ringsLong[f.ring])+'</span>'
+  +'<h2 id="dh">'+esc(f.what[lang])+'</h2><div class="loc">'+esc(loc(f))+'</div>'+dlHtml(f)
+  +'<div class="acts"><button type="button" class="btn sm" id="tocard">'+t.card+' &darr;</button></div>';
+ $("#tocard").addEventListener("click",function(){var c=$("#card-"+id);if(c.hidden){reset()}c.scrollIntoView({block:"center"});c.setAttribute("tabindex","-1");c.focus({preventScroll:true})});
+}
+function applyFilter(){
+ var t=T[lang],q=$("#q").value.trim().toLowerCase(),l=$("#fl").value,a=$("#fa").value,ty=$("#ft").value,n=0;
+ F.forEach(function(f){
+  var hay=(f.location+" "+f.what.en+" "+f.what.es+" "+f.whose.en+" "+f.whose.es+" "+f.platform_agent+" "+f.why[lang]+" "+f.meaning[lang]).toLowerCase();
+  var ok=(!q||hay.indexOf(q)>-1)&&(!l||f.level===l)&&(!a||f.platform_agent===a)&&(!ty||f.what.en===ty);
+  if(ok)n++;
+  var c=$("#card-"+f.id);if(c)c.hidden=!ok;
+  var nd=$('.node[data-id="'+f.id+'"]'),sp=$('.spoke[data-id="'+f.id+'"]');
+  if(nd){nd.classList.toggle("dim",!ok);nd.setAttribute("tabindex",ok?"0":"-1");sp.classList.toggle("dim",!ok)}
+ });
+ $("#count").textContent=t.showing.replace("{a}",n).replace("{b}",F.length);
+ $("#empty").hidden=n>0;$("#empty").textContent=t.none;
+}
+function reset(){$("#q").value="";$("#fl").value="";$("#fa").value="";$("#ft").value="";applyFilter()}
+["#q","#fl","#fa","#ft"].forEach(function(s){$(s).addEventListener("input",applyFilter)});
+$("#reset").addEventListener("click",reset);
+$("#lang-en").addEventListener("click",function(){lang="en";applyLang()});
+$("#lang-es").addEventListener("click",function(){lang="es";applyLang()});
+$("#theme").addEventListener("click",function(){theme=theme==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",theme);$("#theme").textContent=T[lang].theme[theme]});
+/* optional: honour ?theme=light and ?lang=es in the URL (used for screenshots), never stored */
+var qs=location.search;if(/theme=light/.test(qs)){theme="light";document.documentElement.setAttribute("data-theme","light")}if(/lang=es/.test(qs))lang="es";
+applyLang();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>AgentReach · Access report</title>
+<style>
+/* ===== Tokens: dark is the default; the light theme is bold, not dull white ===== */
+:root, .band{
+  color-scheme: dark;
+  --bg:#0B1114; --surface:#121C20;
+  --text:#EAF4F2; --text-2:#A9BDB9; --muted:#7C928E;
+  --brand:#3DF5D0; --on-brand:#0B1114;
+  --verified:#FF6B6B; --verified-fill:#FF6B6B; --verified-glyph:#0B1114;
+  --potential:#FFB224; --potential-fill:#FFB224; --potential-glyph:#0B1114;
+  --hypothesis:#A9BDB9; --unchecked:#B9A2FF; --info:#6DB6FF; --ok:#3DF5D0;
+  --glass:rgba(18,28,32,.74); --sheen:rgba(255,255,255,.10);
+  --edge:rgba(255,255,255,.16); --hair:rgba(234,244,242,.16);
+  --inset:rgba(0,0,0,.30); --chip-on:rgba(255,255,255,.14);
+  --act-bg:rgba(61,245,208,.10); --act-edge:rgba(61,245,208,.45);
+  --shadow:0 18px 40px rgba(0,0,0,.40);
+  --focus:#3DF5D0;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg:#DFF5EF; --surface:#FFFFFF;
+  --text:#0B1114; --text-2:#3A524D; --muted:#4B6661;
+  --brand:#005F4D; --on-brand:#0B1114;
+  --verified:#B3201A; --verified-fill:#B3201A; --verified-glyph:#FFFFFF;
+  --potential:#7A4300; --potential-fill:#FFB224; --potential-glyph:#0B1114;
+  --hypothesis:#3A524D; --unchecked:#5A3DC0; --info:#0A58A8; --ok:#005F4D;
+  --glass:rgba(255,255,255,.74); --sheen:rgba(255,255,255,.85);
+  --edge:rgba(255,255,255,.95); --hair:rgba(11,17,20,.16);
+  --inset:rgba(0,95,77,.08); --chip-on:rgba(0,95,77,.16);
+  --act-bg:rgba(0,95,77,.09); --act-edge:rgba(0,95,77,.45);
+  --shadow:0 18px 40px rgba(0,95,77,.18);
+  --focus:#005F4D;
+}
+/* The header band is always dark, so the logo keeps its real colors in both themes */
+.band{ --glass:rgba(18,28,32,.52); --sheen:rgba(255,255,255,.10); --edge:rgba(255,255,255,.18); --shadow:0 18px 40px rgba(0,0,0,.40); }
+
+/* ===== Levels: color + shape + border style + word (never color alone) ===== */
+.lv-verified{--lv:var(--verified);--lv-fill:var(--verified-fill);--lv-glyph:var(--verified-glyph);--bw:3px;--bs:solid}
+.lv-potential{--lv:var(--potential);--lv-fill:var(--potential-fill);--lv-glyph:var(--potential-glyph);--bw:2px;--bs:solid}
+.lv-hypothesis{--lv:var(--hypothesis);--lv-fill:transparent;--lv-glyph:var(--hypothesis);--bw:2px;--bs:dotted}
+.lv-unchecked{--lv:var(--unchecked);--lv-fill:transparent;--lv-glyph:var(--unchecked);--bw:2px;--bs:dashed}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font:400 16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+h1,h2,h3,p,ul,dl,dd{margin:0}
+ul{padding:0;list-style:none}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{width:min(1240px,calc(100% - 32px));margin-inline:auto}
+@media (min-width:640px){.wrap{width:min(1240px,calc(100% - 64px))}}
+
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:8px}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;padding:10px 16px;border-radius:12px;background:#3DF5D0;color:#0B1114;font-weight:700;text-decoration:none}
+.skip:focus{top:12px}
+
+.ic{width:1.5em;height:1.5em;flex:none;display:inline-block;vertical-align:middle;overflow:visible}
+.ic.big{width:46px;height:46px}
+
+/* ===== Aurora: soft color blobs that sit behind the glass ===== */
+.aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--o);animation:drift 28s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:46vmax;height:46vmax;left:-12vmax;top:14vh;background:#3DF5D0;--o:.34}
+.aurora i:nth-child(2){width:40vmax;height:40vmax;right:-10vmax;top:40vh;background:#B9A2FF;--o:.30;animation-duration:34s;animation-delay:-9s}
+.aurora i:nth-child(3){width:34vmax;height:34vmax;left:30vw;bottom:-14vmax;background:#FFB224;--o:.18;animation-duration:40s;animation-delay:-4s}
+:root[data-theme="light"] .aurora i:nth-child(1){--o:.60}
+:root[data-theme="light"] .aurora i:nth-child(2){--o:.50}
+:root[data-theme="light"] .aurora i:nth-child(3){--o:.42}
+@keyframes drift{to{transform:translate3d(7vmax,-5vmax,0) scale(1.14)}}
+
+/* ===== Glass ===== */
+.glass{
+  position:relative;
+  background:
+    radial-gradient(120% 70% at 0% 0%, var(--sheen), transparent 55%),
+    linear-gradient(160deg, rgba(255,255,255,.05), transparent 40%),
+    var(--glass);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid var(--edge);
+  border-radius:22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), var(--shadow);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{background:var(--surface)}
+  .band .glass{background:#121C20}
+}
+
+/* ===== Header band ===== */
+.band{
+  position:relative; isolation:isolate; overflow:hidden; color:var(--text);
+  background:
+    radial-gradient(640px 420px at 82% 18%, rgba(61,245,208,.30), transparent 62%),
+    radial-gradient(520px 420px at 6% 100%, rgba(185,162,255,.24), transparent 62%),
+    radial-gradient(420px 300px at 55% 0%, rgba(255,178,36,.12), transparent 60%),
+    #0B1114;
+  border-bottom:1px solid rgba(61,245,208,.40);
+  padding-block:20px 44px;
+}
+.band::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-radial-gradient(circle at 80% 36%, transparent 0 46px, rgba(61,245,208,.08) 46px 47px);
+  -webkit-mask-image:radial-gradient(circle at 80% 36%, #000 0, transparent 72%);
+  mask-image:radial-gradient(circle at 80% 36%, #000 0, transparent 72%);
+}
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .ic{width:46px;height:46px}
+.wm{font-weight:800;font-size:20px;letter-spacing:.16em;color:var(--text)}
+.wm span{color:var(--brand)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:inline-flex;padding:4px;gap:4px;border-radius:999px}
+.btn{
+  min-height:44px;min-width:44px;padding:0 16px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font:700 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;letter-spacing:.04em;
+  color:var(--text);background:transparent;border:2px solid transparent;
+}
+.seg .btn[aria-pressed="true"]{background:#3DF5D0;color:#0B1114}
+.seg .btn:not([aria-pressed="true"]):hover{background:rgba(255,255,255,.10)}
+.tbtn{border-color:#7C928E}
+.tbtn:hover{background:rgba(255,255,255,.10)}
+
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:36px;align-items:center;margin-top:40px}
+.eyebrow{font:600 13px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--brand)}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.025em;margin-top:12px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chipmeta{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;font-size:15px;color:var(--text)}
+.chipmeta .ic{color:var(--brand);width:1.2em;height:1.2em}
+.chipmeta b{font-weight:700}
+.notice{display:flex;gap:14px;align-items:flex-start;margin-top:22px;padding:16px 18px;max-width:640px;border-radius:18px}
+.notice .ic{color:var(--info);width:1.6em;height:1.6em;margin-top:1px}
+.notice p{font-size:15px;line-height:1.5;color:var(--text-2)}
+.notice strong{display:block;color:var(--text);font-size:17px;margin-bottom:2px}
+
+/* Radar: the "reach rings" of the logo; closer to the center = more certain */
+.radarbox{justify-self:center;width:min(100%,400px)}
+.radar{position:relative;aspect-ratio:1;width:100%}
+.sweep{position:absolute;inset:2%;border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(61,245,208,0) 0deg, rgba(61,245,208,0) 250deg, rgba(61,245,208,.30) 358deg, rgba(61,245,208,0) 360deg);
+  -webkit-mask-image:radial-gradient(circle, transparent 6%, #000 8%);mask-image:radial-gradient(circle, transparent 6%, #000 8%);
+  animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar svg.plot{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring{fill:none;stroke:rgba(234,244,242,.22);stroke-width:1}
+.ring.dash{stroke-dasharray:3 6;stroke:rgba(234,244,242,.30)}
+.spoke{stroke:rgba(234,244,242,.10);stroke-width:1}
+.node{filter:drop-shadow(0 0 6px var(--lv))}
+.core{fill:none;stroke:#3DF5D0;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.radarcap{margin-top:10px;text-align:center;font-size:14px;color:var(--text-2)}
+
+/* Summary tiles */
+.sumtitle{margin-top:44px;font:700 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--text-2)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}
+.tile{display:flex;flex-direction:column;gap:6px;height:100%;padding:18px 18px 16px;border:var(--bw) var(--bs) var(--lv);color:var(--text);text-decoration:none;transition:transform .25s ease}
+a.tile:hover,.tile:hover{transform:translateY(-3px)}
+.tile .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tile .ic{width:34px;height:34px;filter:drop-shadow(0 0 8px var(--lv))}
+.num{font-size:50px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.numunit{font-size:15px;font-weight:600;color:var(--text-2);margin-left:6px;letter-spacing:0}
+.tname{font-size:18px;font-weight:800;color:var(--lv)}
+.tmean{font-size:14.5px;line-height:1.4;color:var(--text-2)}
+.tile .more{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--lv);margin-top:2px}
+.tile .more .ic{width:1.1em;height:1.1em;filter:none}
+
+/* ===== Filters ===== */
+main{padding-block:8px 8px}
+.sect-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-top:40px}
+.sect-h h2{font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;font-weight:800}
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 14px;margin-block:18px 22px;z-index:20}
+@media (min-width:760px){.filters{position:sticky;top:12px}}
+.search{flex:1 1 280px;min-width:0;display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border-radius:14px;border:2px solid var(--muted);background:var(--inset)}
+.search:focus-within{outline:3px solid var(--focus);outline-offset:2px}
+.search .ic{color:var(--text-2);width:1.3em;height:1.3em}
+.search input{all:unset;flex:1;min-width:0;font:500 16px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);padding:12px 0}
+.search input::placeholder{color:var(--muted);opacity:1}
+.clear{all:unset;cursor:pointer;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;color:var(--text-2);font-size:20px;line-height:1}
+.clear[hidden]{display:none}
+.clear:hover{background:var(--chip-on)}
+.clear:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  min-height:44px;padding:0 14px 0 10px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+  font:700 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);
+  background:transparent;border:2px var(--bs,solid) var(--lv,var(--muted));
+}
+.chip .ic{width:1.35em;height:1.35em}
+.chip .cn{font-weight:600;color:var(--text-2)}
+.chip .tick{display:none;width:1.1em;height:1.1em;color:var(--ok)}
+.chip[aria-pressed="true"]{background:var(--chip-on)}
+.chip[aria-pressed="true"] .tick{display:inline-block}
+.chip:hover{background:var(--chip-on)}
+.count{margin-left:auto;font-size:14.5px;color:var(--text-2)}
+
+/* ===== Finding cards ===== */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media (min-width:1180px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cards>li{display:flex;min-width:0}
+.card{
+  width:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 18px;padding:22px;
+  border:var(--bw) var(--bs) var(--lv);transition:transform .25s ease;
+}
+.card:hover{transform:translateY(-3px)}
+.rail{display:flex;flex-direction:column;align-items:center;padding-top:2px}
+.rail .ic{filter:drop-shadow(0 0 12px var(--lv))}
+.fields{container-type:inline-size;min-width:0}
+.fields dl{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px 12px}
+.f{grid-column:span 6;min-width:0}
+.f4,.f5,.f6{grid-column:span 2}
+@container (max-width:430px){.f4,.f5,.f6{grid-column:span 6}}
+.f4,.f5,.f6{padding:12px 14px;border-radius:14px;background:var(--inset)}
+dt{display:flex;align-items:center;gap:8px;font-size:13px;line-height:1.2;font-weight:700;color:var(--text-2);margin-bottom:6px}
+.n{display:inline-grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--hair);font-size:12px;font-weight:700;color:var(--text)}
+dd{min-width:0;overflow-wrap:anywhere}
+.loc code{font-size:14.5px;color:var(--text);background:var(--inset);padding:4px 9px;border-radius:9px;display:inline-block}
+.ln{font-size:14px;color:var(--text-2);margin-left:8px}
+.what{font-weight:700;font-size:17px}
+.whose{color:var(--text-2)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:4px 14px 4px 8px;border-radius:999px;border:2px var(--bs) var(--lv);font-weight:800;color:var(--lv)}
+.pill .ic{width:1.35em;height:1.35em}
+.why{margin-top:8px}
+.val{font-weight:700}
+.act{padding:14px 16px;border-radius:16px;background:var(--act-bg);border:1px solid var(--act-edge)}
+.f7 dt{color:var(--ok)}
+.f7 dt .ic{width:1.25em;height:1.25em;color:var(--ok)}
+.f7 dt .n{border-color:var(--act-edge)}
+.f7 dd{color:var(--text)}
+.f8 dd{color:var(--text-2)}
+
+/* ===== Could-not-check section (always visible) ===== */
+.cnc{padding:26px;border:2px dashed var(--unchecked);margin-top:12px}
+.cnc-h{display:flex;align-items:center;gap:14px}
+.cnc-h .ic{width:40px;height:40px;filter:drop-shadow(0 0 10px var(--lv))}
+.cnc-h h2{font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;font-weight:800}
+.cnc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:22px}
+.part h3{font:700 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);margin-bottom:12px}
+.part ul{display:grid;gap:12px}
+.lim{padding:14px 16px;border-radius:16px;background:var(--inset);border:1px solid var(--hair)}
+.lim .why2{font-weight:700;color:var(--text)}
+.files{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.files code{font-size:13.5px;padding:3px 9px;border-radius:9px;background:var(--inset);border:1px solid var(--hair);overflow-wrap:anywhere}
+.fix{display:flex;gap:10px;align-items:flex-start;margin-top:10px;color:var(--text-2);font-size:15px}
+.fix .ic{color:var(--ok);margin-top:2px;width:1.2em;height:1.2em}
+.fix b{color:var(--ok)}
+.empty{padding:14px 16px;border-radius:16px;border:1px dashed var(--hair);color:var(--text-2)}
+.nores{padding:28px;text-align:center;color:var(--text-2);font-size:17px}
+
+footer{margin-block:36px 48px}
+.foot{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:18px;width:fit-content;max-width:100%}
+.foot .ic{color:var(--info)}
+.foot p{font-size:15px;color:var(--text-2)}
+.foot strong{color:var(--text)}
+
+.nojs{margin:40px auto;padding:24px;max-width:640px;border:2px dashed var(--muted);border-radius:18px;text-align:center}
+
+/* ===== Responsive ===== */
+@media (max-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr);gap:28px}
+  .radarbox{width:min(100%,340px)}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cnc-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .tiles{grid-template-columns:minmax(0,1fr)}
+  .card{grid-template-columns:minmax(0,1fr);padding:18px}
+  .rail{flex-direction:row;justify-content:flex-start;margin-bottom:12px}
+  .count{margin-left:0;width:100%}
+  .wm{font-size:17px}
+}
+
+/* ===== Motion: off for people who ask for less ===== */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .sweep{display:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <symbol id="logo" viewBox="0 0 200 200">
+    <g fill="none" stroke-linecap="round">
+      <circle cx="100" cy="100" r="30" stroke="#3DF5D0" stroke-width="6" stroke-dasharray="120 68.5" transform="rotate(-100 100 100)"/>
+      <circle cx="100" cy="100" r="55" stroke="#3DF5D0" stroke-width="6" stroke-opacity=".6" stroke-dasharray="200 145.6" transform="rotate(-20 100 100)"/>
+      <circle cx="100" cy="100" r="80" stroke="#3DF5D0" stroke-width="6" stroke-opacity=".3" stroke-dasharray="270 232.7" transform="rotate(60 100 100)"/>
+      <line x1="100" y1="100" x2="156.6" y2="43.4" stroke="#3DF5D0" stroke-width="4"/>
+      <line x1="100" y1="100" x2="169.3" y2="140" stroke="#FFB224" stroke-width="4"/>
+      <line x1="100" y1="100" x2="24.8" y2="72.6" stroke="#3DF5D0" stroke-width="4"/>
+    </g>
+    <circle cx="156.6" cy="43.4" r="9" fill="#3DF5D0"/><circle cx="169.3" cy="140" r="9" fill="#FFB224"/>
+    <circle cx="24.8" cy="72.6" r="9" fill="#3DF5D0"/><circle cx="100" cy="100" r="14" fill="#3DF5D0"/>
+  </symbol>
+
+  <!-- Verified: solid octagon with "!" and a thick border -->
+  <symbol id="i-verified" viewBox="0 0 24 24">
+    <polygon points="8.4,2.4 15.6,2.4 21.6,8.4 21.6,15.6 15.6,21.6 8.4,21.6 2.4,15.6 2.4,8.4" style="fill:var(--lv-fill);stroke:var(--lv);stroke-width:2.6;stroke-linejoin:round"/>
+    <path d="M12 7v6.2" style="fill:none;stroke:var(--lv-glyph);stroke-width:2.4;stroke-linecap:round"/>
+    <circle cx="12" cy="16.8" r="1.4" style="fill:var(--lv-glyph)"/>
+  </symbol>
+  <!-- Potential: triangle with "!" -->
+  <symbol id="i-potential" viewBox="0 0 24 24">
+    <polygon points="12,3 22,20.5 2,20.5" style="fill:var(--lv-fill);stroke:var(--lv);stroke-width:2;stroke-linejoin:round"/>
+    <path d="M12 9.6v4.6" style="fill:none;stroke:var(--lv-glyph);stroke-width:2.2;stroke-linecap:round"/>
+    <circle cx="12" cy="17.2" r="1.2" style="fill:var(--lv-glyph)"/>
+  </symbol>
+  <!-- Hypothesis: diamond with "?" and a dotted border -->
+  <symbol id="i-hypothesis" viewBox="0 0 24 24">
+    <polygon points="12,1.8 22.2,12 12,22.2 1.8,12" style="fill:var(--lv-fill);stroke:var(--lv);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:.01 3.5"/>
+    <path d="M9.4 9.6a2.7 2.7 0 1 1 4 2.3c-.9.5-1.4 1.1-1.4 2" style="fill:none;stroke:var(--lv-glyph);stroke-width:2;stroke-linecap:round"/>
+    <circle cx="12" cy="17.2" r="1.2" style="fill:var(--lv-glyph)"/>
+  </symbol>
+  <!-- Could not check: circle with a slash and a dashed border -->
+  <symbol id="i-unchecked" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9.6" style="fill:var(--lv-fill);stroke:var(--lv);stroke-width:2;stroke-dasharray:4 3"/>
+    <path d="M5.6 18.4L18.4 5.6" style="fill:none;stroke:var(--lv-glyph);stroke-width:2.2;stroke-linecap:round"/>
+  </symbol>
+  <!-- Information (notices) -->
+  <symbol id="i-info" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9.6" style="fill:none;stroke:currentColor;stroke-width:2"/>
+    <path d="M12 11v6" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round"/>
+    <circle cx="12" cy="7.7" r="1.3" style="fill:currentColor"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.8l4.6 4.6L19 7.6" style="fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h14M13 6.2l5.8 5.8-5.8 5.8" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4.5v14M6.2 13l5.8 5.8 5.8-5.8" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><g style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></g></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.3h8.8A1.5 1.5 0 0 1 21 8.8v9.7a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round"/></symbol>
+  <symbol id="i-files" viewBox="0 0 24 24"><g style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 16h6"/></g></symbol>
+</defs>
+</svg>
+
+<a class="skip" href="#findings" data-i18n="skip">Skip to findings</a>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="band">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
+        <span class="wm" aria-label="AgentReach">AGENT<span>REACH</span></span>
+      </div>
+      <div class="controls">
+        <div class="seg glass" role="group" data-i18n-label="langGroup" aria-label="Language">
+          <button class="btn" type="button" id="b-en" lang="en" aria-pressed="true">EN</button>
+          <button class="btn" type="button" id="b-es" lang="es" aria-pressed="false">ES</button>
+        </div>
+        <button class="btn tbtn glass" type="button" id="b-theme"></button>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div>
+        <p class="eyebrow" id="tool"></p>
+        <h1 data-i18n="title">Access report</h1>
+        <div class="meta">
+          <span class="chipmeta glass"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-folder"/></svg><span><span data-i18n="folder">Folder reviewed</span>: <b class="mono" id="folder"></b></span></span>
+          <span class="chipmeta glass"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-files"/></svg><span><b id="nfiles"></b> <span data-i18n="files">files looked at</span></span></span>
+        </div>
+        <div class="notice glass" role="note" id="notice"></div>
+      </div>
+      <div class="radarbox" aria-hidden="true">
+        <div class="radar">
+          <div class="sweep"></div>
+          <svg class="plot" viewBox="0 0 360 360" id="plot" focusable="false"></svg>
+        </div>
+        <p class="radarcap" data-i18n="radarCap">Closer to the center = more certain</p>
+      </div>
+    </div>
+
+    <h2 class="sumtitle" data-i18n="summary">Summary by level</h2>
+    <ul class="tiles" id="tiles"></ul>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <noscript><div class="nojs">This report needs JavaScript to show its data.<br>Este informe necesita JavaScript para mostrar sus datos.</div></noscript>
+
+  <section aria-labelledby="findings">
+    <div class="sect-h"><h2 id="findings" data-i18n="findingsH">Findings</h2></div>
+
+    <div class="filters glass" role="search">
+      <label class="search">
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+        <span class="vh" id="lbl-search"></span>
+        <input type="text" id="q" autocomplete="off" spellcheck="false" aria-labelledby="lbl-search">
+        <button type="button" class="clear" id="clear" hidden aria-label="Clear search">×</button>
+      </label>
+      <div class="chips" id="chips" role="group"></div>
+      <p class="count" id="count" role="status" aria-live="polite"></p>
+    </div>
+
+    <ul class="cards" id="list"></ul>
+  </section>
+
+  <section aria-labelledby="cnc-title" id="cnc" class="cnc glass lv-unchecked" style="margin-top:44px">
+    <div class="cnc-h">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-unchecked"/></svg>
+      <h2 id="cnc-title" data-i18n="cncH">What AgentReach could not check</h2>
+    </div>
+    <div class="cnc-grid" id="cnc-grid"></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="foot glass" id="foot"></div>
+</footer>
+
+<script type="application/json" id="data">{
+  "_note": "100% fictional sample data. Not from any real machine, person or repository. No secret values.",
+  "tool": "AgentReach (demo)",
+  "folder_reviewed": "demo-app",
+  "files_looked_at": 41,
+  "levels": {
+    "verified":     { "en": "Verified",      "es": "Comprobado",        "meaning_en": "Confirmed: the agent can reach it today.",        "meaning_es": "Confirmado: el agente puede llegar hoy." },
+    "potential":    { "en": "Potential",     "es": "Potencial",         "meaning_en": "Likely reachable, but not fully confirmed.",      "meaning_es": "Probablemente alcanzable, sin confirmar del todo." },
+    "hypothesis":   { "en": "Hypothesis",    "es": "Hipótesis",         "meaning_en": "A suggestion only. Not a confirmed access.",      "meaning_es": "Solo una sugerencia. No es un acceso comprobado." },
+    "could_not_check": { "en": "Could not check", "es": "No se pudo revisar", "meaning_en": "AgentReach could not look at this.",         "meaning_es": "AgentReach no pudo mirar esto." }
+  },
+  "secrets_notice": {
+    "en": "No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.",
+    "es": "No se muestran valores de secretos. AgentReach nunca copia contraseñas, tokens ni claves: solo dice dónde están y de qué tipo son."
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": "demo-app/config/settings.example", "line": 2,
+      "what": { "en": "Credential in a file", "es": "Credencial en un archivo" },
+      "whose": { "en": "payments service (demo)", "es": "servicio de pagos (demo)" },
+      "level": "verified",
+      "why": { "en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Move the credential out of the project, or keep it in a secrets manager (a safe vault for passwords and keys). Replace it with a new one if it was ever exposed.", "es": "Saque la credencial del proyecto o guárdela en un gestor de secretos (una bóveda segura para claves). Cámbiela por una nueva si estuvo expuesta." },
+      "meaning": { "en": "A project file holds a credential (a key or password that gives access to a service). An agent that can read the project could read it.", "es": "Un archivo del proyecto guarda una credencial (una clave o contraseña que da acceso a un servicio). Un agente que pueda leer el proyecto podría leerla." }
+    },
+    {
+      "id": "f2",
+      "location": "demo-app/config/staging.example", "line": 5,
+      "what": { "en": "Credential in a file", "es": "Credencial en un archivo" },
+      "whose": { "en": "database (demo)", "es": "base de datos (demo)" },
+      "level": "verified",
+      "why": { "en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "asks first", "es": "pide confirmación" },
+      "what_to_do": { "en": "Keep database access out of files in the project. Use a safer place and replace the old access.", "es": "Mantenga el acceso a la base de datos fuera de los archivos del proyecto. Use un lugar más seguro y cambie el acceso anterior." },
+      "meaning": { "en": "A file stores database access. The agent asks before reading it, but it is still reachable if you say yes.", "es": "Un archivo guarda acceso a una base de datos. El agente pregunta antes de leerlo, pero sigue siendo alcanzable si usted dice que sí." }
+    },
+    {
+      "id": "f3",
+      "location": "demo-app/deploy/publish-demo.sh", "line": 12,
+      "what": { "en": "Deployment script (publishes changes)", "es": "Script de despliegue (publica cambios)" },
+      "whose": { "en": "deployment platform (demo)", "es": "plataforma de despliegue (demo)" },
+      "level": "potential",
+      "why": { "en": "The script exists and the agent may run programs, but we did not confirm it can reach the platform.", "es": "El script existe y el agente puede ejecutar programas, pero no se confirmó que llegue a la plataforma." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "allows it", "es": "lo permite" },
+      "what_to_do": { "en": "Require a human to approve any publish step. Remove the agent's permission to run this script.", "es": "Exija que una persona apruebe todo paso de publicación. Quite al agente el permiso de ejecutar este script." },
+      "meaning": { "en": "An agent could start a script that publishes your changes to a live place.", "es": "Un agente podría iniciar un script que publica sus cambios en un lugar real." }
+    },
+    {
+      "id": "f4",
+      "location": "demo-app/.agent/rules.example", "line": 3,
+      "what": { "en": "Agent rule that is too permissive", "es": "Regla del agente demasiado permisiva" },
+      "whose": { "en": "agent settings (demo)", "es": "configuración del agente (demo)" },
+      "level": "potential",
+      "why": { "en": "The rule allows many actions without asking.", "es": "La regla permite muchas acciones sin preguntar." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "allows it", "es": "lo permite" },
+      "what_to_do": { "en": "Change the rule so the agent asks first for risky actions.", "es": "Cambie la regla para que el agente pregunte antes de acciones riesgosas." },
+      "meaning": { "en": "The agent can do more than it needs, and nobody is asked to confirm.", "es": "El agente puede hacer más de lo necesario y nadie debe confirmar." }
+    },
+    {
+      "id": "f5",
+      "location": "demo-app/docs/notes-style.txt", "line": 27,
+      "what": { "en": "Platform or deployment secret", "es": "Secreto de plataforma o de despliegue" },
+      "whose": { "en": "code hosting service (demo)", "es": "servicio de alojamiento de código (demo)" },
+      "level": "potential",
+      "why": { "en": "A secret-like label sits in a file that looks unrelated to the work.", "es": "Una etiqueta parecida a un secreto está en un archivo que parece ajeno al trabajo." },
+      "unrelated_to_task": "yes",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Check if this file needs that item. If not, remove it.", "es": "Revise si este archivo necesita ese dato. Si no, quítelo." },
+      "meaning": { "en": "A sensitive item is in a place where nobody expects it, so it is easy to forget.", "es": "Un dato sensible está donde nadie lo espera, y es fácil olvidarlo." }
+    },
+    {
+      "id": "f6",
+      "location": "demo-app/AGENTS.example", "line": 8,
+      "what": { "en": "Instructions file with suspicious text", "es": "Archivo de instrucciones con texto sospechoso" },
+      "whose": { "en": "agent instructions (demo)", "es": "instrucciones del agente (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The text looks like it tries to steer the agent, but we cannot be sure.", "es": "El texto parece querer dirigir al agente, pero no podemos estar seguros." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent C",
+      "agent_rules": { "en": "not determined", "es": "no determinadas" },
+      "what_to_do": { "en": "Read the file yourself and remove lines you do not recognise.", "es": "Lea el archivo usted mismo y quite las líneas que no reconozca." },
+      "meaning": { "en": "An instructions file could change what the agent does. This is only a suggestion to look.", "es": "Un archivo de instrucciones podría cambiar lo que hace el agente. Es solo una sugerencia para revisar." }
+    },
+    {
+      "id": "f7",
+      "location": "demo-app/links/shared-folder", "line": null,
+      "what": { "en": "Link that leaves the folder", "es": "Enlace que sale de la carpeta" },
+      "whose": { "en": "unknown (demo)", "es": "desconocido (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The link points outside the project, but we did not follow it.", "es": "El enlace apunta fuera del proyecto, pero no lo seguimos." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent C",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Check where the link goes. Remove it if you do not need it.", "es": "Revise a dónde lleva el enlace. Quítelo si no lo necesita." },
+      "meaning": { "en": "An agent might follow the link and reach files outside the project.", "es": "Un agente podría seguir el enlace y llegar a archivos fuera del proyecto." }
+    },
+    {
+      "id": "f8",
+      "location": "demo-app/.tasks/auto-start.example", "line": 4,
+      "what": { "en": "Task that starts when the folder is opened", "es": "Tarea que arranca al abrir la carpeta" },
+      "whose": { "en": "editor settings (demo)", "es": "configuración del editor (demo)" },
+      "level": "potential",
+      "why": { "en": "A task is set to start by itself; we did not confirm it runs.", "es": "Hay una tarea configurada para arrancar sola; no se confirmó que se ejecute." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "asks first", "es": "pide confirmación" },
+      "what_to_do": { "en": "Remove the auto-start, or make sure you know what the task does.", "es": "Quite el arranque automático, o asegúrese de saber qué hace la tarea." },
+      "meaning": { "en": "A program could start just by opening the folder.", "es": "Un programa podría arrancar con solo abrir la carpeta." }
+    },
+    {
+      "id": "f9",
+      "location": "demo-app/config/cloud.example", "line": 1,
+      "what": { "en": "Cloud account credentials", "es": "Credenciales de una cuenta en la nube" },
+      "whose": { "en": "cloud account (demo)", "es": "cuenta en la nube (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The file name suggests cloud access, but we did not confirm it is readable.", "es": "El nombre del archivo sugiere acceso a la nube, pero no se confirmó que sea legible." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "blocks it (rule only)", "es": "lo bloquea (solo por regla)" },
+      "what_to_do": { "en": "Keep this access as small as possible. Give it only the rights the work needs.", "es": "Mantenga este acceso lo más pequeño posible. Dele solo los permisos que el trabajo necesita." },
+      "meaning": { "en": "A rule blocks the agent today, but a rule is not a lock: someone can change it.", "es": "Una regla bloquea al agente hoy, pero una regla no es un candado: alguien puede cambiarla." }
+    }
+  ],
+  "limits": [
+    {
+      "id": "l1",
+      "part": "this folder",
+      "reason": { "en": "Could not open the file", "es": "No se pudo abrir el archivo" },
+      "items": ["demo-app/data/locked-file.example"],
+      "how_to_fix": { "en": "Check that the file exists and that you can read it. Then run again.", "es": "Compruebe que el archivo existe y que usted puede leerlo. Luego ejecute de nuevo." }
+    },
+    {
+      "id": "l2",
+      "part": "this folder",
+      "reason": { "en": "File too large (over 5 MB)", "es": "Archivo demasiado grande (más de 5 MB)" },
+      "items": ["demo-app/data/big-export.example"],
+      "how_to_fix": { "en": "AgentReach does not open files this big. Check it by hand if it may hold secrets.", "es": "AgentReach no abre archivos tan grandes. Revíselo a mano si puede guardar secretos." }
+    },
+    {
+      "id": "l3",
+      "part": "tool limits",
+      "reason": { "en": "Commit history is not checked", "es": "El historial de commits no se revisa" },
+      "items": [],
+      "how_to_fix": { "en": "This version does not look at old versions of files. Use another tool for that.", "es": "Esta versión no mira versiones antiguas de los archivos. Use otra herramienta para eso." }
+    },
+    {
+      "id": "l4",
+      "part": "tool limits",
+      "reason": { "en": "Changes after you approve a setting are not tracked", "es": "No se vigilan los cambios después de aprobar una configuración" },
+      "items": [],
+      "how_to_fix": { "en": "Run AgentReach again after any change to agent settings.", "es": "Ejecute AgentReach de nuevo tras cualquier cambio en la configuración del agente." }
+    },
+    {
+      "id": "l5",
+      "part": "tool limits",
+      "reason": { "en": "Running programs and open ports are not checked", "es": "No se revisan los programas en ejecución ni los puertos abiertos" },
+      "items": [],
+      "how_to_fix": { "en": "AgentReach only reads files. Use a different tool to look at what is running.", "es": "AgentReach solo lee archivos. Use otra herramienta para ver qué se está ejecutando." }
+    },
+    {
+      "id": "l6",
+      "part": "tool limits",
+      "reason": { "en": "Network locations are not visited", "es": "No se visitan ubicaciones de red" },
+      "items": ["demo-app/shared/network-share.example"],
+      "how_to_fix": { "en": "AgentReach never goes to the network. Copy the folder to this computer and run again.", "es": "AgentReach nunca sale a la red. Copie la carpeta a este equipo y ejecute de nuevo." }
+    }
+  ]
+}</script>
+
+<script>
+(function(){
+'use strict';
+
+var DATA = JSON.parse(document.getElementById('data').textContent);
+
+/* ---- Interface text (the report data already has both languages) ---- */
+var UI = {
+  en:{
+    skip:'Skip to findings', title:'Access report', folder:'Folder reviewed', files:'files looked at',
+    summary:'Summary by level', one:'finding', many:'findings', points:'points', seeBelow:'See below',
+    radarCap:'Closer to the center = more certain',
+    findingsH:'Findings', search:'Search findings', ph:'Search text…', all:'All levels', clear:'Clear search',
+    showing:'Showing {n} of {t} findings', none:'No findings match your filters.', filterGroup:'Filter by level',
+    f1:'Location and line', f2:'What it is, and whose it is', f3:'Level, and why', f4:'Unrelated to the task',
+    f5:'Platform and agent', f6:'Agent rules', f7:'What to do', f8:'What it means',
+    yes:'Yes', no:'No', nd:'Not determined', line:'line', noLine:'no line number',
+    cncH:'What AgentReach could not check', partFolder:'In this folder', partTool:'Tool limits',
+    fix:'How to fix', empty:'Nothing here.', langGroup:'Language',
+    toLight:'Light', toDark:'Dark', toLightAria:'Switch to light theme', toDarkAria:'Switch to dark theme'
+  },
+  es:{
+    skip:'Saltar a los hallazgos', title:'Informe de acceso', folder:'Carpeta revisada', files:'archivos revisados',
+    summary:'Resumen por nivel', one:'hallazgo', many:'hallazgos', points:'puntos', seeBelow:'Ver abajo',
+    radarCap:'Más cerca del centro = más seguro',
+    findingsH:'Hallazgos', search:'Buscar hallazgos', ph:'Buscar texto…', all:'Todos los niveles', clear:'Borrar búsqueda',
+    showing:'Mostrando {n} de {t} hallazgos', none:'Ningún hallazgo coincide con los filtros.', filterGroup:'Filtrar por nivel',
+    f1:'Ubicación y línea', f2:'Qué es y de quién es', f3:'Nivel y por qué', f4:'Ajeno a la tarea',
+    f5:'Plataforma y agente', f6:'Reglas del agente', f7:'Qué hacer', f8:'Qué significa',
+    yes:'Sí', no:'No', nd:'No determinado', line:'línea', noLine:'sin número de línea',
+    cncH:'Qué no pudo revisar AgentReach', partFolder:'En esta carpeta', partTool:'Límites de la herramienta',
+    fix:'Cómo resolverlo', empty:'Aquí no hay nada.', langGroup:'Idioma',
+    toLight:'Claro', toDark:'Oscuro', toLightAria:'Cambiar al tema claro', toDarkAria:'Cambiar al tema oscuro'
+  }
+};
+var UNRELATED = {'yes':'yes','no':'no','not determined':'nd'};
+var LEVELS = ['verified','potential','hypothesis'];
+
+var lang = (navigator.language||'en').toLowerCase().indexOf('es')===0 ? 'es' : 'en';
+var theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+var level = 'all', query = '';
+
+function $(s){return document.querySelector(s)}
+function t(k){return UI[lang][k]}
+function L(o,k){return k ? o[k+'_'+lang] : o[lang]}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function ic(id,cls,extra){return '<svg class="ic '+(cls||'')+'" aria-hidden="true" focusable="false"'+(extra||'')+'><use href="#'+id+'"/></svg>'}
+function countOf(lv){return DATA.findings.filter(function(f){return f.level===lv}).length}
+function unrel(v){return t(UNRELATED[v]||'nd')}
+
+/* ---- Search text for one finding (current language) ---- */
+function haystack(f){
+  return [f.location, f.line==null?'':f.line, L(f.what), L(f.whose), L(DATA.levels[f.level]), L(f.why),
+    unrel(f.unrelated_to_task), f.platform_agent, L(f.agent_rules), L(f.what_to_do), L(f.meaning)].join(' ');
+}
+function visible(){
+  var q = norm(query.trim());
+  return DATA.findings.filter(function(f){
+    return (level==='all' || f.level===level) && (!q || norm(haystack(f)).indexOf(q)>-1);
+  });
+}
+
+/* ---- Pieces ---- */
+function renderStatic(){
+  document.documentElement.lang = lang;
+  document.title = 'AgentReach · ' + t('title');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(el){el.textContent=t(el.getAttribute('data-i18n'))});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-label]'),function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-label')))});
+  $('#tool').textContent = DATA.tool;
+  $('#folder').textContent = DATA.folder_reviewed;
+  $('#nfiles').textContent = DATA.files_looked_at;
+  $('#lbl-search').textContent = t('search');
+  $('#q').placeholder = t('ph');
+  $('#clear').setAttribute('aria-label', t('clear'));
+  $('#chips').setAttribute('aria-label', t('filterGroup'));
+  $('#b-en').setAttribute('aria-pressed', lang==='en');
+  $('#b-es').setAttribute('aria-pressed', lang==='es');
+  var tb = $('#b-theme');
+  tb.innerHTML = ic(theme==='dark'?'i-sun':'i-moon') + '<span>' + (theme==='dark'?t('toLight'):t('toDark')) + '</span>';
+  tb.setAttribute('aria-label', theme==='dark'?t('toLightAria'):t('toDarkAria'));
+  document.documentElement.setAttribute('data-theme', theme);
+
+  var s = L(DATA.secrets_notice), i = s.indexOf('. ');
+  var first = i>-1 ? s.slice(0,i+1) : s, rest = i>-1 ? s.slice(i+2) : '';
+  $('#notice').innerHTML = ic('i-info') + '<p><strong>'+esc(first)+'</strong>'+esc(rest)+'</p>';
+  $('#foot').innerHTML = ic('i-info') + '<p><strong>'+esc(first)+'</strong></p>';
+}
+
+function renderTiles(){
+  var html = LEVELS.map(function(lv){
+    var n = countOf(lv);
+    return '<li><div class="tile glass lv-'+lv+'" role="group" aria-label="'+esc(L(DATA.levels[lv]))+': '+n+' '+(n===1?t('one'):t('many'))+'">'+
+      '<div class="row">'+ic('i-'+lv,'lv-'+lv)+'</div>'+
+      '<p class="num">'+n+'<span class="numunit">'+(n===1?t('one'):t('many'))+'</span></p>'+
+      '<p class="tname">'+esc(L(DATA.levels[lv]))+'</p>'+
+      '<p class="tmean">'+esc(L(DATA.levels[lv],'meaning'))+'</p></div></li>';
+  }).join('');
+  var u = DATA.levels.could_not_check;
+  html += '<li><a class="tile glass lv-unchecked" href="#cnc">'+
+    '<div class="row">'+ic('i-unchecked')+'</div>'+
+    '<p class="num">'+DATA.limits.length+'<span class="numunit">'+t('points')+'</span></p>'+
+    '<p class="tname">'+esc(L(u))+'</p>'+
+    '<p class="tmean">'+esc(L(u,'meaning'))+'</p>'+
+    '<span class="more">'+t('seeBelow')+ic('i-down')+'</span></a></li>';
+  $('#tiles').innerHTML = html;
+}
+function renderRadar(){
+  var C=180, R={verified:56,potential:104,hypothesis:152}, svg='';
+  [56,104,152].forEach(function(r){svg+='<circle class="ring" cx="'+C+'" cy="'+C+'" r="'+r+'"/>'});
+  svg+='<circle class="ring dash" cx="'+C+'" cy="'+C+'" r="174"/>';
+  for(var k=0;k<8;k++){var a=k*Math.PI/4;svg+='<line class="spoke" x1="'+C+'" y1="'+C+'" x2="'+(C+174*Math.cos(a)).toFixed(1)+'" y2="'+(C+174*Math.sin(a)).toFixed(1)+'"/>'}
+  LEVELS.forEach(function(lv,li){
+    var list = DATA.findings.filter(function(f){return f.level===lv});
+    list.forEach(function(f,i){
+      var a = (i/list.length)*2*Math.PI + li*0.95 - Math.PI/2;
+      var x = C+R[lv]*Math.cos(a), y = C+R[lv]*Math.sin(a);
+      svg+='<use class="node lv-'+lv+'" href="#i-'+lv+'" x="'+(x-14).toFixed(1)+'" y="'+(y-14).toFixed(1)+'" width="28" height="28"/>';
+    });
+  });
+  svg+='<circle class="core" cx="'+C+'" cy="'+C+'" r="13"/>';
+  svg+='<use href="#logo" x="'+(C-24)+'" y="'+(C-24)+'" width="48" height="48"/>';
+  $('#plot').innerHTML = svg;
+}
+
+function chips(){
+  var items = [{id:'all'}].concat(LEVELS.map(function(l){return {id:l}}));
+  $('#chips').innerHTML = items.map(function(it){
+    var on = level===it.id;
+    if(it.id==='all'){
+      return '<button type="button" class="chip" data-level="all" aria-pressed="'+on+'">'+ic('i-check','tick')+t('all')+'</button>';
+    }
+    return '<button type="button" class="chip lv-'+it.id+'" data-level="'+it.id+'" aria-pressed="'+on+'">'+ic('i-'+it.id,'lv-'+it.id)+esc(L(DATA.levels[it.id]))+' <span class="cn">'+countOf(it.id)+'</span>'+ic('i-check','tick')+'</button>';
+  }).join('');
+}
+
+function field(n,label,body,cls){
+  return '<div class="f f'+n+(cls?' '+cls:'')+'"><dt><span class="n">'+n+'</span>'+(n===7?ic('i-arrow'):'')+esc(label)+'</dt><dd>'+body+'</dd></div>';
+}
+function card(f){
+  var lv=f.level, name=L(DATA.levels[lv]);
+  var line = f.line==null ? t('noLine') : t('line')+' '+f.line;
+  var body =
+    field(1,t('f1'),'<span class="loc"><code>'+esc(f.location)+'</code><span class="ln">'+esc(line)+'</span></span>')+
+    field(2,t('f2'),'<p class="what">'+esc(L(f.what))+'</p><p class="whose">'+esc(L(f.whose))+'</p>')+
+    field(3,t('f3'),'<span class="pill lv-'+lv+'">'+ic('i-'+lv,'lv-'+lv)+esc(name)+'</span><p class="why">'+esc(L(f.why))+'</p>')+
+    field(4,t('f4'),'<span class="val">'+esc(unrel(f.unrelated_to_task))+'</span>')+
+    field(5,t('f5'),'<span class="val">'+esc(f.platform_agent)+'</span>')+
+    field(6,t('f6'),'<span class="val">'+esc(L(f.agent_rules))+'</span>')+
+    field(7,t('f7'),'<p>'+esc(L(f.what_to_do))+'</p>','act')+
+    field(8,t('f8'),'<p>'+esc(L(f.meaning))+'</p>');
+  return '<li><article class="card glass lv-'+lv+'" id="'+esc(f.id)+'" aria-label="'+esc(name+': '+L(f.what)+' — '+f.location)+'">'+
+    '<div class="rail" aria-hidden="true">'+ic('i-'+lv,'big lv-'+lv)+'</div>'+
+    '<div class="fields"><dl>'+body+'</dl></div></article></li>';
+}
+function renderList(){
+  var list = visible();
+  $('#list').innerHTML = list.length ? list.map(card).join('') : '<li style="grid-column:1/-1"><p class="nores glass">'+esc(t('none'))+'</p></li>';
+  $('#count').textContent = t('showing').replace('{n}',list.length).replace('{t}',DATA.findings.length);
+  $('#clear').hidden = !query;
+}
+
+function renderCnc(){
+  var parts = [['this folder','partFolder'],['tool limits','partTool']];
+  $('#cnc-grid').innerHTML = parts.map(function(p){
+    var rows = DATA.limits.filter(function(l){return l.part===p[0]});
+    var inner = rows.length ? '<ul>'+rows.map(function(l){
+      var files = l.items.length ? '<div class="files">'+l.items.map(function(x){return '<code>'+esc(x)+'</code>'}).join('')+'</div>' : '';
+      return '<li class="lim"><p class="why2">'+esc(L(l.reason))+'</p>'+files+
+        '<p class="fix">'+ic('i-arrow')+'<span><b>'+esc(t('fix'))+':</b> '+esc(L(l.how_to_fix))+'</span></p></li>';
+    }).join('')+'</ul>' : '<p class="empty">'+esc(t('empty'))+'</p>';
+    return '<div class="part"><h3>'+esc(t(p[1]))+'</h3>'+inner+'</div>';
+  }).join('');
+}
+
+function renderAll(){ renderStatic(); renderTiles(); chips(); renderList(); renderCnc(); }
+
+/* ---- Events ---- */
+$('#b-en').addEventListener('click',function(){lang='en';renderAll()});
+$('#b-es').addEventListener('click',function(){lang='es';renderAll()});
+$('#b-theme').addEventListener('click',function(){theme = theme==='dark'?'light':'dark'; renderStatic()});
+$('#chips').addEventListener('click',function(e){
+  var b = e.target.closest('button[data-level]'); if(!b) return;
+  level = b.getAttribute('data-level'); chips(); renderList();
+  var again = $('#chips [data-level="'+level+'"]'); if(again) again.focus();
+});
+$('#q').addEventListener('input',function(e){query=e.target.value; renderList()});
+$('#clear').addEventListener('click',function(){query='';$('#q').value='';renderList();$('#q').focus()});
+if(window.matchMedia){
+  var mq = window.matchMedia('(prefers-color-scheme: light)');
+  var onMq = function(e){theme = e.matches?'light':'dark'; renderStatic()};
+  if(mq.addEventListener) mq.addEventListener('change',onMq);
+}
+
+renderRadar();
+renderAll();
+})();
+</script>
+</body>
+</html>

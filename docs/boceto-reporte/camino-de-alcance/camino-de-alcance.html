@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentReach Reach Path</title>
+<meta name="description" content="Reach path: how far an AI agent can get, drawn as a chain. Demo data, read-only, no secret values.">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0B1114; --surf:#121C20;
+  --text:#EAF4F2; --text2:#A9BDB9; --text3:#7C928E;
+  --mint:#3DF5D0; --mint-ui:#3DF5D0; --mint-text:#3DF5D0; --on-mint:#0B1114; --mint-fill:#3DF5D0;
+  --info:#6DB6FF; --violet:#B9A2FF;
+  /* levels: line/border color, text color, icon fill/stroke/glyph */
+  --lc-v:#FF6B6B; --lc-p:#FFB224; --lc-h:#A9BDB9; --lc-c:#B9A2FF;
+  --lt-v:#FF6B6B; --lt-p:#FFB224; --lt-h:#A9BDB9; --lt-c:#B9A2FF;
+  --ic-v:#FF6B6B; --g-v:#0B1114;
+  --ic-p:#FFB224; --st-p:#FFB224; --g-p:#0B1114;
+  --ic-h:#A9BDB9; --fl-h:rgba(169,189,185,.16);
+  --ic-c:#B9A2FF; --fl-c:rgba(185,162,255,.16);
+  --glass: linear-gradient(150deg, rgba(255,255,255,.085), rgba(255,255,255,.02) 60%), rgba(18,28,32,.70);
+  --glass-solid:#121C20;
+  --glass-hi: linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.04) 60%), rgba(18,28,32,.82);
+  --edge:rgba(255,255,255,.17); --edge-top:rgba(255,255,255,.34);
+  --shadow:0 10px 30px rgba(0,0,0,.40);
+  --flow:#EAF4F2;
+  --focus:#3DF5D0;
+  --ctl:#7C928E;
+  --page:
+    radial-gradient(900px 520px at 6% -6%, rgba(61,245,208,.24), transparent 62%),
+    radial-gradient(800px 560px at 98% 8%, rgba(109,182,255,.20), transparent 62%),
+    radial-gradient(900px 600px at 70% 108%, rgba(185,162,255,.17), transparent 60%),
+    radial-gradient(700px 480px at -4% 86%, rgba(255,178,36,.13), transparent 62%),
+    linear-gradient(rgba(234,244,242,.035) 1px, transparent 1px) 0 0/44px 44px,
+    linear-gradient(90deg, rgba(234,244,242,.035) 1px, transparent 1px) 0 0/44px 44px,
+    #0B1114;
+  --dim:.38;
+  --f-head:Bahnschrift,"Segoe UI Variable Display","Avenir Next Condensed","DIN Alternate","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --f-mono:"Cascadia Mono","JetBrains Mono",ui-monospace,Consolas,"SF Mono",monospace;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg:#DFF5EF; --surf:#FFFFFF;
+  --text:#0B1114; --text2:#24403B; --text3:#3E5A55;
+  --mint:#00806B; --mint-ui:#00806B; --mint-text:#005F4D; --on-mint:#FFFFFF; --mint-fill:#00806B;
+  --info:#0A58A8; --violet:#5A3DC0;
+  --lc-v:#B3201A; --lc-p:#B86E00; --lc-h:#3A524D; --lc-c:#5A3DC0;
+  --lt-v:#B3201A; --lt-p:#7A4300; --lt-h:#3A524D; --lt-c:#5A3DC0;
+  --ic-v:#B3201A; --g-v:#FFFFFF;
+  --ic-p:#FFB224; --st-p:#7A4300; --g-p:#0B1114;
+  --ic-h:#3A524D; --fl-h:rgba(58,82,77,.12);
+  --ic-c:#5A3DC0; --fl-c:rgba(90,61,192,.12);
+  --glass: linear-gradient(150deg, rgba(255,255,255,.80), rgba(255,255,255,.52) 70%), rgba(255,255,255,.42);
+  --glass-solid:#FFFFFF;
+  --glass-hi: linear-gradient(150deg, rgba(255,255,255,.92), rgba(255,255,255,.70)), rgba(255,255,255,.5);
+  --edge:rgba(255,255,255,.95); --edge-top:#FFFFFF;
+  --shadow:0 12px 32px rgba(40,70,110,.20);
+  --flow:#FFFFFF;
+  --focus:#0A3FA8;
+  --ctl:#46635E;
+  --page:
+    radial-gradient(900px 560px at 4% -8%, rgba(0,200,160,.50), transparent 62%),
+    radial-gradient(800px 560px at 100% 4%, rgba(120,150,255,.46), transparent 62%),
+    radial-gradient(900px 600px at 72% 108%, rgba(255,160,90,.44), transparent 60%),
+    radial-gradient(700px 500px at -4% 90%, rgba(255,200,60,.42), transparent 62%),
+    linear-gradient(135deg, #CDF6EA, #D4E4FF 55%, #FFE8C8);
+  --dim:.42;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--page);background-color:var(--bg);color:var(--text);font:16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;background:var(--mint-fill);color:var(--on-mint);padding:8px 14px;border-radius:8px;z-index:50;font-weight:700}
+.skip:focus{top:10px}
+
+/* glass */
+.glass{background:var(--glass);border:1px solid var(--edge);border-top-color:var(--edge-top);border-radius:16px;box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.14);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass,.node,.pill,.chip,.ctl-group{background:var(--glass-solid)!important}
+}
+@media (prefers-contrast:more){ .glass,.node,.pill,.chip,.ctl-group{background:var(--glass-solid)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important} }
+
+.wrap{max-width:1500px;margin:0 auto;padding:18px 24px 48px}
+header.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
+.brand{font:700 13px/1 var(--f-head);letter-spacing:.22em;text-transform:uppercase;color:var(--text)}
+.brand b{color:var(--mint-text)}
+h1{margin:6px 0 4px;font:700 clamp(30px,4.4vw,52px)/1.02 var(--f-head);letter-spacing:-.01em}
+h1 span{color:var(--mint-text)}
+.lead{margin:0;color:var(--text2);max-width:62ch}
+.ctls{display:flex;flex-wrap:wrap;gap:10px}
+.ctl-group{display:inline-flex;border:1px solid var(--edge);border-radius:12px;padding:3px;gap:2px;background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.ctl-group button{min-height:36px;min-width:44px;padding:4px 12px;border:0;border-radius:9px;background:transparent;cursor:pointer;font-weight:600;color:var(--text)}
+.ctl-group button[aria-pressed="true"]{background:var(--mint-fill);color:var(--on-mint)}
+.ctl-group button:hover:not([aria-pressed="true"]){background:rgba(127,160,155,.22)}
+
+.notice{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;margin-bottom:14px;border-color:color-mix(in srgb,var(--info) 55%,transparent)}
+.notice p{margin:0;color:var(--text)}
+.notice small{color:var(--text2)}
+.ic{width:18px;height:18px;flex:none;display:inline-block;vertical-align:-3px}
+.ic.sm{width:15px;height:15px;vertical-align:-2px}
+.ic.lg{width:24px;height:24px}
+
+.bar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;padding:12px 14px;margin-bottom:14px}
+.bar .grp{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar .lbl{font:600 12px/1 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.chip{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:4px 12px;border-radius:999px;border:1.5px solid var(--ctl);background:var(--glass);cursor:pointer;color:var(--text);font-weight:600;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.chip[aria-pressed="true"]{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.chip[aria-pressed="false"]{opacity:.78}
+.chip[aria-pressed="false"] .cnt{text-decoration:line-through}
+.chip .cnt{font-family:var(--f-mono);font-size:13px;color:var(--text2)}
+.chip.lv-v{border-color:var(--lc-v)}.chip.lv-p{border-color:var(--lc-p)}.chip.lv-h{border-color:var(--lc-h);border-style:dotted}
+select,input[type=search]{min-height:38px;border-radius:10px;border:1.5px solid var(--ctl);background:var(--glass-solid);color:var(--text);padding:4px 10px}
+input[type=search]{min-width:200px}
+.status{margin-left:auto;color:var(--text2);font-size:14px}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+@media (min-width:1100px){ .main.has-panel{grid-template-columns:minmax(0,1fr) 372px} }
+.stage-card{padding:14px 18px 18px;position:relative}
+.cols-head{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:8px}
+.cols-head div{font:700 13px/1.2 var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+.cols-head small{display:block;margin-top:3px;font:500 12px/1.3 var(--f-body);letter-spacing:0;text-transform:none;color:var(--text2)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;color:var(--text2);font-size:13px;margin-bottom:10px}
+.legend .li{display:inline-flex;gap:7px;align-items:center}
+.legend svg.ln{width:36px;height:8px}
+.stage{position:relative;width:100%}
+.stage svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.e-base{fill:none;stroke-width:2.2;stroke-linecap:round}
+.e-dash{stroke-dasharray:7 7}
+.e-flow{fill:none;stroke:var(--flow);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:12 64;opacity:.85;animation:flow 2.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-152}}
+.edge{transition:opacity .2s}
+.edge.on .e-base{stroke-width:3.4}
+.edge.on .e-flow{stroke-width:3.4;animation-duration:1.4s}
+.edge.lv-v{color:var(--lc-v)}.edge.lv-p{color:var(--lc-p)}.edge.lv-h{color:var(--lc-h)}
+.edge .e-base,.edge polygon{stroke:currentColor}.edge polygon{fill:currentColor;stroke-width:1;stroke-linejoin:round}
+.edge.lv-h .e-base{stroke-width:1.8}
+.dim{opacity:var(--dim)}
+.edge.dim{opacity:.16}
+.nodes{position:absolute;inset:0}
+.node{position:absolute;text-align:left;border-radius:14px;padding:8px 10px 9px;cursor:pointer;min-height:56px;
+  background:var(--glass);border:1.5px solid var(--edge);border-top-color:var(--edge-top);box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%);transition:opacity .2s, box-shadow .2s;color:var(--text)}
+.node:hover{background:var(--glass-hi)}
+.node .nt{display:flex;gap:6px;align-items:flex-start}
+.node .nt .ics{display:flex;gap:2px;flex:none;padding-top:1px}
+.node .nm{font:700 14px/1.2 var(--f-head);letter-spacing:.01em;overflow-wrap:anywhere}
+.node .sub{display:block;margin-top:3px;font:12px/1.3 var(--f-mono);color:var(--text2);overflow-wrap:anywhere}
+.node .sub.nc{font-family:var(--f-body);font-style:italic}
+.node.lv-v{border-color:var(--lc-v);border-width:2.5px;border-style:solid}
+.node.lv-p{border-color:var(--lc-p);border-style:solid}
+.node.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
+.node.col3{border-style:dashed}
+.node.on{box-shadow:0 0 0 2px var(--text), 0 0 26px color-mix(in srgb,var(--mint-ui) 45%,transparent), var(--shadow)}
+.node.sel{box-shadow:0 0 0 3px var(--mint-ui), 0 0 0 5px var(--bg), 0 0 30px color-mix(in srgb,var(--mint-ui) 60%,transparent), var(--shadow)}
+.node.dim{opacity:var(--dim)}
+.pill{position:absolute;transform:translate(-50%,-50%);display:flex;gap:5px;align-items:center;padding:3px 8px 3px 6px;border-radius:999px;font:600 11.5px/1.2 var(--f-body);color:var(--text);
+  background:var(--glass);border:1.5px solid var(--edge);max-width:130px;cursor:pointer;text-align:left;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.pill.lv-v{border-color:var(--lc-v)}.pill.lv-p{border-color:var(--lc-p)}.pill.lv-h{border-color:var(--lc-h);border-style:dotted}
+.pill.nc{border-style:dashed}
+.pill i{font-style:normal;display:block;font-weight:700;color:var(--text2)}
+.pill.dim{opacity:var(--dim)}
+.pill.on{box-shadow:0 0 0 2px var(--text), 0 3px 12px rgba(0,0,0,.3)}
+.empty{padding:40px 12px;text-align:center;color:var(--text2)}
+
+/* panel */
+.panel{padding:16px 18px 18px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+.panel h2{margin:0 0 4px;font:700 20px/1.2 var(--f-head)}
+.panel .hint{color:var(--text2);margin:0 0 10px}
+.panel .tag{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.lvbadge{display:inline-flex;gap:6px;align-items:center;font-weight:700;padding:2px 10px 2px 6px;border-radius:999px;border:1.5px solid var(--edge);color:var(--text)}
+.lvbadge.lv-v{border-color:var(--lc-v);color:var(--lt-v);border-width:2.5px}.lvbadge.lv-p{border-color:var(--lc-p);color:var(--lt-p)}
+.lvbadge.lv-h{border-color:var(--lc-h);color:var(--lt-h);border-style:dotted}.lvbadge.lv-c{border-color:var(--lc-c);color:var(--lt-c);border-style:dashed}
+.pickers{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pickers button{min-height:36px;padding:3px 10px;border-radius:10px;border:1.5px solid var(--ctl);background:transparent;cursor:pointer;font-size:13px;font-weight:600}
+.pickers button[aria-pressed="true"]{background:var(--mint-fill);color:var(--on-mint);border-color:var(--mint-fill)}
+dl.f{margin:0;display:grid;gap:10px}
+dl.f>div{padding:8px 10px;border-radius:10px;background:rgba(127,160,155,.12);border-left:3px solid var(--ctl)}
+dl.f dt{font:700 11.5px/1.2 var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:3px}
+dl.f dt b{display:inline-block;min-width:1.4em;color:var(--text)}
+dl.f dd{margin:0;overflow-wrap:anywhere}
+dl.f dd code{font:13px var(--f-mono)}
+dl.f .act{border-left-color:var(--mint-ui)}
+dl.f .act dt{color:var(--mint-text)}
+.chaincheck{margin:0 0 12px;padding:8px 10px;border-radius:10px;border:1.5px dashed var(--lc-c);font-size:13.5px;color:var(--text)}
+.unrel-yes{font-weight:800;text-decoration:underline wavy;text-underline-offset:3px}
+.close{float:right;min-height:34px;border-radius:9px;border:1.5px solid var(--ctl);background:transparent;cursor:pointer;padding:2px 10px;font-size:13px}
+
+/* list view */
+.pathlist{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){ .pathlist{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.pathcard{padding:14px 16px;border-width:1.5px}
+.pathcard.lv-v{border-color:var(--lc-v);border-width:2.5px}.pathcard.lv-p{border-color:var(--lc-p)}.pathcard.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
+.pathcard.dim{opacity:var(--dim)}
+.pathcard.sel{box-shadow:0 0 0 3px var(--mint-ui), var(--shadow)}
+.pc-head{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.pc-head strong{min-width:0;overflow-wrap:anywhere;font:700 15px/1.25 var(--f-head)}
+.pc-btn{flex:none;min-height:40px;min-width:44px;padding:4px 12px;border-radius:10px;border:1.5px solid var(--ctl);background:transparent;cursor:pointer;font-weight:600;white-space:nowrap}
+.pc-btn[aria-expanded="true"]{background:var(--mint-fill);color:var(--on-mint);border-color:var(--mint-fill)}
+ol.chain{list-style:none;margin:0;padding:0}
+ol.chain>li{position:relative;padding:6px 8px 6px 12px;border-left:2px solid var(--ctl);margin-left:9px}
+ol.chain>li .via{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--text2);margin-bottom:2px}
+ol.chain>li.step{padding-top:8px}
+ol.chain .k{font:700 11px/1.2 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+ol.chain .v{display:block;font-weight:600;overflow-wrap:anywhere}
+ol.chain>li.nc{border-left-style:dashed;border-left-color:var(--lc-c)}
+.pathcard .more{margin-top:10px}
+
+/* limits */
+.limits{margin-top:22px;padding:18px 20px}
+.limits h2{margin:0 0 4px;font:700 22px/1.2 var(--f-head);display:flex;gap:10px;align-items:center}
+.limits .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
+.limits .it{padding:10px 12px;border-radius:12px;border:1.5px dashed var(--lc-c);background:rgba(127,160,155,.10)}
+.limits .it h3{margin:0 0 4px;font:700 14px/1.3 var(--f-head)}
+.limits .it p{margin:4px 0 0;font-size:14px;color:var(--text)}
+.limits .it .part{font:700 11px/1 var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.limits code{display:block;font:12.5px var(--f-mono);overflow-wrap:anywhere;color:var(--text)}
+footer{margin-top:18px;color:var(--text2);font-size:13px}
+
+@media (max-width:1099px){ .wrap{padding:14px 16px 40px} .status{margin-left:0;width:100%} }
+@media (max-width:560px){ input[type=search]{min-width:0;width:100%} .bar .grp{width:100%} }
+@media (prefers-reduced-motion:reduce){ .e-flow{display:none} html{scroll-behavior:auto} .node,.pill,.edge{transition:none} }
+</style>
+</head>
+<body>
+<a class="skip" href="#paths" data-i="skip">Skip to the paths</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-v" viewBox="0 0 24 24"><polygon points="8,2 16,2 22,8 22,16 16,22 8,22 2,16 2,8" fill="var(--ic-v)"/><rect x="11" y="6" width="2" height="8" rx="1" fill="var(--g-v)"/><circle cx="12" cy="17.5" r="1.3" fill="var(--g-v)"/></symbol>
+    <symbol id="i-p" viewBox="0 0 24 24"><polygon points="12,2.8 22.4,21 1.6,21" fill="var(--ic-p)" stroke="var(--st-p)" stroke-width="1.6" stroke-linejoin="round"/><rect x="11" y="9" width="2" height="6" rx="1" fill="var(--g-p)"/><circle cx="12" cy="18" r="1.2" fill="var(--g-p)"/></symbol>
+    <symbol id="i-h" viewBox="0 0 24 24"><polygon points="12,1.8 22.2,12 12,22.2 1.8,12" fill="var(--fl-h)" stroke="var(--ic-h)" stroke-width="2" stroke-dasharray="3 2"/><path d="M9.4 9.6a2.7 2.7 0 1 1 4.3 2.2c-1 .7-1.7 1.2-1.7 2.3" fill="none" stroke="var(--ic-h)" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.2" fill="var(--ic-h)"/></symbol>
+    <symbol id="i-c" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.8" fill="var(--fl-c)" stroke="var(--ic-c)" stroke-width="2" stroke-dasharray="3.6 2.6"/><path d="M7.8 12h8.4" stroke="var(--ic-c)" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--info)" stroke-width="2"/><rect x="11" y="10.5" width="2" height="7" rx="1" fill="var(--info)"/><circle cx="12" cy="7.4" r="1.3" fill="var(--info)"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+<header class="top">
+  <div>
+    <div class="brand">AGENT<b>REACH</b></div>
+    <h1 id="h1"></h1>
+    <p class="lead" id="lead"></p>
+  </div>
+  <div class="ctls" role="group" aria-label="Settings">
+    <div class="ctl-group" role="group" id="gLang" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+      <button type="button" data-lang="es" aria-pressed="false" lang="es">ES</button>
+    </div>
+    <div class="ctl-group" role="group" id="gTheme">
+      <button type="button" data-theme="dark" aria-pressed="true"></button>
+      <button type="button" data-theme="light" aria-pressed="false"></button>
+    </div>
+    <div class="ctl-group" role="group" id="gView">
+      <button type="button" data-view="graph" aria-pressed="true"></button>
+      <button type="button" data-view="list" aria-pressed="false"></button>
+    </div>
+  </div>
+</header>
+
+<div class="glass notice" role="note"><svg class="ic lg"><use href="#i-i"/></svg>
+  <div><p id="secrets"></p><small id="demo"></small></div></div>
+
+<div class="glass bar" id="filters" role="search">
+  <div class="grp" id="gLevels" role="group"></div>
+  <div class="grp"><label class="lbl" for="selAgent" id="lblAgent"></label><select id="selAgent"></select></div>
+  <div class="grp"><label class="lbl" for="q" id="lblQ"></label><input id="q" type="search" autocomplete="off"></div>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+</div>
+
+<main id="paths" tabindex="-1">
+<div class="main has-panel" id="mainGrid">
+  <section id="graphView" aria-labelledby="h1">
+    <div class="stage-card" id="stageCard">
+      <div class="legend" id="legend"></div>
+      <div class="cols-head" id="colsHead"></div>
+      <div class="stage" id="stage"></div>
+      <p class="hint" id="kbd" style="color:var(--text2);font-size:13px;margin:10px 0 0"></p>
+    </div>
+  </section>
+  <aside class="glass panel" id="panel" aria-live="polite" aria-labelledby="panelTitle"></aside>
+  <section id="listView" hidden>
+    <div class="legend" id="legend2"></div>
+    <ol class="pathlist" id="pathlist"></ol>
+  </section>
+</div>
+</main>
+
+<section class="glass limits" id="limits" aria-labelledby="limTitle"></section>
+<footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="data">{"tool":"AgentReach (demo)","folder_reviewed":"demo-app","files_looked_at":41,"levels":{"verified":{"en":"Verified","es":"Comprobado","meaning_en":"Confirmed: the agent can reach it today.","meaning_es":"Confirmado: el agente puede llegar hoy."},"potential":{"en":"Potential","es":"Potencial","meaning_en":"Likely reachable, but not fully confirmed.","meaning_es":"Probablemente alcanzable, sin confirmar del todo."},"hypothesis":{"en":"Hypothesis","es":"Hipótesis","meaning_en":"A suggestion only. Not a confirmed access.","meaning_es":"Solo una sugerencia. No es un acceso comprobado."},"could_not_check":{"en":"Could not check","es":"No se pudo revisar","meaning_en":"AgentReach could not look at this.","meaning_es":"AgentReach no pudo mirar esto."}},"secrets_notice":{"en":"No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.","es":"No se muestran valores de secretos. AgentReach nunca copia contraseñas, tokens ni claves: solo dice dónde están y de qué tipo son."},"findings":[{"id":"f1","location":"demo-app/config/settings.example","line":2,"what":{"en":"Credential in a file","es":"Credencial en un archivo"},"whose":{"en":"payments service (demo)","es":"servicio de pagos (demo)"},"level":"verified","why":{"en":"It exists, the system lets the agent read it, and no agent rule blocks it.","es":"Existe, el sistema permite leerlo y ninguna regla del agente lo impide."},"unrelated_to_task":"no","platform_agent":"Demo Agent A","agent_rules":{"en":"no rule","es":"sin regla"},"what_to_do":{"en":"Move the credential out of the project, or keep it in a secrets manager (a safe vault for passwords and keys). Replace it with a new one if it was ever exposed.","es":"Saque la credencial del proyecto o guárdela en un gestor de secretos (una bóveda segura para claves). Cámbiela por una nueva si estuvo expuesta."},"meaning":{"en":"A project file holds a credential (a key or password that gives access to a service). An agent that can read the project could read it.","es":"Un archivo del proyecto guarda una credencial (una clave o contraseña que da acceso a un servicio). Un agente que pueda leer el proyecto podría leerla."}},{"id":"f2","location":"demo-app/config/staging.example","line":5,"what":{"en":"Credential in a file","es":"Credencial en un archivo"},"whose":{"en":"database (demo)","es":"base de datos (demo)"},"level":"verified","why":{"en":"It exists, the system lets the agent read it, and no agent rule blocks it.","es":"Existe, el sistema permite leerlo y ninguna regla del agente lo impide."},"unrelated_to_task":"not determined","platform_agent":"Demo Agent A","agent_rules":{"en":"asks first","es":"pide confirmación"},"what_to_do":{"en":"Keep database access out of files in the project. Use a safer place and replace the old access.","es":"Mantenga el acceso a la base de datos fuera de los archivos del proyecto. Use un lugar más seguro y cambie el acceso anterior."},"meaning":{"en":"A file stores database access. The agent asks before reading it, but it is still reachable if you say yes.","es":"Un archivo guarda acceso a una base de datos. El agente pregunta antes de leerlo, pero sigue siendo alcanzable si usted dice que sí."}},{"id":"f3","location":"demo-app/deploy/publish-demo.sh","line":12,"what":{"en":"Deployment script (publishes changes)","es":"Script de despliegue (publica cambios)"},"whose":{"en":"deployment platform (demo)","es":"plataforma de despliegue (demo)"},"level":"potential","why":{"en":"The script exists and the agent may run programs, but we did not confirm it can reach the platform.","es":"El script existe y el agente puede ejecutar programas, pero no se confirmó que llegue a la plataforma."},"unrelated_to_task":"no","platform_agent":"Demo Agent B","agent_rules":{"en":"allows it","es":"lo permite"},"what_to_do":{"en":"Require a human to approve any publish step. Remove the agent's permission to run this script.","es":"Exija que una persona apruebe todo paso de publicación. Quite al agente el permiso de ejecutar este script."},"meaning":{"en":"An agent could start a script that publishes your changes to a live place.","es":"Un agente podría iniciar un script que publica sus cambios en un lugar real."}},{"id":"f4","location":"demo-app/.agent/rules.example","line":3,"what":{"en":"Agent rule that is too permissive","es":"Regla del agente demasiado permisiva"},"whose":{"en":"agent settings (demo)","es":"configuración del agente (demo)"},"level":"potential","why":{"en":"The rule allows many actions without asking.","es":"La regla permite muchas acciones sin preguntar."},"unrelated_to_task":"not determined","platform_agent":"Demo Agent B","agent_rules":{"en":"allows it","es":"lo permite"},"what_to_do":{"en":"Change the rule so the agent asks first for risky actions.","es":"Cambie la regla para que el agente pregunte antes de acciones riesgosas."},"meaning":{"en":"The agent can do more than it needs, and nobody is asked to confirm.","es":"El agente puede hacer más de lo necesario y nadie debe confirmar."}},{"id":"f5","location":"demo-app/docs/notes-style.txt","line":27,"what":{"en":"Platform or deployment secret","es":"Secreto de plataforma o de despliegue"},"whose":{"en":"code hosting service (demo)","es":"servicio de alojamiento de código (demo)"},"level":"potential","why":{"en":"A secret-like label sits in a file that looks unrelated to the work.","es":"Una etiqueta parecida a un secreto está en un archivo que parece ajeno al trabajo."},"unrelated_to_task":"yes","platform_agent":"Demo Agent A","agent_rules":{"en":"no rule","es":"sin regla"},"what_to_do":{"en":"Check if this file needs that item. If not, remove it.","es":"Revise si este archivo necesita ese dato. Si no, quítelo."},"meaning":{"en":"A sensitive item is in a place where nobody expects it, so it is easy to forget.","es":"Un dato sensible está donde nadie lo espera, y es fácil olvidarlo."}},{"id":"f6","location":"demo-app/AGENTS.example","line":8,"what":{"en":"Instructions file with suspicious text","es":"Archivo de instrucciones con texto sospechoso"},"whose":{"en":"agent instructions (demo)","es":"instrucciones del agente (demo)"},"level":"hypothesis","why":{"en":"The text looks like it tries to steer the agent, but we cannot be sure.","es":"El texto parece querer dirigir al agente, pero no podemos estar seguros."},"unrelated_to_task":"not determined","platform_agent":"Demo Agent C","agent_rules":{"en":"not determined","es":"no determinadas"},"what_to_do":{"en":"Read the file yourself and remove lines you do not recognise.","es":"Lea el archivo usted mismo y quite las líneas que no reconozca."},"meaning":{"en":"An instructions file could change what the agent does. This is only a suggestion to look.","es":"Un archivo de instrucciones podría cambiar lo que hace el agente. Es solo una sugerencia para revisar."}},{"id":"f7","location":"demo-app/links/shared-folder","line":null,"what":{"en":"Link that leaves the folder","es":"Enlace que sale de la carpeta"},"whose":{"en":"unknown (demo)","es":"desconocido (demo)"},"level":"hypothesis","why":{"en":"The link points outside the project, but we did not follow it.","es":"El enlace apunta fuera del proyecto, pero no lo seguimos."},"unrelated_to_task":"not determined","platform_agent":"Demo Agent C","agent_rules":{"en":"no rule","es":"sin regla"},"what_to_do":{"en":"Check where the link goes. Remove it if you do not need it.","es":"Revise a dónde lleva el enlace. Quítelo si no lo necesita."},"meaning":{"en":"An agent might follow the link and reach files outside the project.","es":"Un agente podría seguir el enlace y llegar a archivos fuera del proyecto."}},{"id":"f8","location":"demo-app/.tasks/auto-start.example","line":4,"what":{"en":"Task that starts when the folder is opened","es":"Tarea que arranca al abrir la carpeta"},"whose":{"en":"editor settings (demo)","es":"configuración del editor (demo)"},"level":"potential","why":{"en":"A task is set to start by itself; we did not confirm it runs.","es":"Hay una tarea configurada para arrancar sola; no se confirmó que se ejecute."},"unrelated_to_task":"no","platform_agent":"Demo Agent B","agent_rules":{"en":"asks first","es":"pide confirmación"},"what_to_do":{"en":"Remove the auto-start, or make sure you know what the task does.","es":"Quite el arranque automático, o asegúrese de saber qué hace la tarea."},"meaning":{"en":"A program could start just by opening the folder.","es":"Un programa podría arrancar con solo abrir la carpeta."}},{"id":"f9","location":"demo-app/config/cloud.example","line":1,"what":{"en":"Cloud account credentials","es":"Credenciales de una cuenta en la nube"},"whose":{"en":"cloud account (demo)","es":"cuenta en la nube (demo)"},"level":"hypothesis","why":{"en":"The file name suggests cloud access, but we did not confirm it is readable.","es":"El nombre del archivo sugiere acceso a la nube, pero no se confirmó que sea legible."},"unrelated_to_task":"no","platform_agent":"Demo Agent A","agent_rules":{"en":"blocks it (rule only)","es":"lo bloquea (solo por regla)"},"what_to_do":{"en":"Keep this access as small as possible. Give it only the rights the work needs.","es":"Mantenga este acceso lo más pequeño posible. Dele solo los permisos que el trabajo necesita."},"meaning":{"en":"A rule blocks the agent today, but a rule is not a lock: someone can change it.","es":"Una regla bloquea al agente hoy, pero una regla no es un candado: alguien puede cambiarla."}}],"limits":[{"id":"l1","part":"this folder","reason":{"en":"Could not open the file","es":"No se pudo abrir el archivo"},"items":["demo-app/data/locked-file.example"],"how_to_fix":{"en":"Check that the file exists and that you can read it. Then run again.","es":"Compruebe que el archivo existe y que usted puede leerlo. Luego ejecute de nuevo."}},{"id":"l2","part":"this folder","reason":{"en":"File too large (over 5 MB)","es":"Archivo demasiado grande (más de 5 MB)"},"items":["demo-app/data/big-export.example"],"how_to_fix":{"en":"AgentReach does not open files this big. Check it by hand if it may hold secrets.","es":"AgentReach no abre archivos tan grandes. Revíselo a mano si puede guardar secretos."}},{"id":"l3","part":"tool limits","reason":{"en":"Commit history is not checked","es":"El historial de commits no se revisa"},"items":[],"how_to_fix":{"en":"This version does not look at old versions of files. Use another tool for that.","es":"Esta versión no mira versiones antiguas de los archivos. Use otra herramienta para eso."}},{"id":"l4","part":"tool limits","reason":{"en":"Changes after you approve a setting are not tracked","es":"No se vigilan los cambios después de aprobar una configuración"},"items":[],"how_to_fix":{"en":"Run AgentReach again after any change to agent settings.","es":"Ejecute AgentReach de nuevo tras cualquier cambio en la configuración del agente."}},{"id":"l5","part":"tool limits","reason":{"en":"Running programs and open ports are not checked","es":"No se revisan los programas en ejecución ni los puertos abiertos"},"items":[],"how_to_fix":{"en":"AgentReach only reads files. Use a different tool to look at what is running.","es":"AgentReach solo lee archivos. Use otra herramienta para ver qué se está ejecutando."}},{"id":"l6","part":"tool limits","reason":{"en":"Network locations are not visited","es":"No se visitan ubicaciones de red"},"items":["demo-app/shared/network-share.example"],"how_to_fix":{"en":"AgentReach never goes to the network. Copy the folder to this computer and run again.","es":"AgentReach nunca sale a la red. Copie la carpeta a este equipo y ejecute de nuevo."}}]}</script>
+<script>
+(function(){
+'use strict';
+const D = JSON.parse(document.getElementById('data').textContent);
+const LV = ['verified','potential','hypothesis'];
+const K = {verified:'v',potential:'p',hypothesis:'h',could_not_check:'c'};
+const RANK = {verified:0,potential:1,hypothesis:2};
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const T = {
+ en:{skip:'Skip to the paths',title:'Reach <span>path</span>',
+  lead:'How far can an AI agent get? Each finding is a chain, not a single point. Follow it from the agent to what it might open.',
+  secrets:D.secrets_notice.en,demo:'Read-only report. Demo data, fictional: nothing here comes from a real machine.',
+  dark:'Dark',light:'Light',graph:'Graph',list:'List',level:'Level',agent:'Agent',search:'Search',all:'All agents',searchPh:'file, service, text…',
+  shown:(n,m)=>n+' of '+m+' paths shown',
+  cols:['Agent','Where','What it is','Possible effect'],
+  colsub:['who acts','file or folder, line','what is there','not checked'],
+  lgSolid:'Solid line: AgentReach checked this step.',lgDash:'Dashed line: not checked. AgentReach does not look at what a key can do or whether it is valid.',
+  contains:'contains',mayReach:'may reach',notChecked:'not checked',rule:'rule',
+  paths:n=>n+(n===1?' path':' paths'),line:n=>n==null?'no line':'line '+n,
+  kbd:'Select a path or any box to light up its whole chain and dim the rest. Arrow keys move between boxes (up and down: other paths; left and right: along the chain). Enter selects, Esc clears.',
+  noMatch:'No paths match these filters.',
+  panelTitle:'Path details',panelHint:'Select a path, or any box in the graph, to see its eight details here.',
+  through:'Paths through this box',clear:'Clear',details:'Details',hide:'Hide details',
+  f:['Location and line','What it is and whose','Level and why','Unrelated to the task','Platform and agent','Agent rules','What to do','What it means'],
+  yes:'yes',no:'no',nd:'not determined',
+  chainV:'Checked by AgentReach: the agent can reach the file and the file holds this kind of item. Not checked (dashed): what that item could open, or whether it is valid.',
+  chainO:'The solid steps were seen in files but are not fully confirmed (see the level). The dashed step was not checked at all.',
+  limTitle:'What AgentReach could not check',limLead:'This section always appears. A path with no finding does not mean there is no risk.',
+  part:{'this folder':'In this folder','tool limits':'Tool limits'},fix:'How to fix',
+  foot:'Single page. Nothing is loaded from the internet and nothing is stored: language and theme reset when you reload.',
+  aC:['Agent','Where','What it is','Possible effect'],
+  lvl:{verified:'Verified',potential:'Potential',hypothesis:'Hypothesis',could_not_check:'Could not check'},
+  via:['rule','contains','may reach (not checked)'],step:'Path'},
+ es:{skip:'Saltar a los caminos',title:'Camino de <span>alcance</span>',
+  lead:'¿Hasta dónde puede llegar un agente de IA? Cada hallazgo es una cadena, no un punto. Sígala desde el agente hasta lo que podría abrir.',
+  secrets:D.secrets_notice.es,demo:'Informe de solo lectura. Datos de ejemplo, ficticios: nada viene de un equipo real.',
+  dark:'Oscuro',light:'Claro',graph:'Grafo',list:'Lista',level:'Nivel',agent:'Agente',search:'Buscar',all:'Todos los agentes',searchPh:'archivo, servicio, texto…',
+  shown:(n,m)=>n+' de '+m+' caminos mostrados',
+  cols:['Agente','Dónde','Qué es','Efecto posible'],
+  colsub:['quién actúa','archivo o carpeta, línea','qué hay','no comprobado'],
+  lgSolid:'Línea continua: AgentReach comprobó este tramo.',lgDash:'Línea discontinua: no comprobado. AgentReach no mira qué puede hacer una clave ni si es válida.',
+  contains:'contiene',mayReach:'podría dar acceso a',notChecked:'no comprobado',rule:'regla',
+  paths:n=>n+(n===1?' camino':' caminos'),line:n=>n==null?'sin línea':'línea '+n,
+  kbd:'Elija un camino o cualquier caja para iluminar toda su cadena y atenuar el resto. Las flechas mueven entre cajas (arriba y abajo: otros caminos; izquierda y derecha: a lo largo de la cadena). Enter selecciona, Esc quita la selección.',
+  noMatch:'Ningún camino coincide con estos filtros.',
+  panelTitle:'Detalle del camino',panelHint:'Elija un camino, o cualquier caja del grafo, para ver aquí sus ocho datos.',
+  through:'Caminos que pasan por esta caja',clear:'Quitar',details:'Detalles',hide:'Ocultar detalles',
+  f:['Ubicación y línea','Qué es y de quién','Nivel y por qué','Ajeno a la tarea','Plataforma y agente','Reglas del agente','Qué hacer','Qué significa'],
+  yes:'sí',no:'no',nd:'no determinado',
+  chainV:'Comprobado por AgentReach: el agente puede llegar al archivo y el archivo guarda este tipo de dato. No comprobado (discontinuo): qué podría abrir ese dato o si es válido.',
+  chainO:'Los tramos continuos se vieron en archivos pero no están del todo confirmados (vea el nivel). El tramo discontinuo no se comprobó.',
+  limTitle:'Qué no pudo revisar AgentReach',limLead:'Esta sección siempre aparece. Que no haya hallazgos no significa que no haya riesgo.',
+  part:{'this folder':'En esta carpeta','tool limits':'Límites de la herramienta'},fix:'Cómo resolverlo',
+  foot:'Una sola página. No se carga nada de internet y no se guarda nada: el idioma y el tema vuelven al inicial al recargar.',
+  aC:['Agente','Dónde','Qué es','Efecto posible'],
+  lvl:{verified:'Comprobado',potential:'Potencial',hypothesis:'Hipótesis',could_not_check:'No se pudo revisar'},
+  via:['regla','contiene','podría dar acceso a (no comprobado)'],step:'Camino'}
+};
+
+let lang='en';
+const S = {sel:null, pf:null, levels:new Set(LV), agent:'all', q:'', view:'graph', focusId:null, expanded:new Set()};
+const t = ()=>T[lang];
+const L = o=>o==null?'':(typeof o==='string'?o:o[lang]);
+const lvName = l=>t().lvl[l];
+const ico = (l,cls)=>'<svg class="ic '+(cls||'')+'" aria-hidden="true" focusable="false"><use href="#i-'+K[l]+'"/></svg>';
+const icoInfo = '<svg class="ic" aria-hidden="true"><use href="#i-i"/></svg>';
+
+const F = D.findings.map(f=>{
+  const parts = f.location.split('/'); const name = parts.pop();
+  return Object.assign({}, f, {name, dir: parts.join('/'),
+    keys:[f.platform_agent, f.location+':'+f.line, f.what.en, f.whose.en]});
+});
+const byId = Object.fromEntries(F.map(f=>[f.id,f]));
+const AGENTS = [...new Set(F.map(f=>f.platform_agent))].sort();
+
+function matches(f){
+  if(!S.levels.has(f.level)) return false;
+  if(S.agent!=='all' && f.platform_agent!==S.agent) return false;
+  const q = S.q.trim().toLowerCase();
+  if(q){
+    const hay = [f.location,L(f.what),L(f.whose),f.platform_agent,L(f.meaning),L(f.agent_rules),L(f.why),lvName(f.level)].join(' ').toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+function visible(){
+  return F.filter(matches).sort((a,b)=> a.platform_agent.localeCompare(b.platform_agent) || RANK[a.level]-RANK[b.level] || a.id.localeCompare(b.id,undefined,{numeric:true}));
+}
+
+/* ---------- graph model ---------- */
+function model(fs){
+  const cols=[new Map(),new Map(),new Map(),new Map()];
+  const chain={};
+  fs.forEach((f,i)=>{
+    chain[f.id]=f.keys.map((k,c)=>{
+      let n=cols[c].get(k);
+      if(!n){n={id:c+'|'+k,col:c,key:k,fs:[],rows:[],f0:f};cols[c].set(k,n);}
+      n.fs.push(f); n.rows.push(i); return n;
+    });
+  });
+  return {cols:cols.map(m=>[...m.values()]),chain};
+}
+function nodeText(n){
+  const T_=t(), f=n.f0;
+  const lv=[...new Set(n.fs.map(x=>x.level))].sort((a,b)=>RANK[a]-RANK[b]);
+  let nm,sub,subCls='';
+  if(n.col===0){nm=f.platform_agent;sub=T_.paths(n.fs.length);}
+  else if(n.col===1){nm=f.name;sub=(f.dir?f.dir+' · ':'')+T_.line(f.line);}
+  else if(n.col===2){nm=L(f.what);sub=T_.paths(n.fs.length);}
+  else {nm=L(f.whose);sub=T_.notChecked;subCls=' nc';}
+  const label = T_.aC[n.col]+': '+nm+'. '+(n.col===1?sub+'. ':n.col===3?'':sub+'. ')+lv.map(lvName).join(', ')+'.'+(n.col===3?' '+T_.notChecked+'.':'');
+  return {lv,nm,sub,subCls,label,top:lv[0]};
+}
+function activeSet(){
+  if(!S.sel) return null;
+  if(S.sel.kind==='f') return new Set([S.sel.id]);
+  return new Set(S.sel.fs);
+}
+
+let M=null, FS=[], nodeEls={}, geom=null;
+
+function renderGraph(){
+  const stage=$('#stage'); const keepFocus = stage.contains(document.activeElement) ? document.activeElement.dataset.id : null;
+  FS=visible(); M=model(FS);
+  stage.innerHTML=''; nodeEls={};
+  if(!FS.length){stage.style.height='auto';stage.innerHTML='<p class="empty">'+esc(t().noMatch)+'</p>';return;}
+  const W=stage.clientWidth||900;
+  const colW=Math.max(128,Math.min(176,Math.round(W*.146)));
+  const gap=(W-4*colW)/3;
+  const colX=[0,1,2,3].map(c=>Math.round(c*(colW+gap)));
+  const nl=document.createElement('div'); nl.className='nodes'; stage.appendChild(nl);
+  const all=[];
+  M.cols.forEach((col,c)=>col.forEach(n=>{
+    const x=nodeText(n);
+    const b=document.createElement('button'); b.type='button'; b.className='node col'+c+' lv-'+K[x.top];
+    b.dataset.id=n.id; b.setAttribute('aria-label',x.label); b.setAttribute('aria-pressed','false'); b.tabIndex=-1;
+    b.style.width=colW+'px'; b.style.left=colX[c]+'px'; b.style.top='0px';
+    b.innerHTML='<span class="nt"><span class="ics">'+x.lv.map(l=>ico(l,'sm')).join('')+'</span><span class="nm">'+esc(x.nm).replace(/([._-])/g,'$1<wbr>')+'</span></span><span class="sub'+x.subCls+'">'+esc(x.sub)+'</span>';
+    nl.appendChild(b); n.el=b; nodeEls[n.id]=b; all.push(n);
+  }));
+  const ROW=100, TOP=10;
+  M.cols.forEach(col=>{
+    col.forEach(n=>{n.h=n.el.offsetHeight; n.cy=TOP+ROW*(n.rows.reduce((a,b)=>a+b,0)/n.rows.length+.5);});
+    col.sort((a,b)=>a.cy-b.cy);
+    for(let i=1;i<col.length;i++){const m=col[i-1].cy+col[i-1].h/2+col[i].h/2+12; if(col[i].cy<m) col[i].cy=m;}
+    col.forEach(n=>{n.el.style.top=Math.round(n.cy-n.h/2)+'px';});
+  });
+  const H=Math.max(...all.map(n=>n.cy+n.h/2))+TOP;
+  stage.style.height=H+'px';
+  // edges
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg'); svg.setAttribute('class','edges'); svg.setAttribute('width',W); svg.setAttribute('height',H); svg.setAttribute('viewBox','0 0 '+W+' '+H); svg.setAttribute('aria-hidden','true');
+  stage.insertBefore(svg,nl);
+  // attachment slots
+  const outs=new Map(), ins=new Map();
+  FS.forEach(f=>{const ch=M.chain[f.id]; for(let c=0;c<3;c++){
+    const a=ch[c], b=ch[c+1]; const e={f,c,a,b};
+    (outs.get(a)||outs.set(a,[]).get(a)).push(e); (ins.get(b)||ins.set(b,[]).get(b)).push(e);
+  }});
+  const slot=(list,key,other)=>{list.sort((p,q)=>p[other].cy-q[other].cy||p.f.id.localeCompare(q.f.id)); list.forEach((e,i)=>{e[key]=(i-(list.length-1)/2)*Math.min(9,(e[other==='b'?'a':'b'].h-18)/Math.max(1,list.length-1));});};
+  outs.forEach(l=>slot(l,'dy0','b')); ins.forEach(l=>slot(l,'dy1','a'));
+  const pills=document.createElement('div'); pills.className='nodes'; pills.style.pointerEvents='none'; stage.appendChild(pills);
+  geom={edges:[],pills:[]};
+  const T_=t();
+  FS.forEach(f=>{ for(let c=0;c<3;c++){
+    const e=[...outs.get(M.chain[f.id][c])].find(x=>x.f===f&&x.c===c);
+    const x0=colX[c]+colW, x1=colX[c+1], y0=e.a.cy+(e.dy0||0), y1=e.b.cy+(e.dy1||0), xm=(x0+x1)/2;
+    const g=document.createElementNS(NS,'g'); g.setAttribute('class','edge lv-'+K[f.level]); g.dataset.f=f.id; g.dataset.c=c;
+    const d='M'+x0+' '+y0+' C'+xm+' '+y0+','+xm+' '+y1+','+(x1-8)+' '+y1;
+    const p=document.createElementNS(NS,'path'); p.setAttribute('d',d); p.setAttribute('class','e-base'+(c===2?' e-dash':'')); g.appendChild(p);
+    if(c<2){const fl=document.createElementNS(NS,'path'); fl.setAttribute('d',d); fl.setAttribute('class','e-flow'); g.appendChild(fl);}
+    const ar=document.createElementNS(NS,'polygon'); ar.setAttribute('points',x1+','+y1+' '+(x1-9)+','+(y1-5)+' '+(x1-9)+','+(y1+5)); g.appendChild(ar);
+    svg.appendChild(g);
+    const pb=document.createElement('button'); pb.type='button'; pb.tabIndex=-1; pb.setAttribute('aria-hidden','true');
+    pb.className='pill lv-'+K[f.level]+(c===2?' nc':''); pb.dataset.f=f.id; pb.style.pointerEvents='auto';
+    pb.style.left=Math.round(xm)+'px'; pb.style.top=Math.round((y0+y1)/2)+'px';
+    const txt=c===0?T_.rule+': '+L(f.agent_rules):c===1?T_.contains:'<span>'+esc(T_.mayReach)+'</span><i>'+esc(T_.notChecked)+'</i>';
+    pb.innerHTML=ico(f.level,'sm')+'<span>'+(c===0?esc(txt):txt)+'</span>';
+    pills.appendChild(pb);
+  }});
+  // roving tab stop
+  const ids=Object.keys(nodeEls);
+  const fid = (keepFocus&&nodeEls[keepFocus])?keepFocus:(S.focusId&&nodeEls[S.focusId]?S.focusId:M.cols[0][0].id);
+  S.focusId=fid; nodeEls[fid].tabIndex=0;
+  if(keepFocus&&nodeEls[keepFocus]) nodeEls[keepFocus].focus({preventScroll:true});
+}
+
+function applySel(){
+  const act=activeSet();
+  const stage=$('#stage');
+  stage.querySelectorAll('.edge').forEach(g=>{const on=act&&act.has(g.dataset.f); g.classList.toggle('on',!!on); g.classList.toggle('dim',!!act&&!on);});
+  stage.querySelectorAll('.pill').forEach(p=>{const on=act&&act.has(p.dataset.f); p.classList.toggle('on',!!on); p.classList.toggle('dim',!!act&&!on);});
+  if(M) M.cols.forEach(col=>col.forEach(n=>{
+    const on=act&&n.fs.some(f=>act.has(f.id));
+    n.el.classList.toggle('on',!!on); n.el.classList.toggle('dim',!!act&&!on);
+    const isSel=S.sel&&((S.sel.kind==='n'&&S.sel.id===n.id)||(S.sel.kind==='f'&&M.chain[S.sel.id]&&M.chain[S.sel.id][n.col]===n&&n.col===1));
+    n.el.classList.toggle('sel',!!isSel); n.el.setAttribute('aria-pressed',isSel?'true':'false');
+  }));
+  document.querySelectorAll('.pathcard').forEach(li=>{
+    const on=act&&act.has(li.dataset.f); li.classList.toggle('dim',!!act&&!on); li.classList.toggle('sel',!!(S.sel&&S.sel.kind==='f'&&S.sel.id===li.dataset.f));
+  });
+  renderPanel();
+}
+
+/* ---------- panel / details ---------- */
+function detailHTML(f){
+  const T_=t(); const F8=T_.f;
+  const un = f.unrelated_to_task==='yes'?'<span class="unrel-yes">'+T_.yes+'</span>':f.unrelated_to_task==='no'?T_.no:T_.nd;
+  const lines=[
+    '<code>'+esc(f.location)+'</code> · '+esc(T_.line(f.line)),
+    esc(L(f.what))+' · '+esc(L(f.whose)),
+    '<span class="lvbadge lv-'+K[f.level]+'">'+ico(f.level,'sm')+esc(lvName(f.level))+'</span> '+esc(L(f.why)),
+    un,
+    esc(f.platform_agent),
+    esc(L(f.agent_rules)),
+    esc(L(f.what_to_do)),
+    esc(L(f.meaning))
+  ];
+  const note = f.level==='verified'?T_.chainV:T_.chainO;
+  return '<p class="chaincheck">'+esc(note)+'</p><dl class="f">'+lines.map((h,i)=>'<div'+(i===6?' class="act"':'')+'><dt><b>'+(i+1)+'</b> '+esc(F8[i])+'</dt><dd>'+h+'</dd></div>').join('')+'</dl>';
+}
+function renderPanel(){
+  const p=$('#panel'), T_=t();
+  if(!S.sel){p.innerHTML='<h2 id="panelTitle">'+esc(T_.panelTitle)+'</h2><p class="hint">'+esc(T_.panelHint)+'</p>'+legendHTML();return;}
+  let ids, fid;
+  if(S.sel.kind==='f'){ids=[S.sel.id];fid=S.sel.id;} else {ids=S.sel.fs; fid=ids.includes(S.pf)?S.pf:ids[0];}
+  const f=byId[fid];
+  let h='<button type="button" class="close" id="btnClear">'+esc(T_.clear)+'</button><h2 id="panelTitle">'+esc(T_.panelTitle)+'</h2>';
+  h+='<div class="tag">'+'<span class="lvbadge lv-'+K[f.level]+'">'+ico(f.level,'sm')+esc(lvName(f.level))+'</span></div>';
+  if(ids.length>1){h+='<p class="hint" style="margin-bottom:6px">'+esc(T_.through)+'</p><div class="pickers">'+ids.map(id=>'<button type="button" data-pick="'+id+'" aria-pressed="'+(id===fid)+'">'+esc(byId[id].name)+'</button>').join('')+'</div>';}
+  h+=detailHTML(f);
+  p.innerHTML=h;
+}
+function legendHTML(){
+  const T_=t();
+  return '<ul style="list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px">'+LV.concat(['could_not_check']).map(l=>'<li style="display:flex;gap:8px;align-items:flex-start">'+ico(l)+'<span><b style="color:var(--lt-'+K[l]+')">'+esc(lvName(l))+'</b><br><span style="color:var(--text2);font-size:14px">'+esc(D.levels[l]['meaning_'+lang])+'</span></span></li>').join('')+'</ul>';
+}
+
+/* ---------- list view ---------- */
+function renderList(){
+  const T_=t(); const ol=$('#pathlist'); const fs=visible();
+  if(!fs.length){ol.innerHTML='<li class="empty glass" style="padding:24px">'+esc(T_.noMatch)+'</li>';return;}
+  ol.innerHTML=fs.map((f,i)=>{
+    const open=S.sel&&S.sel.kind==='f'&&S.sel.id===f.id||S.expanded.has(f.id);
+    const steps=[
+      ['aC0',f.platform_agent,''],
+      ['aC1',f.location+' · '+T_.line(f.line),T_.via[0]+': '+L(f.agent_rules)],
+      ['aC2',L(f.what),T_.via[1]],
+      ['aC3',L(f.whose),T_.via[2]]
+    ];
+    return '<li class="glass pathcard lv-'+K[f.level]+'" data-f="'+f.id+'"><div class="pc-head"><strong>'+ico(f.level)+' '+esc(T_.step+' '+(i+1)+' · '+L(f.what))+'</strong>'+
+      '<button type="button" class="pc-btn" data-toggle="'+f.id+'" aria-expanded="'+!!open+'" aria-controls="det-'+f.id+'">'+esc(open?T_.hide:T_.details)+'</button></div>'+
+      '<ol class="chain">'+steps.map((s,k)=>'<li class="'+(k===0?'step':k===3?'step nc':'step')+'">'+(s[2]?'<span class="via">'+ico(f.level,'sm')+'<span>'+esc(s[2])+'</span></span>':'')+'<span class="k">'+esc(T_.aC[k])+' </span><span class="v">'+esc(s[1])+'</span></li>').join('')+'</ol>'+
+      '<div class="more" id="det-'+f.id+'"'+(open?'':' hidden')+'>'+(open?detailHTML(f):'')+'</div></li>';
+  }).join('');
+}
+
+/* ---------- static texts ---------- */
+function legendBar(){
+  const T_=t();
+  return '<span class="li"><svg class="ln" viewBox="0 0 36 8" aria-hidden="true"><path d="M1 4h34" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'+esc(T_.lgSolid)+'</span>'+
+  '<span class="li"><svg class="ln" viewBox="0 0 36 8" aria-hidden="true"><path d="M1 4h34" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="6 6"/></svg>'+esc(T_.lgDash)+'</span>'+
+  LV.map(l=>'<span class="li">'+ico(l,'sm')+esc(lvName(l))+'</span>').join('');
+}
+function renderStatic(){
+  const T_=t(); document.documentElement.lang=lang;
+  $('#h1').innerHTML=T_.title; $('#lead').textContent=T_.lead; $('#secrets').textContent=T_.secrets; $('#demo').textContent=T_.demo;
+  document.title='AgentReach · '+(lang==='es'?'Camino de alcance':'Reach path');
+  document.querySelector('.skip').textContent=T_.skip;
+  $('#gTheme [data-theme=dark]').textContent=T_.dark; $('#gTheme [data-theme=light]').textContent=T_.light;
+  $('#gView [data-view=graph]').textContent=T_.graph; $('#gView [data-view=list]').textContent=T_.list;
+  $('#gTheme').setAttribute('aria-label',lang==='es'?'Tema':'Theme'); $('#gView').setAttribute('aria-label',lang==='es'?'Vista':'View');
+  $('#lblAgent').textContent=T_.agent; $('#lblQ').textContent=T_.search; $('#q').placeholder=T_.searchPh;
+  const sel=$('#selAgent'); sel.innerHTML='<option value="all">'+esc(T_.all)+'</option>'+AGENTS.map(a=>'<option>'+esc(a)+'</option>').join(''); sel.value=S.agent;
+  $('#gLevels').setAttribute('aria-label',T_.level);
+  $('#gLevels').innerHTML='<span class="lbl">'+esc(T_.level)+'</span>'+LV.map(l=>'<button type="button" class="chip lv-'+K[l]+'" data-lv="'+l+'" aria-pressed="'+S.levels.has(l)+'">'+ico(l,'sm')+esc(lvName(l))+' <span class="cnt">'+F.filter(f=>f.level===l).length+'</span></button>').join('');
+  $('#colsHead').innerHTML=T_.cols.map((c,i)=>'<div>'+esc(c)+'<small>'+esc(T_.colsub[i])+'</small></div>').join('');
+  $('#legend').innerHTML=legendBar(); $('#legend2').innerHTML=legendBar();
+  $('#kbd').textContent=T_.kbd;
+  // limits
+  $('#limits').innerHTML='<h2 id="limTitle">'+ico('could_not_check','lg')+esc(T_.limTitle)+'</h2><p style="margin:0;color:var(--text2)">'+esc(T_.limLead)+'</p><div class="grid">'+
+    D.limits.map(l=>'<div class="it"><span class="part">'+esc(T_.part[l.part]||l.part)+'</span><h3>'+esc(L(l.reason))+'</h3>'+l.items.map(i=>'<code>'+esc(i)+'</code>').join('')+'<p><b>'+esc(T_.fix)+':</b> '+esc(L(l.how_to_fix))+'</p></div>').join('')+'</div>';
+  $('#foot').textContent=T_.foot;
+}
+
+/* ---------- master render ---------- */
+const mq=window.matchMedia('(min-width:1100px)');
+function effView(){return mq.matches?S.view:'list';}
+function render(){
+  const v=effView();
+  $('#graphView').hidden=v!=='graph'; $('#listView').hidden=v!=='list'; $('#panel').hidden=v!=='graph';
+  $('#mainGrid').classList.toggle('has-panel',v==='graph');
+  $('#gView').hidden=!mq.matches;
+  const fs=visible();
+  if(S.sel){const ok=S.sel.kind==='f'?fs.some(f=>f.id===S.sel.id):(S.sel.fs=S.sel.fs.filter(id=>fs.some(f=>f.id===id))).length>0; if(!ok)S.sel=null;}
+  $('#status').textContent=t().shown(fs.length,F.length);
+  if(v==='graph'){renderGraph();}
+  if(v==='list'){renderList();}
+  applySel();
+}
+
+/* ---------- selection ---------- */
+function selectFinding(id){ if(S.sel&&S.sel.kind==='f'&&S.sel.id===id){S.sel=null;} else S.sel={kind:'f',id}; S.pf=id; if(effView()==='list'&&S.sel)S.expanded.add(id); if(effView()==='list') renderList(); applySel(); }
+function selectNode(n){
+  if(n.col===1 && n.fs.length===1) return selectFinding(n.fs[0].id);
+  if(S.sel&&S.sel.kind==='n'&&S.sel.id===n.id){S.sel=null;} else {S.sel={kind:'n',id:n.id,fs:n.fs.map(f=>f.id)}; S.pf=n.fs[0].id;}
+  applySel();
+}
+function nodeById(id){let r=null; M.cols.forEach(c=>c.forEach(n=>{if(n.id===id)r=n;})); return r;}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.lang){lang=b.dataset.lang; document.querySelectorAll('#gLang button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderStatic(); render(); return;}
+  if(b.dataset.theme){document.documentElement.dataset.theme=b.dataset.theme; document.querySelectorAll('#gTheme button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return;}
+  if(b.dataset.view){S.view=b.dataset.view; document.querySelectorAll('#gView button').forEach(x=>x.setAttribute('aria-pressed',x===b)); render(); return;}
+  if(b.dataset.lv){const l=b.dataset.lv; if(S.levels.has(l)){ if(S.levels.size>1) S.levels.delete(l);} else S.levels.add(l); b.setAttribute('aria-pressed',S.levels.has(l)); render(); return;}
+  if(b.id==='btnClear'){S.sel=null; applySel(); return;}
+  if(b.dataset.pick){S.pf=b.dataset.pick; renderPanel(); const pb=document.querySelector('[data-pick="'+b.dataset.pick+'"]'); if(pb)pb.focus(); return;}
+  if(b.dataset.toggle){const id=b.dataset.toggle; const wasSel=S.sel&&S.sel.kind==='f'&&S.sel.id===id; if(wasSel){S.sel=null;S.expanded.delete(id);} else if(S.expanded.has(id)){S.expanded.delete(id);} else {S.expanded.add(id);S.sel={kind:'f',id};S.pf=id;} renderList(); applySel(); const nb=document.querySelector('[data-toggle="'+id+'"]'); if(nb)nb.focus(); return;}
+  if(b.classList.contains('pill')){selectFinding(b.dataset.f); return;}
+  if(b.classList.contains('node')){S.focusId=b.dataset.id; setRoving(b.dataset.id,false); selectNode(nodeById(b.dataset.id)); return;}
+});
+$('#selAgent').addEventListener('change',e=>{S.agent=e.target.value; render();});
+$('#q').addEventListener('input',e=>{S.q=e.target.value; render();});
+function setRoving(id,focus){Object.values(nodeEls).forEach(el=>el.tabIndex=-1); const el=nodeEls[id]; if(!el)return; el.tabIndex=0; S.focusId=id; if(focus)el.focus();}
+$('#stage').addEventListener('keydown',e=>{
+  const el=e.target.closest('.node'); if(!el||!M) return;
+  const n=nodeById(el.dataset.id); const col=M.cols[n.col]; const i=col.indexOf(n);
+  let tgt=null;
+  if(e.key==='ArrowDown') tgt=col[Math.min(col.length-1,i+1)];
+  else if(e.key==='ArrowUp') tgt=col[Math.max(0,i-1)];
+  else if(e.key==='Home') tgt=col[0];
+  else if(e.key==='End') tgt=col[col.length-1];
+  else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+    const nc=n.col+(e.key==='ArrowRight'?1:-1); if(nc<0||nc>3) return e.preventDefault();
+    const act=activeSet(); let f=n.fs.find(x=>act&&act.has(x.id))||n.fs[0];
+    tgt=M.chain[f.id][nc];
+  }
+  else if(e.key==='Escape'){S.sel=null; applySel(); return;}
+  else return;
+  e.preventDefault(); if(tgt) setRoving(tgt.id,true);
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.sel&&!e.target.closest('#stage')&&e.target.id!=='q'){S.sel=null;applySel();} });
+let rz=0; window.addEventListener('resize',()=>{cancelAnimationFrame(rz);rz=requestAnimationFrame(()=>{if(effView()==='graph'){renderGraph();applySel();}});});
+mq.addEventListener('change',()=>{render();});
+
+renderStatic(); render();
+window.__ar={S,select:selectFinding,selectNodeId:id=>selectNode(nodeById(id)),setLang:l=>{document.querySelector('[data-lang='+l+']').click();}};
+})();
+</script>
+</body>
+</html>
