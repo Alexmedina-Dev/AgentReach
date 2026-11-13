@@ -65,10 +65,10 @@ def _carpeta_usable(home: str, auditada: str) -> tuple[str | None, str]:
     if not home or not os.path.isabs(home):
         return None, "sin_home"
     carpeta = carpeta_de_reportes(home)
+    if os.path.lexists(carpeta) and _es_enlace(carpeta):
+        return None, "enlace"  # primero el enlace: es el motivo más concreto y el que se le explica a la persona
     if dentro(carpeta, auditada) or dentro(auditada, carpeta):
         return None, "dentro"
-    if os.path.lexists(carpeta) and _es_enlace(carpeta):
-        return None, "enlace"
     return carpeta, ""
 
 
