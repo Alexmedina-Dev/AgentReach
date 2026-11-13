@@ -2,7 +2,7 @@
 
 AgentReach es una herramienta de código abierto que **audita a qué puede acceder un agente de IA** en tu entorno (archivos, variables de entorno, credenciales, etc.), con evidencias y niveles de confianza. El MVP (producto mínimo viable) ya está construido y en pruebas con agentes reales: puedes instalarlo y usarlo (ver `README.md`).
 
-Para el contexto completo lee `README.md`. La arquitectura vigente está en `_bmad-output/planning-artifacts/architecture/architecture-agent-reach-2026-11-11/ARCHITECTURE-SPINE.md`, y las historias del producto en `_bmad-output/planning-artifacts/historias-mvp.md`.
+Para el contexto completo lee `README.md`. La arquitectura vigente y las historias del producto están en la rama `development`: `_bmad-output/planning-artifacts/architecture/architecture-agent-reach-2026-11-11/ARCHITECTURE-SPINE.md` y `_bmad-output/planning-artifacts/historias-mvp.md`.
 
 ## Preparar el entorno
 
