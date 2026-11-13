@@ -185,56 +185,15 @@ You can try the design without running anything: open the [report sketch](https:
 
 ## Installation
 
-> [!NOTE]
-> **You do not need to download or clone this repository to use AgentReach.** You install the tool with one command, from a single small file (a *wheel*) attached to each [release](https://github.com/Alexmedina-Dev/AgentReach/releases). The package is not on PyPI yet, so `uv tool install agentreach` does not work today.
-
-### Install on any computer (Windows, PowerShell)
-
-**1. Check if `uv` is installed.** `uv` is the tool that installs AgentReach and brings the Python it needs (3.12 or newer). You do not install Python yourself.
+You do not need to download the repository to use AgentReach. One command installs it. You only need [`uv`](https://docs.astral.sh/uv/getting-started/installation/), the tool that installs it and brings the Python it needs (3.12 or newer).
 
 ```powershell
-uv --version
+uv tool install git+https://github.com/Alexmedina-Dev/AgentReach
 ```
 
-If it prints a version (for example `uv 0.8.0`), go to step 3. If it says the command is not recognized, go to step 2.
+Open a new terminal, go into the project you want to review and type `agentreach`. If the terminal does not know the command, run `uv tool update-shell` once and open another new terminal.
 
-**2. Install `uv`:**
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-Close the terminal, open a new one and run `uv --version` again to check it.
-
-**3. Install AgentReach from the release:**
-
-```powershell
-uv tool install https://github.com/Alexmedina-Dev/AgentReach/releases/download/v0.1.0-dev0/agentreach-0.1.0.dev0-py3-none-any.whl
-uv tool update-shell     # one time only: lets your terminal find the command
-```
-
-**4. Close the terminal and open a new one**, then check it:
-
-```powershell
-agentreach --version
-```
-
-To update, run the install command of the new release and add `--reinstall`. AgentReach never updates itself and never uses the network during a review.
-
-If the computer has no internet access, download the `.whl` file from the release on another computer, copy it over (USB drive or shared folder) and install it from the path: `uv tool install C:\Users\you\Downloads\agentreach-0.1.0.dev0-py3-none-any.whl`.
-
-### Run it from the source code (developers and contributors)
-
-Only people who want to change the code need the repository. Pull Requests go to the `development` branch (see [`CONTRIBUTING.md`](CONTRIBUTING.md)).
-
-```bash
-git clone https://github.com/Alexmedina-Dev/AgentReach.git
-cd AgentReach
-uv run agentreach <folder>        # example: uv run agentreach .
-uv build --wheel                  # builds the file used in the steps above
-```
-
-If the terminal says it does not know the command, you skipped `uv tool update-shell` or you did not open a new terminal. After that, the use is always the same:
+After that, the use is always the same:
 
 1. Open a terminal (Windows Terminal, VS Code, or the one you use).
 2. Go into the project folder you want to review.
@@ -257,6 +216,16 @@ uv tool install agentreach        # global installation (planned)
 ```
 
 Per-project installation (a policy that belongs to the repository) is also planned. The exact commands will be documented when the package is published.
+
+### Contribute (developers)
+
+Contributions go to the `development` branch. Open your Pull Request against `development` (see [`CONTRIBUTING.md`](CONTRIBUTING.md)).
+
+```bash
+git clone -b development https://github.com/Alexmedina-Dev/AgentReach.git
+cd AgentReach
+uv run agentreach <folder>        # example: uv run agentreach .
+```
 
 ## Technology
 
