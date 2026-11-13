@@ -1,0 +1,179 @@
+{
+  "_note": "100% fictional sample data. Not from any real machine, person or repository. No secret values.",
+  "tool": "AgentReach (demo)",
+  "folder_reviewed": "demo-app",
+  "files_looked_at": 41,
+  "levels": {
+    "verified":     { "en": "Verified",      "es": "Comprobado",        "meaning_en": "Confirmed: the agent can reach it today.",        "meaning_es": "Confirmado: el agente puede llegar hoy." },
+    "potential":    { "en": "Potential",     "es": "Potencial",         "meaning_en": "Likely reachable, but not fully confirmed.",      "meaning_es": "Probablemente alcanzable, sin confirmar del todo." },
+    "hypothesis":   { "en": "Hypothesis",    "es": "Hipótesis",         "meaning_en": "A suggestion only. Not a confirmed access.",      "meaning_es": "Solo una sugerencia. No es un acceso comprobado." },
+    "could_not_check": { "en": "Could not check", "es": "No se pudo revisar", "meaning_en": "AgentReach could not look at this.",         "meaning_es": "AgentReach no pudo mirar esto." }
+  },
+  "secrets_notice": {
+    "en": "No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.",
+    "es": "No se muestran valores de secretos. AgentReach nunca copia contraseñas, tokens ni claves: solo dice dónde están y de qué tipo son."
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": "demo-app/config/settings.example", "line": 2,
+      "what": { "en": "Credential in a file", "es": "Credencial en un archivo" },
+      "whose": { "en": "payments service (demo)", "es": "servicio de pagos (demo)" },
+      "level": "verified",
+      "why": { "en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Move the credential out of the project, or keep it in a secrets manager (a safe vault for passwords and keys). Replace it with a new one if it was ever exposed.", "es": "Saque la credencial del proyecto o guárdela en un gestor de secretos (una bóveda segura para claves). Cámbiela por una nueva si estuvo expuesta." },
+      "meaning": { "en": "A project file holds a credential (a key or password that gives access to a service). An agent that can read the project could read it.", "es": "Un archivo del proyecto guarda una credencial (una clave o contraseña que da acceso a un servicio). Un agente que pueda leer el proyecto podría leerla." }
+    },
+    {
+      "id": "f2",
+      "location": "demo-app/config/staging.example", "line": 5,
+      "what": { "en": "Credential in a file", "es": "Credencial en un archivo" },
+      "whose": { "en": "database (demo)", "es": "base de datos (demo)" },
+      "level": "verified",
+      "why": { "en": "It exists, the system lets the agent read it, and no agent rule blocks it.", "es": "Existe, el sistema permite leerlo y ninguna regla del agente lo impide." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "asks first", "es": "pide confirmación" },
+      "what_to_do": { "en": "Keep database access out of files in the project. Use a safer place and replace the old access.", "es": "Mantenga el acceso a la base de datos fuera de los archivos del proyecto. Use un lugar más seguro y cambie el acceso anterior." },
+      "meaning": { "en": "A file stores database access. The agent asks before reading it, but it is still reachable if you say yes.", "es": "Un archivo guarda acceso a una base de datos. El agente pregunta antes de leerlo, pero sigue siendo alcanzable si usted dice que sí." }
+    },
+    {
+      "id": "f3",
+      "location": "demo-app/deploy/publish-demo.sh", "line": 12,
+      "what": { "en": "Deployment script (publishes changes)", "es": "Script de despliegue (publica cambios)" },
+      "whose": { "en": "deployment platform (demo)", "es": "plataforma de despliegue (demo)" },
+      "level": "potential",
+      "why": { "en": "The script exists and the agent may run programs, but we did not confirm it can reach the platform.", "es": "El script existe y el agente puede ejecutar programas, pero no se confirmó que llegue a la plataforma." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "allows it", "es": "lo permite" },
+      "what_to_do": { "en": "Require a human to approve any publish step. Remove the agent's permission to run this script.", "es": "Exija que una persona apruebe todo paso de publicación. Quite al agente el permiso de ejecutar este script." },
+      "meaning": { "en": "An agent could start a script that publishes your changes to a live place.", "es": "Un agente podría iniciar un script que publica sus cambios en un lugar real." }
+    },
+    {
+      "id": "f4",
+      "location": "demo-app/.agent/rules.example", "line": 3,
+      "what": { "en": "Agent rule that is too permissive", "es": "Regla del agente demasiado permisiva" },
+      "whose": { "en": "agent settings (demo)", "es": "configuración del agente (demo)" },
+      "level": "potential",
+      "why": { "en": "The rule allows many actions without asking.", "es": "La regla permite muchas acciones sin preguntar." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "allows it", "es": "lo permite" },
+      "what_to_do": { "en": "Change the rule so the agent asks first for risky actions.", "es": "Cambie la regla para que el agente pregunte antes de acciones riesgosas." },
+      "meaning": { "en": "The agent can do more than it needs, and nobody is asked to confirm.", "es": "El agente puede hacer más de lo necesario y nadie debe confirmar." }
+    },
+    {
+      "id": "f5",
+      "location": "demo-app/docs/notes-style.txt", "line": 27,
+      "what": { "en": "Platform or deployment secret", "es": "Secreto de plataforma o de despliegue" },
+      "whose": { "en": "code hosting service (demo)", "es": "servicio de alojamiento de código (demo)" },
+      "level": "potential",
+      "why": { "en": "A secret-like label sits in a file that looks unrelated to the work.", "es": "Una etiqueta parecida a un secreto está en un archivo que parece ajeno al trabajo." },
+      "unrelated_to_task": "yes",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Check if this file needs that item. If not, remove it.", "es": "Revise si este archivo necesita ese dato. Si no, quítelo." },
+      "meaning": { "en": "A sensitive item is in a place where nobody expects it, so it is easy to forget.", "es": "Un dato sensible está donde nadie lo espera, y es fácil olvidarlo." }
+    },
+    {
+      "id": "f6",
+      "location": "demo-app/AGENTS.example", "line": 8,
+      "what": { "en": "Instructions file with suspicious text", "es": "Archivo de instrucciones con texto sospechoso" },
+      "whose": { "en": "agent instructions (demo)", "es": "instrucciones del agente (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The text looks like it tries to steer the agent, but we cannot be sure.", "es": "El texto parece querer dirigir al agente, pero no podemos estar seguros." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent C",
+      "agent_rules": { "en": "not determined", "es": "no determinadas" },
+      "what_to_do": { "en": "Read the file yourself and remove lines you do not recognise.", "es": "Lea el archivo usted mismo y quite las líneas que no reconozca." },
+      "meaning": { "en": "An instructions file could change what the agent does. This is only a suggestion to look.", "es": "Un archivo de instrucciones podría cambiar lo que hace el agente. Es solo una sugerencia para revisar." }
+    },
+    {
+      "id": "f7",
+      "location": "demo-app/links/shared-folder", "line": null,
+      "what": { "en": "Link that leaves the folder", "es": "Enlace que sale de la carpeta" },
+      "whose": { "en": "unknown (demo)", "es": "desconocido (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The link points outside the project, but we did not follow it.", "es": "El enlace apunta fuera del proyecto, pero no lo seguimos." },
+      "unrelated_to_task": "not determined",
+      "platform_agent": "Demo Agent C",
+      "agent_rules": { "en": "no rule", "es": "sin regla" },
+      "what_to_do": { "en": "Check where the link goes. Remove it if you do not need it.", "es": "Revise a dónde lleva el enlace. Quítelo si no lo necesita." },
+      "meaning": { "en": "An agent might follow the link and reach files outside the project.", "es": "Un agente podría seguir el enlace y llegar a archivos fuera del proyecto." }
+    },
+    {
+      "id": "f8",
+      "location": "demo-app/.tasks/auto-start.example", "line": 4,
+      "what": { "en": "Task that starts when the folder is opened", "es": "Tarea que arranca al abrir la carpeta" },
+      "whose": { "en": "editor settings (demo)", "es": "configuración del editor (demo)" },
+      "level": "potential",
+      "why": { "en": "A task is set to start by itself; we did not confirm it runs.", "es": "Hay una tarea configurada para arrancar sola; no se confirmó que se ejecute." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent B",
+      "agent_rules": { "en": "asks first", "es": "pide confirmación" },
+      "what_to_do": { "en": "Remove the auto-start, or make sure you know what the task does.", "es": "Quite el arranque automático, o asegúrese de saber qué hace la tarea." },
+      "meaning": { "en": "A program could start just by opening the folder.", "es": "Un programa podría arrancar con solo abrir la carpeta." }
+    },
+    {
+      "id": "f9",
+      "location": "demo-app/config/cloud.example", "line": 1,
+      "what": { "en": "Cloud account credentials", "es": "Credenciales de una cuenta en la nube" },
+      "whose": { "en": "cloud account (demo)", "es": "cuenta en la nube (demo)" },
+      "level": "hypothesis",
+      "why": { "en": "The file name suggests cloud access, but we did not confirm it is readable.", "es": "El nombre del archivo sugiere acceso a la nube, pero no se confirmó que sea legible." },
+      "unrelated_to_task": "no",
+      "platform_agent": "Demo Agent A",
+      "agent_rules": { "en": "blocks it (rule only)", "es": "lo bloquea (solo por regla)" },
+      "what_to_do": { "en": "Keep this access as small as possible. Give it only the rights the work needs.", "es": "Mantenga este acceso lo más pequeño posible. Dele solo los permisos que el trabajo necesita." },
+      "meaning": { "en": "A rule blocks the agent today, but a rule is not a lock: someone can change it.", "es": "Una regla bloquea al agente hoy, pero una regla no es un candado: alguien puede cambiarla." }
+    }
+  ],
+  "limits": [
+    {
+      "id": "l1",
+      "part": "this folder",
+      "reason": { "en": "Could not open the file", "es": "No se pudo abrir el archivo" },
+      "items": ["demo-app/data/locked-file.example"],
+      "how_to_fix": { "en": "Check that the file exists and that you can read it. Then run again.", "es": "Compruebe que el archivo existe y que usted puede leerlo. Luego ejecute de nuevo." }
+    },
+    {
+      "id": "l2",
+      "part": "this folder",
+      "reason": { "en": "File too large (over 5 MB)", "es": "Archivo demasiado grande (más de 5 MB)" },
+      "items": ["demo-app/data/big-export.example"],
+      "how_to_fix": { "en": "AgentReach does not open files this big. Check it by hand if it may hold secrets.", "es": "AgentReach no abre archivos tan grandes. Revíselo a mano si puede guardar secretos." }
+    },
+    {
+      "id": "l3",
+      "part": "tool limits",
+      "reason": { "en": "Commit history is not checked", "es": "El historial de commits no se revisa" },
+      "items": [],
+      "how_to_fix": { "en": "This version does not look at old versions of files. Use another tool for that.", "es": "Esta versión no mira versiones antiguas de los archivos. Use otra herramienta para eso." }
+    },
+    {
+      "id": "l4",
+      "part": "tool limits",
+      "reason": { "en": "Changes after you approve a setting are not tracked", "es": "No se vigilan los cambios después de aprobar una configuración" },
+      "items": [],
+      "how_to_fix": { "en": "Run AgentReach again after any change to agent settings.", "es": "Ejecute AgentReach de nuevo tras cualquier cambio en la configuración del agente." }
+    },
+    {
+      "id": "l5",
+      "part": "tool limits",
+      "reason": { "en": "Running programs and open ports are not checked", "es": "No se revisan los programas en ejecución ni los puertos abiertos" },
+      "items": [],
+      "how_to_fix": { "en": "AgentReach only reads files. Use a different tool to look at what is running.", "es": "AgentReach solo lee archivos. Use otra herramienta para ver qué se está ejecutando." }
+    },
+    {
+      "id": "l6",
+      "part": "tool limits",
+      "reason": { "en": "Network locations are not visited", "es": "No se visitan ubicaciones de red" },
+      "items": ["demo-app/shared/network-share.example"],
+      "how_to_fix": { "en": "AgentReach never goes to the network. Copy the folder to this computer and run again.", "es": "AgentReach nunca sale a la red. Copie la carpeta a este equipo y ejecute de nuevo." }
+    }
+  ]
+}

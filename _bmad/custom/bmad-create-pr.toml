@@ -1,0 +1,17 @@
+# Ajustes de AgentReach para bmad-create-pr. Los comandos de verificación de abajo
+# son los mismos de .github/workflows/ci.yml. Las entradas backend-* y frontend-* de la
+# skill original no aplican (sus rutas backend/** y frontend/** no existen aquí).
+
+[[workflow.verify_commands]]
+id = "agentreach-lint"
+label = "AgentReach: ruff check"
+paths = ["src/**", "tests/**", "pruebas/**"]
+cwd = "."
+command = "uv run ruff check ."
+
+[[workflow.verify_commands]]
+id = "agentreach-tests"
+label = "AgentReach: pytest"
+paths = ["src/**", "tests/**"]
+cwd = "."
+command = "uv run pytest -q"

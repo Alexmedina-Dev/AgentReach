@@ -1,0 +1,989 @@
+[
+ {
+  "id": "PP-01",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "comprobado"
+  },
+  "justificacion": "CC: regla deny Read(./.env) = potencial con nota de politica (FR-6). opencode: un read allow posterior anula el ask base de *.env (gana la ultima regla); sin deny = comprobado.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Orden de reglas verificado en la doc 2.x; el formato 1.x no se pudo consultar: no verificado para 1.19.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "PP-01a",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer ANTHROPIC_API_KEY por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. ",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-01b",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer STRIPE_SECRET_KEY por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. ",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-01c",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer GITHUB_TOKEN por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. ",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-01d",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer RAILWAY_TOKEN por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. ",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-01e",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer DATABASE_URL por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. DATABASE_URL con usuario:clave literal podria tratarse como TH-19 (comprobado si el texto lo determina).",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-01f",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Reconocer JWT_SECRET por nombre no tiene fuente primaria (FR-7): maximo potencial en ambos agentes; en CC ademas hay deny.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: FR-7 solo ejemplifica Stripe; no dice si aplica a las otras cinco. ",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "PP-02",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Plantilla sin secretos; opencode la permite explicitamente (*.env.example allow).",
+  "fuente_primaria": [
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "PP-03",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Existe pero un ACE deny de lectura impide leerlo al usuario: FR-8 potencial. Windows evalua los ACE en secuencia y un deny bloquea.",
+  "fuente_primaria": [
+   "https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists",
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "PP-04",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "Permiso normal y sin regla del agente: comprobado. CC lee sin aprobacion dentro del directorio de trabajo. opencode: el allow de lectura posterior anula el ask de *.env.*.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "opencode 1.x no verificado.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "PP-05",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "Igual que PP-04; estar en .gitignore no es una regla del agente.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "No verifique si la busqueda (Grep/Glob) de Claude Code respeta .gitignore; la lectura directa esta permitida.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AJ-01",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Fuera del directorio de trabajo: CC pide aprobacion para leer fuera; opencode con external_directory en ask. Hay pregunta previa = potencial.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/config/",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Ambiguedad: un aviso por defecto de la herramienta no es una regla ask escrita; FR-5 solo habla de reglas. Elegi potencial por el espiritu de FR-5/FR-8. Las lecturas por shell no estan limitadas en CC.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "EN-01",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-6: el enlace es hallazgo con maximo potencial y solo metadatos (FR-19). CC revisa la ruta pedida y la resuelta, tambien en junctions de Windows.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Comportamiento de opencode ante junctions: no verificado.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "EN-02",
+  "nivel_por_agente": {
+   "claude_code": "no se pudo revisar",
+   "opencode": "no se pudo revisar"
+  },
+  "justificacion": "Lo que hay detras del enlace no se mira (FR-19) y se declara no se pudo revisar (decision 2026-11-09).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Ambiguedad: la tabla original decia no aplica; FR-19 dice solo metadatos; el memlog dice no se pudo revisar.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "EN-03",
+  "nivel_por_agente": {
+   "claude_code": "no aplicable",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "El enlace simbolico no pudo crearse: no existe en el arbol, nada que auditar.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "HF-01",
+  "nivel_por_agente": {
+   "claude_code": "potencial con opt-in activado / no se pudo revisar sin opt-in",
+   "opencode": "potencial con opt-in activado / no se pudo revisar sin opt-in"
+  },
+  "justificacion": "TH-2: ubicacion sensible apagada por defecto (sin activar = no se pudo revisar); con opt-in, maximo potencial por ruta sin fuente (FR-7).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Ambiguedad: el nivel depende de si la prueba usa opt-in; la ruta ~/.ssh como clave privada no tiene fuente primaria que yo confirmara. En CC las lecturas por shell no se limitan por defecto.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "HF-02",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Material publico, no es secreto.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "HF-03",
+  "nivel_por_agente": {
+   "claude_code": "potencial con opt-in activado / no se pudo revisar sin opt-in",
+   "opencode": "potencial con opt-in activado / no se pudo revisar sin opt-in"
+  },
+  "justificacion": "TH-3: igual que HF-01 (maximo potencial, FR-7).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Ruta ~/.aws/credentials sin fuente primaria confirmada por mi.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "HF-04",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Configuracion sin secretos.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "HF-05",
+  "nivel_por_agente": {
+   "claude_code": "potencial con opt-in activado / no se pudo revisar sin opt-in",
+   "opencode": "potencial con opt-in activado / no se pudo revisar sin opt-in"
+  },
+  "justificacion": "Token npm en el home: ubicacion sensible fuera del proyecto, opt-in, sin fuente verificada = maximo potencial.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Ambiguedad: TH-1 menciona .npmrc pero dentro del proyecto; TH-2/TH-3 no cubren npm; no esta claro a que tipo pertenece.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "CA-01",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "Reglas de permisos sanas = contexto del campo reglas del agente, no hallazgo propio (decision 2026-11-09). Es archivo de Claude Code.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "CA-02",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-10: la doc oficial dice que en Windows nativo no hay sandbox; maximo potencial porque no se ve la version. No aplica a opencode.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/sandboxing"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "CA-03",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "Medida de proteccion, no hallazgo propio; la doc dice que quita credenciales del entorno de subprocesos.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/env-vars"
+  ],
+  "duda": "No confirme si la variable surte efecto cuando viene del env de .claude/settings.json del proyecto.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "CA-04",
+  "nivel_por_agente": {
+   "claude_code": "no aplicable",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-7: allow casi total en opencode es permisivo, maximo potencial (sin fuente completa de reglas 1.x/2.x).",
+  "fuente_primaria": [
+   "https://opencode.ai/docs/permissions/",
+   "https://opencode.ai/docs/config/"
+  ],
+  "duda": "Formato 1.x no verificado.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "CA-05",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-11: definicion de agente, maximo potencial. Es de Claude Code.",
+  "fuente_primaria": [],
+  "duda": "No consulte la doc de subagentes; nivel fijado solo por el tope del PRD.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "CX-01",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Texto inofensivo.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "NO-01",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Nombres sin valor de credencial.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "NO-02",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Nombres no reconocibles, contenido inofensivo.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "NO-03",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Clave de ejemplo publica de la doc del proveedor.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "NO-04",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Solo referencia a un secreto del repositorio, sin valor.",
+  "fuente_primaria": [],
+  "duda": "Ambiguedad menor: TH-9 reconoce deploy.sh/.ps1 por nombre; no dice si deploy.yml cuenta (maximo hipotesis).",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "NO-05",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Los .sample no son hooks activos; git ignora hooks sin el bit ejecutable y busca el nombre exacto.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/githooks"
+  ],
+  "duda": "La doc consultada no menciona .sample; solo el bit ejecutable.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "GT-01",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "Igual que PP-04. Que git lo siga queda como dato no se pudo revisar (el MVP no lee el indice).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-02",
+  "nivel_por_agente": {
+   "claude_code": "no se pudo revisar",
+   "opencode": "no se pudo revisar"
+  },
+  "justificacion": "Solo vive en el historial; verlo exige ejecutar git (fase 2).",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-03",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "TH-19: usuario y clave literales en la URL = comprobado si el texto lo determina; ningun deny.",
+  "fuente_primaria": [],
+  "duda": "Doc de git sobre credenciales en URL no consultada. Ambiguedad: falso/relleno baja a potencial (GT-08); la frontera no esta definida.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "EV-01",
+  "nivel_por_agente": {
+   "claude_code": "hipotesis",
+   "opencode": "hipotesis"
+  },
+  "justificacion": "TH-4: AgentReach ve su entorno, no el del agente: hipotesis siempre. CC con scrub activo no cambia el nivel (FR-6).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/env-vars",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "opencode: la herencia del entorno no esta documentada en la pagina de permisos.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "PA-01",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "ACL permite leer a Todos; el permiso heredado no baja el nivel (decision 2026-11-09).",
+  "fuente_primaria": [
+   "https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists",
+   "https://opencode.ai/docs/permissions/"
+  ],
+  "duda": "Si la ACL fuera no estandar o ambigua bajaria a potencial.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "CX-02",
+  "nivel_por_agente": {
+   "claude_code": "hipotesis",
+   "opencode": "hipotesis"
+  },
+  "justificacion": "TH-5: patron de texto simple, maximo hipotesis.",
+  "fuente_primaria": [],
+  "duda": "No verifique que Claude Code cargue AGENTS.md por si mismo (suele leer CLAUDE.md); tampoco que opencode lo lea.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-01",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "TH-12: bytes U+E0000 presentes = comprobado (el texto existe).",
+  "fuente_primaria": [],
+  "duda": "Ambiguedad: fuente secundaria; el PRD no define si cuenta como verificada (FR-7). Ademas .cursor/rules no lo lee ninguno de los dos agentes.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-02",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Emoji legitimo excluido.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-03",
+  "nivel_por_agente": {
+   "claude_code": "comprobado con opt-in activado / no se pudo revisar sin opt-in",
+   "opencode": "comprobado con opt-in activado / no se pudo revisar sin opt-in"
+  },
+  "justificacion": "TH-13: archivo de instrucciones en carpeta de alto alcance, existe = comprobado; carpeta opt-in.",
+  "fuente_primaria": [],
+  "duda": "La fuente primaria del PRD es una nota de prensa, no la doc de las herramientas.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-04",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-14: hook de proyecto = potencial (no se ve version ni aviso de confianza). opencode no usa hooks de .claude/settings.json (no verificado).",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/hooks",
+   "https://code.claude.com/docs/en/settings"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-05",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-14: servidor MCP de comando en .mcp.json; la doc exige aprobacion en sesiones interactivas, pero en -p se carga sin preguntar: potencial.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/mcp"
+  ],
+  "duda": "opencode usa su propia clave mcp en opencode.json; no verifique que ignore .mcp.json.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-06",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-15: en el proyecto = potencial. La doc dice que desde v2.1.257 defaultMode bypassPermissions no surte efecto desde ajustes de proyecto/locales; antes si.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/settings",
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Ambiguedad: el nivel depende de la version, que AgentReach no ve.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-07",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-16: runOn folderOpen solo corre en carpeta confiable y si task.allowAutomaticTasks lo permite (por defecto off). Es del editor, no del agente.",
+  "fuente_primaria": [
+   "https://code.visualstudio.com/docs/debugtest/tasks"
+  ],
+  "duda": "Ambiguedad: no depende del agente; mismo nivel para ambos.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-08",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-17: se reconoce por nombre de variable (sin fuente, FR-7) y es ajeno a la tarea: potencial.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-09",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "TH-12: U+200B esta en la lista y no hay emoji alrededor = comprobado.",
+  "fuente_primaria": [],
+  "duda": "Misma ambiguedad que AT-01 (fuente secundaria; el archivo es de Copilot).",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-10",
+  "nivel_por_agente": {
+   "claude_code": "comprobado con opt-in activado / no se pudo revisar sin opt-in",
+   "opencode": "comprobado con opt-in activado / no se pudo revisar sin opt-in"
+  },
+  "justificacion": "TH-13 en la raiz del home.",
+  "fuente_primaria": [],
+  "duda": "Igual que AT-03.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "AT-11",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-6: enlace a carpeta externa. CC: el deny cubre la ruta pedida y la resuelta (tambien junctions) pero es politica. opencode: sin regla.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Mismo nivel, motivo distinto en cada agente (TH-6 o deny).",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "AT-12",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "TH-14 caso MCP: la doc dice que la clave committeada se ignora en carpeta no confiable; se honra desde ajustes de usuario.",
+  "fuente_primaria": [
+   "https://code.claude.com/docs/en/mcp"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-04",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "TH-18: core.fsmonitor es el nombre de un programa (hook) si no es true/false; texto inequivoco = comprobado.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "FR-5 mide acceso al archivo, no si el agente llegaria a ejecutar git.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-05",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "core.hooksPath hacia dentro del repo: potencial hasta validar el lector propio (PRD).",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config",
+   "https://git-scm.com/docs/githooks"
+  ],
+  "duda": "El texto parece inequivoco; la doc no dice como se resuelve una ruta relativa.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-06",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "Filtro con clean/smudge definido en config local y asociado en .gitattributes = comprobado.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/gitattributes",
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-07",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Hook activo: git ignora hooks sin bit ejecutable; en Windows no verificado.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/githooks"
+  ],
+  "duda": "Como decide Git for Windows que hook corre: no verificado.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "GT-08",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "TH-19: usuario:TOKEN de relleno = potencial (valor de relleno).",
+  "fuente_primaria": [],
+  "duda": "Ambiguedad: separar relleno de falso real (ver GT-03).",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "GT-09",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Formato retorcido: potencial hasta validar el lector propio. git acepta secciones y claves sin distinguir mayusculas, comentarios ; y #, y continuacion con barra.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Si el lector se valida contra git el caso subiria a comprobado.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-10",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "core.fsmonitor=true activa el monitor integrado, no es un programa.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-11",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "core.fsmonitor=false lo apaga.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-12",
+  "nivel_por_agente": {
+   "claude_code": "no se reporta",
+   "opencode": "no se reporta"
+  },
+  "justificacion": "Sin definicion de driver el filtro es un no-op (doc de gitattributes).",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/gitattributes"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-13",
+  "nivel_por_agente": {
+   "claude_code": "potencial",
+   "opencode": "potencial"
+  },
+  "justificacion": "Clave con comando dentro de un include con ciclo: potencial.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Limite de profundidad/ciclos de include: no verificado en doc.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "GT-14",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "TH-18: core.sshCommand con comando, valor sin ambiguedad.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Solo corre en operaciones de red; sin ver el disparador, comprobado es discutible.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-15",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "core.pager se interpreta por el shell en lecturas con salida larga.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-16",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "Alias con ! se trata como comando de shell.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Solo corre si alguien invoca ese alias.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-17",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "diff.external reemplaza el diff interno.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Solo cuando se genera un diff.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-18",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "gpg.program: programa usado al firmar/verificar firmas. Nivel segun PRD.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config"
+  ],
+  "duda": "Ambiguedad importante: sin firmas ni commit.gpgSign nada lo dispara; FR-5 no pide disparador.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "GT-19",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "comprobado"
+  },
+  "justificacion": "gpg.program + log.showSignature=true: git log asume --show-signature. Nivel segun PRD.",
+  "fuente_primaria": [
+   "https://git-scm.com/docs/git-config",
+   "https://git-scm.com/docs/git-log"
+  ],
+  "duda": "La doc dice que verifica commits firmados; no pude confirmar que se ejecute sin firmas. Podria ser potencial.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": false
+ },
+ {
+  "id": "OC-01",
+  "nivel_por_agente": {
+   "claude_code": "comprobado",
+   "opencode": "potencial"
+  },
+  "justificacion": "opencode: sin regla read se aplica el ask base de *.env = potencial. CC: proyecto sin reglas de Claude = comprobado.",
+  "fuente_primaria": [
+   "https://opencode.ai/docs/permissions/",
+   "https://code.claude.com/docs/en/permissions"
+  ],
+  "duda": "Es control de opencode; el nivel para CC es por completitud.",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ },
+ {
+  "id": "TR-01",
+  "nivel_por_agente": {
+   "claude_code": "no aplicable",
+   "opencode": "no aplicable"
+  },
+  "justificacion": "Marcador que solo existe si algo ejecuto el senuelo: debe no existir; si aparece es fallo de la prueba, no hallazgo.",
+  "fuente_primaria": [],
+  "duda": "",
+  "confirmado_por": "agente-independiente (sin acceso a src ni al nivel esperado)",
+  "fecha": "2026-11-10",
+  "verificado": true
+ }
+]

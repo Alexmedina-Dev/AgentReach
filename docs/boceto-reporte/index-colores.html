@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-pal="A">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentReach report (colors sketch, fake data)</title>
+<style>
+/* ===== Base palette per theme. Brand colors are kept exactly in dark. ===== */
+:root{
+  --font-ui:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  /* brand */
+  --bg:#0B1114;--surface:#121C20;--inset:#0F181B;--line:#2F4044;--line2:#4A5C5F;
+  --text:#EAF4F2;--soft:#A9BDB9;--mute:#7C928E;--ctl:#7C928E;
+  --mint:#3DF5D0;--mint-t:#3DF5D0;--mint-bg:#0E2B2A;--onmint:#0B1114;
+  /* semantic hues: t = text/icon, c = border/fill, bg = tint (opaque) */
+  --red-t:#FF6B6B;--red-c:#FF5A5F;--red-bg:#2E1B1F;
+  --amber-t:#FFB224;--amber-c:#FFB224;--amber-bg:#2B2314;
+  --violet-t:#B9A2FF;--violet-c:#9F84F5;--violet-bg:#241F38;
+  --blue-t:#6DB6FF;--blue-c:#4A9CF0;--blue-bg:#14273B;
+  --gray-t:#A9BDB9;--gray-c:#7C928E;--gray-bg:#1A272B;
+  --focus:#3DF5D0;--shadow:0 1px 0 rgba(255,255,255,.03) inset;
+  --hero-bg:var(--bg);
+}
+:root[data-theme="light"]{
+  --bg:#DFF5EF;--surface:#FFFFFF;--inset:#F0FBF8;--line:#9CC8BE;--line2:#5F8F84;
+  --text:#0B1114;--soft:#2A4540;--mute:#46635E;--ctl:#46635E;
+  --mint:#00806B;--mint-t:#005F4D;--mint-bg:#D2F5EA;--onmint:#FFFFFF;
+  --red-t:#B3201A;--red-c:#D92D20;--red-bg:#FFE6E3;
+  --amber-t:#7A4300;--amber-c:#B86E00;--amber-bg:#FFEFC7;
+  --violet-t:#5A3DC0;--violet-c:#7B5CE0;--violet-bg:#ECE6FF;
+  --blue-t:#0A58A8;--blue-c:#1E78D2;--blue-bg:#DCEBFF;
+  --gray-t:#3A524D;--gray-c:#6C8580;--gray-bg:#E8F0EE;
+  --focus:#005F4D;--shadow:0 2px 6px rgba(7,52,45,.16);
+}
+@media (prefers-color-scheme: light){
+  :root[data-theme="auto"]{
+    --bg:#DFF5EF;--surface:#FFFFFF;--inset:#F0FBF8;--line:#9CC8BE;--line2:#5F8F84;
+    --text:#0B1114;--soft:#2A4540;--mute:#46635E;--ctl:#46635E;
+    --mint:#00806B;--mint-t:#005F4D;--mint-bg:#D2F5EA;--onmint:#FFFFFF;
+    --red-t:#B3201A;--red-c:#D92D20;--red-bg:#FFE6E3;
+    --amber-t:#7A4300;--amber-c:#B86E00;--amber-bg:#FFEFC7;
+    --violet-t:#5A3DC0;--violet-c:#7B5CE0;--violet-bg:#ECE6FF;
+    --blue-t:#0A58A8;--blue-c:#1E78D2;--blue-bg:#DCEBFF;
+    --gray-t:#3A524D;--gray-c:#6C8580;--gray-bg:#E8F0EE;
+    --focus:#005F4D;--shadow:0 2px 6px rgba(7,52,45,.16);
+  }
+}
+/* ===== Roles. Red = verified. ===== */
+:root{
+  --ver-t:var(--red-t);--ver-c:var(--red-c);--ver-bg:var(--red-bg);
+  --pot-t:var(--amber-t);--pot-c:var(--amber-c);--pot-bg:var(--amber-bg);
+  --hyp-t:var(--gray-t);--hyp-c:var(--gray-c);--hyp-bg:var(--gray-bg);
+  --unc-t:var(--violet-t);--unc-c:var(--violet-c);--unc-bg:var(--violet-bg);
+  --info-t:var(--blue-t);--info-c:var(--blue-c);--info-bg:var(--blue-bg);
+  --ok-t:var(--mint-t);--ok-c:var(--mint);--ok-bg:var(--mint-bg);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--font-ui);overflow-wrap:anywhere}
+code,.mono{font-family:var(--font-mono);font-size:.86em}
+a{color:var(--mint-t)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--mint);color:var(--onmint);padding:8px 14px;border-radius:6px;z-index:10;font-weight:700}
+.skip:focus{left:8px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* top bar: always the brand dark surface, in both themes */
+header.top{background:#0B1114;color:#EAF4F2;border-bottom:3px solid #3DF5D0}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{flex:none}
+.wm{font-weight:700;font-size:1.35rem;letter-spacing:.06em;line-height:1}
+.wm b{color:#3DF5D0;font-weight:700}
+.brand small{display:block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#A9BDB9;margin-top:4px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid #4A5C5F;border-radius:8px;overflow:hidden}
+.seg button{background:transparent;color:#A9BDB9;border:0;padding:8px 12px;min-height:40px;font:inherit;font-size:.9rem;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#3DF5D0;color:#0B1114;font-weight:700}
+.btn{background:transparent;color:var(--text);border:1px solid var(--ctl);border-radius:8px;padding:8px 12px;min-height:40px;font:inherit;font-size:.9rem;cursor:pointer}
+.btn:hover{border-color:var(--mint)}
+header.top .btn{color:#EAF4F2;border-color:#4A5C5F}
+header.top .btn:hover{border-color:#3DF5D0}
+header.top :focus-visible{outline-color:#3DF5D0}
+
+/* hero */
+.hero{padding:28px 0 8px}
+.hero h1{margin:0 0 6px;font-size:clamp(1.6rem,4.2vw,2.3rem);line-height:1.15;letter-spacing:-.01em}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--soft);font-size:.92rem;margin:0;padding:0;list-style:none}
+.meta b{color:var(--text);font-weight:700}
+.note{display:flex;gap:12px;align-items:flex-start;margin:14px 0 0;padding:12px 14px;border:1.5px solid var(--ok-c);border-radius:10px;background:var(--ok-bg)}
+.note svg{flex:none;margin-top:2px;color:var(--ok-t)}
+.note p{margin:0}
+.note strong{color:var(--ok-t)}
+.note.info{border-color:var(--info-c);background:var(--info-bg)}
+.note.info svg,.note.info strong{color:var(--info-t)}
+
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+.stat{--t:var(--text);--c:var(--line);--b:var(--surface);background:var(--b);border:1.5px solid var(--c);border-top-width:6px;border-radius:12px;padding:12px 16px 14px;box-shadow:var(--shadow);text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%;display:block;text-decoration:none}
+.stat:hover{filter:brightness(1.06)}
+.stat[aria-pressed="true"]{outline:3px solid var(--text);outline-offset:2px}
+.stat .n{font-size:2.4rem;font-weight:700;line-height:1;display:block;color:var(--t)}
+.stat .l{display:flex;align-items:center;gap:7px;font-weight:700;margin-top:6px;color:var(--t)}
+.stat .d{display:block;color:var(--soft);font-size:.84rem;margin-top:2px}
+.stat.confirmed{--t:var(--ver-t);--c:var(--ver-c);--b:var(--ver-bg)}
+.stat.potential{--t:var(--pot-t);--c:var(--pot-c);--b:var(--pot-bg)}
+.stat.hypothesis{--t:var(--hyp-t);--c:var(--hyp-c);--b:var(--hyp-bg)}
+.stat.hypothesis{border-style:dotted;border-top-style:solid}
+.stat.unchecked{--t:var(--unc-t);--c:var(--unc-c);--b:var(--unc-bg);border-style:dashed;border-top-style:solid}
+.stat.potential{border-style:solid}
+.bars{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--inset);border:1px solid var(--line);margin:-6px 0 22px}
+.bars i{display:block;height:100%}
+.bars .c{background:var(--ver-c)}
+.bars .p{background:repeating-linear-gradient(135deg,var(--pot-c) 0 4px,var(--surface) 4px 8px)}
+.bars .h{background:radial-gradient(circle,var(--hyp-c) 1.2px,transparent 1.6px) 0 0/6px 6px,var(--hyp-bg)}
+
+/* legend */
+.legend{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;margin:0 0 22px;box-shadow:var(--shadow)}
+.legend summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;gap:8px;align-items:center}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border:1.5px solid var(--ctl);border-radius:6px;font-family:var(--font-mono)}
+.legend[open] summary::before{content:"\2212"}
+.legend .body{padding:0 16px 16px}
+.legend p.lead{margin:0 0 10px;color:var(--soft);font-size:.92rem}
+.lg{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.lg li{display:grid;grid-template-columns:minmax(150px,200px) minmax(90px,130px) 1fr;gap:6px 14px;align-items:center;padding:8px 10px;background:var(--inset);border-radius:8px;border:1px solid var(--line)}
+.lg .cn{font-size:.84rem;color:var(--soft)}
+.lg .ds{font-size:.9rem}
+.lg .ds b{display:block}
+
+/* filters */
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line)}
+.frow{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+.f label{display:block;font-size:.78rem;color:var(--soft);margin-bottom:3px;font-weight:700}
+.f input,.f select{width:100%;min-height:44px;background:var(--surface);color:var(--text);border:1.5px solid var(--ctl);border-radius:8px;padding:8px 10px;font:inherit}
+.f input::placeholder{color:var(--mute)}
+.count{margin:10px 0 0;color:var(--soft);font-size:.9rem}
+
+/* cards */
+main h2{font-size:1.3rem;margin:26px 0 12px}
+.cards{display:grid;gap:16px;margin-bottom:28px}
+.card{--c:var(--ver-c);--b:var(--ver-bg);background:var(--surface);border:1.5px solid var(--line);border-left:8px solid var(--c);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.card[data-level="confirmed"]{--c:var(--ver-c)}
+.card[data-level="potential"]{--c:var(--pot-c);border-left-style:solid}
+.card[data-level="hypothesis"]{--c:var(--hyp-c);border-left-style:dotted}
+.card header{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.card[data-level="confirmed"] header{background:var(--ver-bg)}
+.card h3{margin:0;font-size:1.04rem;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.fid{color:var(--mute);font-size:.82rem;font-weight:700;font-family:var(--font-mono)}
+.badge{--t:var(--text);--c:currentColor;--b:transparent;display:inline-flex;align-items:center;gap:6px;color:var(--t);background:var(--b);border:1.5px solid var(--c);border-radius:999px;padding:2px 11px 2px 8px;font-weight:700;font-size:.82rem;white-space:nowrap}
+.badge.confirmed{--t:var(--ver-t);--c:var(--ver-c);--b:var(--ver-bg);border-width:2.5px}
+.badge.potential{--t:var(--pot-t);--c:var(--pot-c);--b:var(--pot-bg)}
+.badge.hypothesis{--t:var(--hyp-t);--c:var(--hyp-c);--b:var(--hyp-bg);border-style:dotted;border-width:2px}
+.badge.unchecked{--t:var(--unc-t);--c:var(--unc-c);--b:var(--unc-bg);border-style:dashed}
+.badge.ok{--t:var(--ok-t);--c:var(--ok-c);--b:var(--ok-bg)}
+.badge.info{--t:var(--info-t);--c:var(--info-c);--b:var(--info-bg)}
+.tag{border:1px solid var(--line2);color:var(--soft);border-radius:6px;padding:1px 8px;font-size:.78rem}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+dl.fields{margin:0;padding:6px 16px 14px;display:grid;grid-template-columns:minmax(150px,210px) 1fr;column-gap:16px}
+dl.fields dt,dl.fields dd{padding:9px 0;border-bottom:1px solid var(--line);margin:0}
+dl.fields dt:nth-last-of-type(1),dl.fields dd:last-of-type{border-bottom:0}
+dt{color:var(--soft);font-size:.82rem;font-weight:700;display:flex;gap:8px;align-items:baseline}
+dt .no{color:var(--mute);font-variant-numeric:tabular-nums}
+.act{display:flex;gap:8px;border-left:3px solid var(--mint);padding-left:10px;color:var(--text)}
+.act svg{flex:none;margin-top:3px;color:var(--mint-t)}
+.out{font-weight:700;color:var(--text);text-decoration:underline;text-decoration-style:wavy;text-underline-offset:3px;text-decoration-color:var(--mute)}
+.in{font-weight:700;color:var(--soft)}
+.empty{padding:28px;text-align:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--soft)}
+
+/* limits */
+.limits{background:var(--unc-bg);border:1.5px dashed var(--unc-c);border-left:8px dashed var(--unc-c);border-radius:12px;padding:6px 18px 16px;margin:12px 0 40px}
+.limits h2{margin:14px 0 4px;color:var(--unc-t)}
+.limits>p{margin:0 0 10px;color:var(--soft)}
+.limits ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.limits li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.limits li svg{color:var(--unc-t);margin-top:3px}
+.limits li b{display:block}
+.limits li span{color:var(--soft);font-size:.92rem}
+footer{border-top:1px solid var(--line);padding:18px 0 36px;color:var(--soft);font-size:.88rem}
+
+@media (max-width:860px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .frow{grid-template-columns:1fr 1fr}
+  .frow .f:first-child{grid-column:1/-1}
+  .filters{position:static}
+  .lg li{grid-template-columns:1fr 1fr}
+  .lg .ds{grid-column:1/-1}
+}
+@media (max-width:600px){
+  dl.fields{grid-template-columns:1fr}
+  dl.fields dt{border-bottom:0!important;padding:10px 0 0}
+  dl.fields dd{padding-top:2px}
+  .stat .n{font-size:1.9rem}
+  .frow{grid-template-columns:1fr}
+  .lg li{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.filters,.tools{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#findings" data-i="skip">Skip to findings</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="brand">
+      <svg width="44" height="44" viewBox="0 0 200 200" role="img" aria-label="AgentReach symbol"><g fill="none" stroke-linecap="round"><circle cx="100" cy="100" r="30" stroke="#3DF5D0" stroke-width="6" stroke-dasharray="120 68.5" transform="rotate(-100 100 100)"/><circle cx="100" cy="100" r="55" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.6" stroke-dasharray="200 145.6" transform="rotate(-20 100 100)"/><circle cx="100" cy="100" r="80" stroke="#3DF5D0" stroke-width="6" stroke-opacity="0.3" stroke-dasharray="270 232.7" transform="rotate(60 100 100)"/><line x1="100" y1="100" x2="156.6" y2="43.4" stroke="#3DF5D0" stroke-width="4"/><line x1="100" y1="100" x2="169.3" y2="140" stroke="#FFB224" stroke-width="4"/><line x1="100" y1="100" x2="24.8" y2="72.6" stroke="#3DF5D0" stroke-width="4"/></g><circle cx="156.6" cy="43.4" r="9" fill="#3DF5D0"/><circle cx="169.3" cy="140" r="9" fill="#FFB224"/><circle cx="24.8" cy="72.6" r="9" fill="#3DF5D0"/><circle cx="100" cy="100" r="14" fill="#3DF5D0"/></svg>
+      <div><div class="wm">AGENT<b>REACH</b></div><small data-i="brandsub">report sketch</small></div>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Language / Idioma">
+        <button type="button" id="lang-en" aria-pressed="true" lang="en" aria-label="English" title="English">EN</button>
+        <button type="button" id="lang-es" aria-pressed="false" lang="es" aria-label="Español" title="Español">ES</button>
+      </div>
+      <button type="button" class="btn" id="theme" data-i="themeDark">Theme: dark</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero" aria-labelledby="t">
+    <h1 id="t" data-i="title">Agent exposure report</h1>
+    <ul class="meta">
+      <li><span data-i="mScope">Scanned</span>: <b class="mono">demo-workspace/</b></li>
+      <li><span data-i="mDate">Date</span>: <b>2026-11-09</b></li>
+      <li><span data-i="mFiles">Files read</span>: <b>1,284</b></li>
+      <li><span data-i="mAgents">Agents detected</span>: <b>4</b></li>
+    </ul>
+    <div class="note" role="note">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.2-8 11-4.6-1.8-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p><strong data-i="safeT">No secret values are shown.</strong> <span data-i="safeB"></span></p>
+    </div>
+    <div class="note info" role="note" style="margin-top:10px">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.3" fill="currentColor"/></svg>
+      <p><strong data-i="demoT">Sketch.</strong> <span data-i="demo"></span></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="sumh">
+    <h2 id="sumh" style="position:absolute;left:-999px" data-i="sumH">Summary</h2>
+    <div class="summary" id="summary"></div>
+    <div class="bars" id="bars" role="img" aria-label=""></div>
+  </section>
+
+  <details class="legend" id="legend" open>
+    <summary data-i="legH">How to read the colors</summary>
+    <div class="body"><p class="lead" id="legLead"></p><ul class="lg" id="lg"></ul></div>
+  </details>
+
+  <div class="filters" role="search" aria-label="Filters">
+    <div class="frow">
+      <div class="f"><label for="q" data-i="fSearch">Search</label><input id="q" type="search" autocomplete="off" data-ip="fSearchPh" placeholder="Path, owner, label..."></div>
+      <div class="f"><label for="fl" data-i="fLevel">Level</label><select id="fl"></select></div>
+      <div class="f"><label for="fa" data-i="fAgent">Agent</label><select id="fa"></select></div>
+      <div class="f"><label for="ft" data-i="fType">Type</label><select id="ft"></select></div>
+      <div class="f"><button type="button" class="btn" id="reset" style="min-height:44px" data-i="reset">Clear</button></div>
+    </div>
+    <p class="count" id="count" role="status" aria-live="polite"></p>
+  </div>
+
+  <main id="main">
+    <h2 id="findings" tabindex="-1" data-i="findH">Findings</h2>
+    <div class="cards" id="cards"></div>
+
+    <section class="limits" aria-labelledby="limh">
+      <h2 id="limh" data-i="limH">What AgentReach could not check</h2>
+      <p data-i="limP"></p>
+      <ul id="limits"></ul>
+    </section>
+  </main>
+</div>
+<footer><div class="wrap" data-i="foot"></div></footer>
+
+<script>
+(function(){
+"use strict";
+var UI={
+ en:{skip:"Skip to findings",brandsub:"report sketch",title:"Agent exposure report",mScope:"Scanned",mDate:"Date",mFiles:"Files read",mAgents:"Agents detected",
+  safeT:"No secret values are shown.",safeB:"This report lists only where something is, what kind it is and who it belongs to. The values themselves were never stored, printed or sent anywhere.",
+  demoT:"Sketch.",demo:"100% invented data. Names, paths and numbers do not come from a real scan.",sumH:"Summary",
+  fSearch:"Search",fSearchPh:"Path, owner, label...",fLevel:"Level",fAgent:"Agent",fType:"Type",reset:"Clear",all:"All",
+  findH:"Findings",limH:"What AgentReach could not check",limP:"A clean result here does not mean \"safe\". These areas were out of reach in this scan.",
+  foot:"AgentReach, phase 2 report. Colors sketch for design review. Not a real scan.",
+  themeAuto:"Theme: system",themeDark:"Theme: dark",themeLight:"Theme: light",
+  legH:"How to read the colors",
+  legLeadA:"Red is used for one thing only: exposure that is verified. Every level also has its own icon and border, so color is never the only clue.",
+  legCols:["Role","Meaning"],
+  lvl:{confirmed:"Verified",potential:"Potential",hypothesis:"Hypothesis",unchecked:"Could not check"},
+  lvlD:{confirmed:"Proven by direct evidence",potential:"Strong signs, not proven",hypothesis:"Possible, needs a human look",unchecked:"Out of reach in this scan"},
+  role:{ok:"No findings / correct",info:"Information",action:"What to do / actions"},
+  roleD:{
+   confirmed:"Exposure confirmed. The most serious level. Act first.",
+   potential:"Likely exposure, not proven. Check soon.",
+   hypothesis:"Weak signal. Low urgency, a human decides.",
+   unchecked:"A gap in coverage, not a verdict. Clean does not mean safe.",
+   ok:"Nothing found here, or a protection is in place. Also the brand color.",
+   info:"Neutral notes (for example, that data is invented). Never a risk.",
+   action:"Steps, links and buttons. Marked with an arrow and the brand mint."},
+  colN:{
+   A:{confirmed:"Red, solid octagon",potential:"Amber, triangle",hypothesis:"Gray, dotted diamond",unchecked:"Violet, dashed circle",ok:"Mint, check",info:"Blue, circle i",action:"Mint, arrow"},
+   B:{confirmed:"Amber, solid octagon",potential:"Amber, triangle, lighter",hypothesis:"Gray, dotted diamond",unchecked:"Violet, dashed circle",ok:"Mint, check",info:"Blue, circle i",action:"Mint, arrow"}},
+  fields:["Location and line","What it is and whose","Level and why","Unrelated to the task","Platform and agent","Agent stance / rules","What to do","What it means"],
+  yes:"Yes, unrelated",no:"No, related",showing:"Showing {a} of {b} findings",none:"No findings match these filters.",
+  barLabel:"{c} verified, {p} potential, {h} hypothesis",line:"line"},
+ es:{skip:"Saltar a los hallazgos",brandsub:"boceto del reporte",title:"Reporte de exposición de agentes",mScope:"Revisado",mDate:"Fecha",mFiles:"Archivos leídos",mAgents:"Agentes detectados",
+  safeT:"No se muestra ningún valor secreto.",safeB:"Este reporte solo dice dónde está algo, de qué tipo es y a quién pertenece. Los valores nunca se guardaron, imprimieron ni enviaron a ningún lado.",
+  demoT:"Boceto.",demo:"Datos 100% inventados. Los nombres, rutas y números no vienen de una revisión real.",sumH:"Resumen",
+  fSearch:"Buscar",fSearchPh:"Ruta, dueño, etiqueta...",fLevel:"Nivel",fAgent:"Agente",fType:"Tipo",reset:"Limpiar",all:"Todos",
+  findH:"Hallazgos",limH:"Lo que AgentReach no pudo revisar",limP:"Un resultado limpio aquí no significa \"seguro\". Estas zonas quedaron fuera de alcance en esta revisión.",
+  foot:"AgentReach, reporte de fase 2. Boceto de colores para revisión de diseño. No es una revisión real.",
+  themeAuto:"Tema: sistema",themeDark:"Tema: oscuro",themeLight:"Tema: claro",
+  legH:"Cómo leer los colores",
+  legLeadA:"El rojo se usa para una sola cosa: exposición comprobada. Además cada nivel tiene su propio icono y borde, así que el color nunca es la única pista.",
+  legCols:["Rol","Significado"],
+  lvl:{confirmed:"Comprobado",potential:"Potencial",hypothesis:"Hipótesis",unchecked:"No se pudo revisar"},
+  lvlD:{confirmed:"Probado con evidencia directa",potential:"Señales fuertes, sin probar",hypothesis:"Posible, requiere ojo humano",unchecked:"Fuera de alcance en esta revisión"},
+  role:{ok:"Sin hallazgos / correcto",info:"Información",action:"Qué hacer / acciones"},
+  roleD:{
+   confirmed:"Exposición confirmada. El nivel más grave. Se atiende primero.",
+   potential:"Exposición probable, sin probar. Revisar pronto.",
+   hypothesis:"Señal débil. Poca urgencia, decide una persona.",
+   unchecked:"Un hueco de cobertura, no un veredicto. Limpio no significa seguro.",
+   ok:"Aquí no se encontró nada, o hay una protección activa. También es el color de la marca.",
+   info:"Notas neutras (por ejemplo, que los datos son inventados). Nunca es un riesgo.",
+   action:"Pasos, enlaces y botones. Se marcan con flecha y el menta de la marca."},
+  colN:{
+   A:{confirmed:"Rojo, octágono sólido",potential:"Ámbar, triángulo",hypothesis:"Gris, rombo punteado",unchecked:"Violeta, círculo discontinuo",ok:"Menta, palomita",info:"Azul, círculo con i",action:"Menta, flecha"},
+   B:{confirmed:"Ámbar, octágono sólido",potential:"Ámbar, triángulo, más suave",hypothesis:"Gris, rombo punteado",unchecked:"Violeta, círculo discontinuo",ok:"Menta, palomita",info:"Azul, círculo con i",action:"Menta, flecha"}},
+  fields:["Ubicación y línea","Qué es y de quién","Nivel y por qué","Ajeno a la tarea","Plataforma y agente","Postura del agente / reglas","Qué hacer","Qué significa"],
+  yes:"Sí, ajeno",no:"No, relacionado",showing:"Mostrando {a} de {b} hallazgos",none:"Ningún hallazgo coincide con estos filtros.",
+  barLabel:"{c} comprobados, {p} potenciales, {h} hipótesis",line:"línea"}
+};
+var SV='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">';
+var ICON={
+ confirmed:SV+'<path fill="currentColor" fill-rule="evenodd" d="M5.2 1h5.6L15 5.2v5.6L10.8 15H5.2L1 10.8V5.2zM7.2 4h1.6v5.2H7.2zM8 10.5a1.05 1.05 0 100 2.1 1.05 1.05 0 000-2.1z"/></svg>',
+ potential:SV+'<path d="M8 1.6l6.8 12.2H1.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 6v3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="11.7" r="1" fill="currentColor"/></svg>',
+ hypothesis:SV+'<path d="M8 1l7 7-7 7-7-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="2.4 2"/><path d="M6.3 6.4a1.8 1.8 0 113 1.2c-.6.5-1.3.8-1.3 1.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.4" r=".9" fill="currentColor"/></svg>',
+ unchecked:SV+'<circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3 2"/><path d="M3.6 12.4l8.8-8.8" stroke="currentColor" stroke-width="1.8"/></svg>',
+ ok:SV+'<circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.8 8.2l2.2 2.2 4.2-4.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ info:SV+'<circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="8" cy="4.9" r=".95" fill="currentColor"/></svg>',
+ action:SV+'<path d="M2.5 8h10M8.6 3.6L13 8l-4.4 4.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+var LEVELS=["confirmed","potential","hypothesis"];
+/* All data invented. Labels only; no values. */
+var D=[
+ {id:"F-01",lv:"confirmed",ag:"Claude Code",ty:"api",
+  en:{title:"Cloud billing API key inside an agent settings file",loc:"demo-app/.claude/settings.local.json",ln:14,what:"Cloud API key, label \"demo-billing\". Owner: finance-bot team.",why:"The file exists, its permissions let the agent read it, and no agent rule blocks it.",unrel:true,unrelT:"The task was \"fix the login page\". Billing is unrelated.",plat:"Windows 11, Claude Code",stance:"Rule \"deny reads of .env*\" exists, but this file is not covered by it.",do:"Revoke the key at the provider, move it to the system keychain, add this file to the agent deny list.",mean:"Any session in this folder can read it. Treat it as already exposed."},
+  es:{title:"Llave de API de facturación en un archivo de ajustes del agente",loc:"demo-app/.claude/settings.local.json",ln:14,what:"Llave de API de nube, etiqueta \"demo-billing\". Dueño: equipo finance-bot.",why:"El archivo existe, sus permisos dejan al agente leerlo y ninguna regla del agente lo bloquea.",unrel:true,unrelT:"La tarea era \"arreglar la página de login\". Facturación no tiene relación.",plat:"Windows 11, Claude Code",stance:"Existe la regla \"negar lectura de .env*\", pero este archivo no está cubierto.",do:"Revoca la llave en el proveedor, muévela al llavero del sistema y agrega este archivo a la lista de negados del agente.",mean:"Cualquier sesión en esta carpeta puede leerla. Considérala ya expuesta."}},
+ {id:"F-02",lv:"confirmed",ag:"Codex",ty:"password",
+  en:{title:"Database password in a committed deploy script",loc:"demo-app/scripts/deploy-staging.sh",ln:32,what:"Password for database user \"report_ro\". Owner: data-platform.",why:"The script assigns it to a variable named DB_PASS and the script is tracked in version control.",unrel:false,unrelT:"The task was \"update deploy docs\". Reading the script is related.",plat:"WSL Ubuntu, Codex CLI",stance:"No rules file found for this agent in this project.",do:"Rotate the password, read it from the environment at run time, rewrite history if the repository is shared.",mean:"Anyone with repository access has had it. Rotation matters more than deletion."},
+  es:{title:"Contraseña de base de datos en un script de despliegue versionado",loc:"demo-app/scripts/deploy-staging.sh",ln:32,what:"Contraseña del usuario de base de datos \"report_ro\". Dueño: data-platform.",why:"El script la asigna a una variable llamada DB_PASS y el script está bajo control de versiones.",unrel:false,unrelT:"La tarea era \"actualizar la documentación de despliegue\". Leer el script sí es relacionado.",plat:"WSL Ubuntu, Codex CLI",stance:"No se encontró archivo de reglas para este agente en este proyecto.",do:"Rota la contraseña, léela del entorno al ejecutar y reescribe el historial si el repositorio es compartido.",mean:"Cualquiera con acceso al repositorio la ha tenido. Rotar importa más que borrar."}},
+ {id:"F-03",lv:"potential",ag:"Cursor",ty:"token",
+  en:{title:"Chat-app access token in an editor extension cache",loc:"~/AppData/Roaming/Cursor/User/globalStorage/demo-ext/state.vscdb",ln:null,what:"Access token for a team chat app, label \"demo-notify\". Owner: unknown.",why:"Key name looks like a token and the value length fits, but the provider could not be matched.",unrel:true,unrelT:"The task was \"rename a React component\". Chat access is unrelated.",plat:"Windows 11, Cursor",stance:"Cursor has no deny rules configured. Extension has file access.",do:"Check in the chat app admin page whether the token \"demo-notify\" exists; if so, revoke it and sign out of the extension.",mean:"Probably real, not proven. A quick manual check settles it."},
+  es:{title:"Token de app de chat en la caché de una extensión del editor",loc:"~/AppData/Roaming/Cursor/User/globalStorage/demo-ext/state.vscdb",ln:null,what:"Token de acceso a una app de chat de equipo, etiqueta \"demo-notify\". Dueño: desconocido.",why:"El nombre de la clave parece de token y el largo del valor encaja, pero no se pudo identificar el proveedor.",unrel:true,unrelT:"La tarea era \"renombrar un componente React\". El acceso al chat no tiene relación.",plat:"Windows 11, Cursor",stance:"Cursor no tiene reglas de negación. La extensión tiene acceso a archivos.",do:"Revisa en la administración de la app de chat si existe el token \"demo-notify\"; si existe, revócalo y cierra sesión en la extensión.",mean:"Probablemente real, no probado. Una revisión manual rápida lo aclara."}},
+ {id:"F-04",lv:"potential",ag:"Claude Code",ty:"key",
+  en:{title:"Private key file outside the project, readable by the agent",loc:"~/.deploy/demo-server.pem",ln:null,what:"Private key for server \"demo-server-01\". Owner: Dana (ops).",why:"File header marks a private key and the file sits in a folder the agent is allowed to open.",unrel:true,unrelT:"The task was \"add a unit test\". Server access is unrelated.",plat:"macOS 15, Claude Code",stance:"Allow rule \"Read(~/**)\" gives access to the whole home folder.",do:"Narrow the allow rule to the project folder; ask Dana whether the key is still in use and rotate it if so.",mean:"The agent could read it today. No sign that it did."},
+  es:{title:"Archivo de llave privada fuera del proyecto, legible por el agente",loc:"~/.deploy/demo-server.pem",ln:null,what:"Llave privada del servidor \"demo-server-01\". Dueña: Dana (operaciones).",why:"El encabezado del archivo indica llave privada y el archivo está en una carpeta que el agente puede abrir.",unrel:true,unrelT:"La tarea era \"agregar una prueba unitaria\". El acceso al servidor no tiene relación.",plat:"macOS 15, Claude Code",stance:"La regla de permiso \"Read(~/**)\" da acceso a toda la carpeta personal.",do:"Limita la regla a la carpeta del proyecto; pregunta a Dana si la llave sigue en uso y rótala si es así.",mean:"El agente podía leerla hoy. No hay señal de que lo hiciera."}},
+ {id:"F-05",lv:"potential",ag:"Gemini CLI",ty:"conn",
+  en:{title:"Connection string with embedded credentials in a log",loc:"demo-app/logs/agent-session-0412.log",ln:208,what:"Database connection string, label \"analytics-replica\". Owner: data-platform.",why:"URL has the user:pass@host shape, but the host name looks like a placeholder.",unrel:false,unrelT:"The task was \"debug slow query\". Related.",plat:"Linux, Gemini CLI",stance:"Agent rule \"never print connection strings\" exists; the log shows it was not followed.",do:"Delete the log, rotate the replica password if the host is real, mask URLs in the agent output settings.",mean:"The agent wrote it into a file that other tools may collect."},
+  es:{title:"Cadena de conexión con credenciales dentro de un registro",loc:"demo-app/logs/agent-session-0412.log",ln:208,what:"Cadena de conexión a base de datos, etiqueta \"analytics-replica\". Dueño: data-platform.",why:"La URL tiene la forma usuario:clave@servidor, pero el nombre del servidor parece de ejemplo.",unrel:false,unrelT:"La tarea era \"depurar consulta lenta\". Sí es relacionado.",plat:"Linux, Gemini CLI",stance:"Existe la regla \"nunca imprimir cadenas de conexión\"; el registro muestra que no se cumplió.",do:"Borra el registro, rota la clave de la réplica si el servidor es real y enmascara las URL en los ajustes de salida del agente.",mean:"El agente lo escribió en un archivo que otras herramientas pueden recolectar."}},
+ {id:"F-06",lv:"potential",ag:"Codex",ty:"token",
+  en:{title:"Package registry token in a user-level config",loc:"~/.config/demo-registry/rc",ln:3,what:"Publish token for a package registry, label \"demo-publish\". Owner: Sam (release).",why:"Key name is standard for this registry; the file is outside any repository.",unrel:true,unrelT:"The task was \"format the README\". Publishing rights are unrelated.",plat:"WSL Ubuntu, Codex CLI",stance:"Sandbox is on, but the home config folder is mounted read-only into it.",do:"Switch to a short-lived token, remove the mount of the home config folder from the sandbox.",mean:"Readable from inside the sandbox. Impact depends on token scope."},
+  es:{title:"Token de registro de paquetes en una configuración de usuario",loc:"~/.config/demo-registry/rc",ln:3,what:"Token de publicación de un registro de paquetes, etiqueta \"demo-publish\". Dueño: Sam (releases).",why:"El nombre de la clave es el estándar de este registro; el archivo está fuera de cualquier repositorio.",unrel:true,unrelT:"La tarea era \"dar formato al README\". Publicar paquetes no tiene relación.",plat:"WSL Ubuntu, Codex CLI",stance:"El sandbox está activo, pero la carpeta de configuración personal entra montada en solo lectura.",do:"Cambia a un token de vida corta y quita el montaje de la carpeta de configuración del sandbox.",mean:"Se puede leer desde dentro del sandbox. El impacto depende del alcance del token."}},
+ {id:"F-07",lv:"hypothesis",ag:"Cursor",ty:"api",
+  en:{title:"Long random-looking string in a test fixture",loc:"demo-app/tests/fixtures/payload.json",ln:57,what:"Unknown string, no label. Owner: unknown.",why:"High randomness only. Folder name suggests sample data.",unrel:false,unrelT:"The task was \"add tests\". Related.",plat:"Windows 11, Cursor",stance:"No rules apply to test folders.",do:"Open the line and decide: if it is fake sample data, mark the file as ignored in the scan settings.",mean:"Most likely harmless. Listed so nothing is hidden."},
+  es:{title:"Cadena larga de apariencia aleatoria en un archivo de prueba",loc:"demo-app/tests/fixtures/payload.json",ln:57,what:"Cadena desconocida, sin etiqueta. Dueño: desconocido.",why:"Solo por alta aleatoriedad. El nombre de la carpeta sugiere datos de ejemplo.",unrel:false,unrelT:"La tarea era \"agregar pruebas\". Sí es relacionado.",plat:"Windows 11, Cursor",stance:"Ninguna regla aplica a las carpetas de pruebas.",do:"Abre la línea y decide: si son datos de ejemplo, marca el archivo como ignorado en los ajustes de la revisión.",mean:"Lo más probable es que sea inofensivo. Se lista para no esconder nada."}},
+ {id:"F-08",lv:"hypothesis",ag:"Claude Code",ty:"password",
+  en:{title:"Variable named \"admin_pass\" in a shell history",loc:"~/.bash_history",ln:911,what:"Command that sets a variable named admin_pass. Owner: you.",why:"Only the variable name is suspicious; the value was not examined.",unrel:true,unrelT:"No task in this session touches shell history.",plat:"macOS 15, Claude Code",stance:"Reading dotfiles is allowed by default.",do:"Clear that history line and check whether the password was reused somewhere else.",mean:"Might be an old habit leaving traces. Worth thirty seconds."},
+  es:{title:"Variable llamada \"admin_pass\" en el historial del shell",loc:"~/.bash_history",ln:911,what:"Comando que define una variable llamada admin_pass. Dueño: tú.",why:"Solo el nombre de la variable es sospechoso; el valor no se examinó.",unrel:true,unrelT:"Ninguna tarea de esta sesión toca el historial del shell.",plat:"macOS 15, Claude Code",stance:"Leer archivos ocultos está permitido por defecto.",do:"Borra esa línea del historial y revisa si la contraseña se reutilizó en otro lugar.",mean:"Puede ser un hábito viejo que dejó rastro. Vale treinta segundos."}}
+];
+var LIM={
+ en:[["Encrypted vaults and keychains","Contents of password managers and system keychains are never opened."],["Files over 5 MB and binary files","Skipped for speed. Databases and archives may hold items we did not see."],["Other users' folders","Only the current user's home and the chosen project were read."],["Running processes and memory","The scan reads files at rest, not live environments."],["Remote systems and cloud consoles","We cannot see what is stored on servers or in provider dashboards."],["Agents without a known config format","3 tools were detected but their settings could not be parsed."]],
+ es:[["Bóvedas y llaveros cifrados","El contenido de gestores de contraseñas y llaveros del sistema nunca se abre."],["Archivos de más de 5 MB y binarios","Se omiten por velocidad. Bases de datos y comprimidos pueden guardar elementos que no vimos."],["Carpetas de otros usuarios","Solo se leyó la carpeta personal actual y el proyecto elegido."],["Procesos y memoria en ejecución","La revisión lee archivos en reposo, no entornos en vivo."],["Sistemas remotos y consolas en la nube","No vemos lo guardado en servidores ni en paneles de proveedores."],["Agentes sin formato de configuración conocido","Se detectaron 3 herramientas pero no se pudieron leer sus ajustes."]]
+};
+var TYPES={api:{en:"API key",es:"Llave de API"},token:{en:"Token",es:"Token"},password:{en:"Password",es:"Contraseña"},key:{en:"Private key",es:"Llave privada"},conn:{en:"Connection string",es:"Cadena de conexión"}};
+var lang="en", theme="dark", pal="A";
+var $=function(s){return document.querySelector(s)};
+var lvlFilter="all";
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function t(){return UI[lang]}
+function counts(){var c={confirmed:0,potential:0,hypothesis:0};D.forEach(function(f){c[f.lv]++});return c}
+function badge(l,txt){return '<span class="badge '+l+'">'+ICON[l==="ok"||l==="info"?l:l]+esc(txt||t().lvl[l])+'</span>'}
+
+function renderStatic(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(function(e){var k=e.getAttribute("data-i");if(t()[k]!==undefined)e.textContent=t()[k]});
+  document.querySelectorAll("[data-ip]").forEach(function(e){e.placeholder=t()[e.getAttribute("data-ip")]});
+  $("#lang-en").setAttribute("aria-pressed",lang==="en");$("#lang-es").setAttribute("aria-pressed",lang==="es");
+  $("#theme").textContent=t()[theme==="auto"?"themeAuto":theme==="dark"?"themeDark":"themeLight"];
+  document.title="AgentReach - "+t().title;
+  var c=counts(),h="";
+  ["confirmed","potential","hypothesis","unchecked"].forEach(function(l){
+    var n=l==="unchecked"?LIM.en.length:c[l];
+    h+= l==="unchecked"
+     ? '<a class="stat unchecked" href="#limh"><span class="n">'+n+'</span><span class="l">'+ICON[l]+esc(t().lvl[l])+'</span><span class="d">'+esc(t().lvlD[l])+'</span></a>'
+     : '<button type="button" class="stat '+l+'" data-lv="'+l+'" aria-pressed="'+(lvlFilter===l)+'"><span class="n">'+n+'</span><span class="l">'+ICON[l]+esc(t().lvl[l])+'</span><span class="d">'+esc(t().lvlD[l])+'</span></button>';
+  });
+  $("#summary").innerHTML=h;
+  var tot=D.length;
+  $("#bars").innerHTML='<i class="c" style="width:'+c.confirmed/tot*100+'%"></i><i class="p" style="width:'+c.potential/tot*100+'%"></i><i class="h" style="width:'+c.hypothesis/tot*100+'%"></i>';
+  $("#bars").setAttribute("aria-label",t().barLabel.replace("{c}",c.confirmed).replace("{p}",c.potential).replace("{h}",c.hypothesis));
+  // legend
+  $("#legLead").textContent=t()["legLead"+pal];
+  var rows=["confirmed","potential","hypothesis","unchecked","ok","info","action"];
+  $("#lg").innerHTML=rows.map(function(r){
+    var isLvl=r!=="ok"&&r!=="info"&&r!=="action";
+    var name=isLvl?t().lvl[r]:t().role[r];
+    var chip=r==="action"
+      ? '<span class="badge ok" style="border-style:solid">'+ICON.action+esc(name)+'</span>'
+      : '<span class="badge '+r+'">'+ICON[r]+esc(name)+'</span>';
+    return '<li><span>'+chip+'</span><span class="cn">'+esc(t().colN[pal][r])+'</span><span class="ds">'+esc(t().roleD[r])+'</span></li>';
+  }).join("");
+  fillSel("#fl",["all"].concat(LEVELS),function(v){return v==="all"?t().all:t().lvl[v]});
+  var ags=[];D.forEach(function(f){if(ags.indexOf(f.ag)<0)ags.push(f.ag)});
+  fillSel("#fa",["all"].concat(ags),function(v){return v==="all"?t().all:v});
+  fillSel("#ft",["all"].concat(Object.keys(TYPES)),function(v){return v==="all"?t().all:TYPES[v][lang]});
+  $("#fl").value=lvlFilter;
+  $("#limits").innerHTML=LIM[lang].map(function(r){return '<li>'+ICON.unchecked+'<div><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></div></li>'}).join("");
+}
+function fillSel(sel,vals,lab){
+  var el=$(sel),cur=el.value||"all";
+  el.innerHTML=vals.map(function(v){return '<option value="'+esc(v)+'">'+esc(lab(v))+'</option>'}).join("");
+  el.value=vals.indexOf(cur)>=0?cur:"all";
+}
+function renderCards(){
+  var q=$("#q").value.trim().toLowerCase(),fl=$("#fl").value,fa=$("#fa").value,ft=$("#ft").value;
+  lvlFilter=fl;
+  document.querySelectorAll(".stat[data-lv]").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-lv")===fl)});
+  var L=t(),out=D.filter(function(f){
+    if(fl!=="all"&&f.lv!==fl)return false;
+    if(fa!=="all"&&f.ag!==fa)return false;
+    if(ft!=="all"&&f.ty!==ft)return false;
+    if(q){var x=f[lang],hay=(f.id+" "+x.title+" "+x.loc+" "+x.what+" "+x.plat+" "+f.ag).toLowerCase();if(hay.indexOf(q)<0)return false}
+    return true});
+  $("#count").textContent=L.showing.replace("{a}",out.length).replace("{b}",D.length);
+  if(!out.length){$("#cards").innerHTML='<div class="empty">'+esc(L.none)+'</div>';return}
+  $("#cards").innerHTML=out.map(function(f){
+    var x=f[lang];
+    var vals=[
+      '<code>'+esc(x.loc)+'</code>'+(x.ln?' <span class="tag">'+esc(L.line)+' '+x.ln+'</span>':''),
+      esc(x.what),
+      badge(f.lv)+' '+esc(x.why),
+      '<span class="'+(x.unrel?'out':'in')+'">'+esc(x.unrel?L.yes:L.no)+'.</span> '+esc(x.unrelT),
+      esc(x.plat),
+      esc(x.stance),
+      '<div class="act">'+ICON.action+'<span>'+esc(x.do)+'</span></div>',
+      esc(x.mean)];
+    var dl=L.fields.map(function(n,i){return '<dt><span class="no">'+(i+1)+'</span>'+esc(n)+'</dt><dd>'+vals[i]+'</dd>'}).join("");
+    return '<article class="card" data-level="'+f.lv+'" aria-labelledby="h-'+f.id+'"><header><h3 id="h-'+f.id+'"><span class="fid">'+f.id+'</span>'+esc(x.title)+'</h3><div class="tags">'+badge(f.lv)+'<span class="tag">'+esc(f.ag)+'</span><span class="tag">'+esc(TYPES[f.ty][lang])+'</span></div></header><dl class="fields">'+dl+'</dl></article>';
+  }).join("");
+}
+function all(){renderStatic();renderCards()}
+$("#lang-en").onclick=function(){lang="en";all()};
+$("#lang-es").onclick=function(){lang="es";all()};
+$("#theme").onclick=function(){theme=theme==="auto"?"dark":theme==="dark"?"light":"auto";document.documentElement.setAttribute("data-theme",theme);renderStatic()};
+["#q","#fl","#fa","#ft"].forEach(function(s){$(s).addEventListener("input",renderCards)});
+$("#reset").onclick=function(){$("#q").value="";$("#fl").value="all";$("#fa").value="all";$("#ft").value="all";renderCards()};
+$("#summary").addEventListener("click",function(e){var b=e.target.closest(".stat[data-lv]");if(!b)return;var v=b.getAttribute("data-lv");$("#fl").value=($("#fl").value===v)?"all":v;renderCards()});
+(function(){var th=location.hash.match(/theme=(dark|light)/),lg=location.hash.match(/lang=(es|en)/);
+ if(th){theme=th[1];document.documentElement.setAttribute("data-theme",theme)}
+ if(lg){lang=lg[1]}})();
+all();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+# Desfases entre el borrador de arquitectura (2026-11-06) y el código (2026-11-11)
+
+Cómo leerlo: cada fila compara lo que decía `arquitectura-borrador.md` con lo que hace hoy `src/agentreach/` (rutas relativas a esa carpeta, salvo `tests/`). Veredictos: **coincide**, **desfase** (el borrador decía otra cosa) o **el borrador no lo cubría**. «Qué se hace»: actualizar el documento (ya hecho en `ARCHITECTURE-SPINE.md`), cambiar el código (no se tocó nada) o aceptar. Los números de línea marcados con `~` son aproximados. No se ejecutó la suite de pruebas; lo afirmado sobre pruebas viene de leer el código.
+
+| # | Lo que decía el borrador | Lo que hace el código (archivo:línea) | Veredicto | Qué se hace |
+| --- | --- | --- | --- | --- |
+| 1 | AD-1: hexagonal con el hallazgo como contrato; «ocho campos» | `contracts/finding.py:543` `Finding` congelado con 11 campos (`regla` y `certeza` añadidos después; `tests/test_contratos.py:72`). Los «ocho campos» de FR-9 son la vista del reporte | Desfase | Actualizar el documento (AD-1 aclara las dos cosas) |
+| 2 | Regla de dependencias: `core` no importa `adapters`, `infra` ni `reporting` | `core/` y `contracts/` sin esos imports; lo vigila `tests/test_contratos.py:164-180` por análisis del código fuente. No vigila `collectors` ni que `contracts` evite `core` | Coincide | Aceptar; la brecha menor queda en Deferred |
+| 3 | Tubería con `reachability.py` y `taxonomy.py` | `core/pipeline.py:42-45` (un detector que falla lanza `RuntimeError` con su nombre); la lógica está en `evaluador.py`, `nivel.py`, `politica.py`, `invariantes.py`, `relacion_tarea.py`, `autocomprobacion.py`, `catalogo_*` | Desfase | Actualizar el documento (mapa de capas) |
+| 4 | Puertos `ReadOnlyFs`, `EnvView`, `FsProbe`, `AgentAdapter`, `Narrator` | `contracts/ports.py`: los cinco más `Detector` (`:131`), `Capacidad`, `PermisoLectura`, `Metadatos`, `PermisosArchivo`; `Narrator` vacío en `:139` | Coincide (con extras no previstos) | Actualizar el documento |
+| 5 | AD-2: entry points (A) para terceros más registro en el árbol (B) para el de referencia | Sin `importlib.metadata` ni `entry_points`; `pyproject.toml` solo declara `[project.scripts]`; registro = tupla fija de constructores en `app/auditar.py:61-73`, con los adaptadores importados directo (`:17-18`) | Desfase | Actualizar el documento (AD-2 = opción B; entry points diferidos). Ver decisión D1 |
+| 6 | Adaptador de referencia (Claude Code) en el árbol | `adapters/claude_code/` y también `adapters/opencode/` y `adapters/base.py` (`AdaptadorBase`, `ResultadoAdaptador` `:54`) | Coincide (con extras) | Actualizar el documento |
+| 7 | Kit de conformidad reutilizable por terceros | `adapters/conformance/__init__.py:60` `ejecutar_conformidad`; comprueba 3 propiedades (sin excepción, `NoRevisado` con motivo correcto, sin valores de entorno, canario `:24`). No verifica la «capacidad declarada» | Coincide (parcial) | Actualizar el documento (AD-2 lo describe como es) |
+| 8 | AD-3: `ReadOnlyFs` con `stat, listar, open('rb'), readlink` | `contracts/ports.py:~86`: solo `listar`, `metadatos`, `leer_texto`; `infra/fs_solo_lectura.py:92-148` no sigue enlaces, confina a la raíz (`:121-134`), tope 1 MiB (`ports.LIMITE_BYTES`) | Desfase | Actualizar el documento (AD-3) |
+| 9 | AD-3: reporte a stdout; `--output` rechazado dentro del árbol | `cli/__init__.py:658` rechaza `--salida` dentro de la carpeta; `:661`, `:701` modo exclusivo; además escribe el HTML y `preferencias.json` en `AgentReach-reportes` por defecto (`cli/reportes.py:17-18,84,117`; `cli/__init__.py:723-724`) | Desfase | Actualizar el documento (AD-19). Ver decisión D2 |
+| 10 | Prueba de hash y mtime del árbol antes y después | `tests/reglas_no_negociables/test_solo_lectura.py:16-23, 73-96`; gancho `sys.addaudithook` con `ViolacionDeRegla` (BaseException) en el `conftest.py` de esa carpeta | Coincide (superado) | Actualizar el documento (AD-3) |
+| 11 | AD-4: sin red, prueba que bloquea sockets y regla de imports | `tests/reglas_no_negociables/test_sin_red.py:14-19, 31-50, 57+`; `MODULOS_DE_RED` incluye `asyncio`, `selectors`; `urllib.parse` permitido (`collectors/git_meta.py:20`) | Coincide | Aceptar |
+| 12 | AD-5 (reemplazada): ACL sin abrir; «abierto: cómo implementarlo en Windows» | `infra/sonda_windows.py:14,66-67` `ctypes`; `GetNamedSecurityInfoW` `:232`, `AccessCheck` `:140-149, 247-250`; dudas = no determinado (`:219-268`); no abre el archivo; sin `icacls` ni `pywin32` | Coincide (y cierra lo abierto) | Actualizar el documento (AD-5) |
+| 13 | AD-5: segundo cálculo independiente | `infra/verificador_permiso_windows.py:1-20` (`GetFileSecurityW`, `GetEffectiveRightsFromAclW`, SDDL); `core/verificacion_independiente.py:60-80`; `core/evaluador.py:131-132`; `core/nivel.py:~96`. Comparte la ACL con la sonda (`LIMITACION_TEXTO` `:37-43`) | El borrador no lo cubría | Actualizar el documento (AD-21) |
+| 14 | AD-5: POSIX con modo, propietario y ACL | `infra/sonda_posix.py:34-53`: `os.stat` y `os.access`, ambiguo con enlace o administrador (`:24-28`); sin ACL POSIX ni verificador; docstring «sin pruebas obligatorias en el MVP» (`:3`) | Desfase | Aceptar para el MVP y documentarlo (AD-5, Deferred). Ver decisión D4 |
+| 15 | AD-6: git como texto, falla cerrado (TH-20), sin programas externos | `infra/lector_config_git.py:1-17, 30, 259, 275`; `collectors/git_meta.py:65-78, 124-135, 174-186, 232-253`; pruebas `test_sin_ejecutar_programas.py:21-35, 50-93` | Coincide | Aceptar (más claves vigiladas que en el borrador) |
+| 16 | AD-6: ningún programa externo | `infra/navegador.py:16-21` `webbrowser.open` lanza en Windows la asociación del `.html`; la prueba estática no lo ve y los tests lo sustituyen (`test_reportes_y_navegador.py:105-127`) | Desfase | Actualizar el documento (excepción acotada en AD-19). Ver decisión D3 |
+| 17 | `ctypes` solo para ACL | También en `cli/__init__.py:288-291` (idioma), `contracts/rutas.py:36` (tipo de unidad) y `reporting/formato.py` (modo de color); `ctypes` limitado a 5 módulos por prueba | Desfase | Aceptar; mencionado en AD-5 y la prueba de procesos |
+| 18 | AD-7: `dataclass` congeladas, sin Pydantic | `@dataclass(frozen=True, slots=True)` en `contracts/finding.py:237,543`, `adapters/base.py`; `pyproject.toml:7` `dependencies = []` | Coincide | Aceptar |
+| 19 | AD-7: JSON Schema generado de `Finding` y comprobado en pruebas | No existe `contracts/schema/finding.schema.json`; el único esquema es `docs/reporte-html/esquema-datos.schema.json`, a mano y para los datos del HTML (`tests/test_reporte_html.py:47`) | Desfase | Actualizar el documento (AD-7; diferido). Ver decisión D6 |
+| 20 | AD-7 / S7: Python mínimo 3.11 | `pyproject.toml:6` `requires-python = ">=3.12"`; ruff `py312`; `tomllib` en `config/__init__.py:11` | Desfase | Actualizar el documento (3.12) |
+| 21 | AD-8: JSON canónico, Markdown y texto | `cli/__init__.py:237` `--formato` solo `texto` y `html`; sin `json_report.py` ni `markdown_report.py`; `--json` oculto y rechazado con código 2 (`:235`, `:646`); `Finding.a_dict` existe (`finding.py:260,587`) sin uso por la CLI | Desfase | Actualizar el documento (AD-8) |
+| 22 | AD-8: el reporte HTML no figuraba | `reporting/html.py:229` `generar_html`; marcador `__AGENTREACH_DATA__` (`:43`); `_a_json_seguro` (`:219`); topes `:44-45`; `schema_version` 1 (`:46`); CSP `default-src 'none'` (plantilla `:5`); JSON y CSV desde el navegador (plantilla `:1306, 1331-1332`) | El borrador no lo cubría | Actualizar el documento (AD-17) |
+| 23 | AD-8: SARIF pospuesto | No existe | Coincide | Aceptar (Deferred) |
+| 24 | Texto y Markdown derivan del JSON canónico | Texto y HTML derivan de `DatosReporte` y `HallazgoVista` de `reporting/gate.py` (`:114`, `:42`, `:173`); `html.py:38` importa de `gate` | Desfase | Actualizar el documento (AD-8 y AD-15); misma garantía de seguridad |
+| 25 | Compuerta con lista blanca | `reporting/gate.py:173` `preparar` autocomprueba (`:185`); `ruta_visible` `:145`; `codigo_de_salida` `:166`; docstring `:1-7` | Coincide (más fuerte) | Actualizar el documento (AD-15) |
+| 26 | Cuatro barreras contra valores de secretos (detectar sin retener, tipos cerrados, compuerta, canario) | `tests/reglas_no_negociables/test_sin_valores_de_secretos.py:111-150` (CNR001 a CNR024; el modelo `Finding` sin texto libre); `Entrada.valor` con `repr=False` (`lector_config_git.py:48`); `NoRevisado.clave` acotada (`no_revisado.py:45`) | Coincide | Aceptar |
+| 27 | AD-9: ubicaciones sensibles opt-in, solo metadatos, solo config global o bandera | `config/__init__.py:1-6, 20-23, 52-65`; `collectors/ubicaciones_usuario.py:5, 71-81` | Coincide (más un segundo candado) | Actualizar el documento (AD-9, AD-13) |
+| 28 | AD-10: `Narrator` vacío en `core.contracts` | `contracts/ports.py:138-141`, exportado en `contracts/__init__.py:39,67`; vive en `contracts.ports` | Coincide | Aceptar |
+| 29 | Niveles comprobado, potencial e hipótesis (D4, D6) sin más reglas | `core/nivel.py:80-101` `_decidir`; `core/politica.py:58-79` `NIVEL_MAXIMO`; `finding.py:272` `FUENTE_VERIFICADA` todo falso; `core/invariantes.py:50-105`; `evaluador.py:123-127`; `autocomprobacion.py:104` | El borrador no lo cubría | Actualizar el documento (AD-11) |
+| 30 | Sin permiso de lectura explícito de una persona | `cli/__init__.py:520-598, 645-647, 678-681`; `config/__init__.py:43`; pruebas `tests/test_historia_28.py:176-246`; sin opción `--permitir` ni equivalente | El borrador no lo cubría | Actualizar el documento (AD-13) |
+| 31 | M1: respuesta leída de `CONIN$` o `/dev/tty` | `cli/__init__.py:517` `_preguntar_por_defecto = input`, `:450`; sin `CONIN$` ni `/dev/tty` salvo en la lista de nombres reservados (`contracts/rutas.py:17`); `_interactivo` exige entrada y salida terminales (`:536-538`) | Desfase | Aceptar hoy; construir antes del lanzamiento público. Ver decisión D5 |
+| 32 | Lectura de archivos sin límites especificados | `infra/lectura_segura.py:34-107`: tope 5 MiB, tipo antes de abrir, UTF-8 estricto, profundidad 64; 12 motivos cerrados (`contracts/no_revisado.py:15-45`); `test_limites_duros.py:29-52, 146, 157` | El borrador no lo cubría | Actualizar el documento (AD-14) |
+| 33 | Catálogo de agentes y reconocimiento | `app/agentes.py` (`ANALIZADOS` `~65`, `OMITIDOS` `~68`, `COMPARTIDOS` `~71`, `_unificar_copilot` `:249`); `data/catalogo-agentes.json` con 22 entradas; copia idéntica en `docs/agentes-catalogo/`, vigilada por `tests/test_historia_24.py:51` | El borrador no lo cubría | Actualizar el documento (AD-18) |
+| 34 | Narración sin tono ni glosario | `core/catalogo_explicaciones.py` (20 tipos, 12 motivos, 6 límites, tono cercano o formal `:215`); `core/catalogo_terminos.py:22,38` (12 fichas); ningún modelo de lenguaje | El borrador no lo cubría | Actualizar el documento (AD-16) |
+| 35 | Presentación de terminal sin especificar | `reporting/formato.py:37-60, 186-226`; `reporting/marca.py:23, 56-65`; `reporting/texto.py:634-656`; código de salida `cli/__init__.py:441-456` | El borrador no lo cubría | Actualizar el documento (AD-20) |
+| 36 | Escrituras fuera de la carpeta revisada | Tres: `--salida` (`cli/__init__.py:699-708`), HTML en `AgentReach-reportes` (`cli/reportes.py:73-91`), `preferencias.json` con modo «w» (`:107-118`, rechaza enlaces y `st_nlink>1` `:115`) | El borrador no lo cubría | Actualizar el documento (AD-19) |
+| 37 | Estructura de carpetas (sección 7): `fs_readonly.py`, `probe_*`, `repo_files.py`, `json_report.py`, etc. | Nombres en español y distintos; 6 recolectores no previstos (`config_ejecuta_sola`, `despliegue`, `enlaces`, `instrucciones_fuera`, `invisibles`, `detector/`); en `infra`: `verificador_permiso_windows`, `lectura_segura`, `localizador`, `navegador`, `lector_config_git`, `json_con_comentarios`; `app/{agentes,doctor}`; `data/`; `reporting/{marca,formato,limpieza,texto_minimo}`; `core/catalogo_*` | Desfase | Actualizar el documento (Structural Seed con el árbol real) |
+| 38 | `app/` con `audit` y `list-adapters` | `app/auditar.py`, `agentes.py`, `doctor.py`; no hay `list-adapters` | Desfase | Aceptar |
+| 39 | `config/` TOML global y de proyecto (`.agentreach/policy.toml`) | `config/__init__.py` único módulo con `tomllib`; solo archivo global `~/.agentreach/config.toml`; sin política de proyecto | Desfase | Aceptar (política de proyecto fuera del MVP, FR-16) |
+| 40 | Pruebas en `unit/`, `contract/`, `e2e/`, `property/`; matriz de CI | `tests/` plano (~45 archivos `test_*.py`), `tests/oraculo/`, `tests/reglas_no_negociables/`; no se encontraron pruebas por propiedades; matriz de CI no comprobada | Desfase | Aceptar; actualizar el documento (convenciones) |
+| 41 | Canario | `tests/test_contratos.py:263`; `adapters/conformance` `CANARIO` `:24` | Coincide | Aceptar |
+| 42 | CLI con `argparse` y códigos de salida | `cli/__init__.py:205-244, 257, 441-456`: subcomandos `audit` implícito y `doctor`, códigos 0, 1, 2, 3, 130; `app/doctor.py` con 7 comprobaciones | Coincide (más `doctor`) | Actualizar el documento (AD-20) |
+| 43 | 12 comentarios `TODO(Q…)` antiguos sobre decisiones «abiertas» (Q1 `collectors/__init__.py:3`, Q2 `infra/__init__.py:3`, Q3 `core/__init__.py:3`, Q4 y Q8 `contracts/finding.py:31-32`, Q5 `collectors/__init__.py:4`, Q7 y Q10 `contracts/ports.py:18-19,141`, Q9 `adapters/__init__.py:3`, Q11 `config/__init__.py:19`, Q12 `reporting/__init__.py:3`) | Ya están resueltas o decididas: Q2 (ctypes), Q9 (opencode implementado), Q10 (`Narrator` vacío), Q1 (opt-in), Q12 y Q11 (no se hizo; fuera del MVP), Q3 (ilegible baja a potencial) | Desfase | Cambiar el código: limpiar los comentarios (solo texto, sin lógica) en una historia aparte; no se hizo ahora |
+
+## Resumen por veredicto
+
+| Veredicto | Filas |
+| --- | --- |
+| Coincide (incluye «con extras» o «más fuerte») | 2, 4, 6, 7, 10, 11, 12, 15, 18, 23, 25, 26, 27, 28, 41, 42 = 16 |
+| Desfase | 1, 3, 5, 8, 9, 14, 16, 17, 19, 20, 21, 24, 31, 37, 38, 39, 40, 43 = 18 |
+| El borrador no lo cubría | 13, 22, 29, 30, 32, 33, 34, 35, 36 = 9 |
+| Total | 43 |
+
+## Desfases que piden una decisión de Alex
+
+Solo los de producto o seguridad. Cada uno con mi recomendación.
+
+| # | Desfase | Pregunta | Recomendación |
+| --- | --- | --- | --- |
+| D1 | Sin entry points (fila 5): un tercero no puede añadir un adaptador sin tocar el núcleo | ¿Se construyen antes del lanzamiento público para cumplir SM-5? | **No por ahora.** Carga código ajeno con los permisos de la persona, justo el riesgo que AgentReach vigila. Cumplir SM-5 con un registro explícito y documentado cuando exista un tercero real. |
+| D2 | Se escribe un HTML y `preferencias.json` en `AgentReach-reportes` por defecto (fila 9) | ¿Se acepta como escritura permanente fuera del proyecto, o pasa a ser opt-in? | **Aceptar** con las protecciones actuales (modo exclusivo, sin enlaces, rechazo dentro de lo revisado) y la opción `--sin-reporte-html`; dejarlo escrito en la documentación pública. |
+| D3 | `webbrowser.open` lanza el programa asociado al `.html` (fila 16), contra «ningún programa externo» | ¿Se mantiene la excepción? | **Sí**, solo con `--abrir`, preferencia recordada o pregunta, y con una prueba que fije que esa es la única llamada permitida (hoy la estática no la ve). |
+| D4 | POSIX solo con `os.access` y modo, sin verificador (fila 14) | ¿Se promete soporte en Linux y macOS? | **No.** Declarar «solo Windows 11 probado» en la documentación pública hasta tener ACL POSIX, verificador y pruebas obligatorias. |
+| D5 | M1: la respuesta s/n se lee con `input()` (fila 31) | ¿Es requisito antes de publicar? | **Sí.** Un agente que simule una terminal podría dar el permiso por la persona; se confirma como requisito de lanzamiento público (Historia 7.4) y debe probarse contra un pseudoterminal. |
+| D6 | No hay esquema JSON de `Finding` ni salida JSON por la CLI (filas 19 y 21) | ¿Se necesita una salida de máquina en el MVP? | **No.** La exportación desde el navegador basta; revisar si alguien quiere integrar (por ejemplo GitHub Code Scanning). |
+
+## Decisiones confirmadas por Alex (2026-11-11)
+
+Alex respondió «sí» a las seis recomendaciones de la tabla anterior.
+
+| # | Decisión confirmada |
+| --- | --- |
+| D1 | No se construyen *entry points* por ahora; se cumplirá SM-5 con un registro explícito y documentado cuando exista un tercero real. |
+| D2 | Se acepta la escritura permanente en `AgentReach-reportes` (HTML y `preferencias.json`) con las protecciones actuales, y se documenta en la documentación pública. |
+| D3 | Se mantiene la excepción de abrir el navegador, solo con permiso, y una prueba fija que esa es la única llamada permitida. |
+| D4 | No se promete Linux ni macOS: se declara «solo Windows 11 probado» hasta tener permisos POSIX completos, verificador y pruebas. |
+| D5 | M1 es requisito antes del lanzamiento público (Historia 7.4) y debe probarse contra un pseudoterminal. |
+| D6 | No hay salida JSON por la CLI en el MVP; basta la exportación desde el navegador. |
