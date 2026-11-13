@@ -131,6 +131,14 @@ def _es_ruta(texto: str) -> bool:
     return bool(texto) and not texto.startswith("(") and "no verificado" not in texto and "no documentado" not in texto
 
 
+def _relativa_a_home(destino: str, home: str) -> str:
+    """La ruta de ``destino`` respecto a la carpeta personal; si está en otra unidad de disco, la ruta entera."""
+    try:
+        return os.path.relpath(destino, home)
+    except ValueError:  # Windows: dos unidades distintas (C: y D:) no tienen ruta relativa
+        return os.path.normpath(destino)
+
+
 def _usuario(entrada: dict, home: str, sistema: str) -> str | None:
     ruta = entrada.get("ruta", "")
     if not _es_ruta(ruta):
@@ -205,7 +213,7 @@ def detectar_agentes(
         if home and leer_usuario:  # sin el permiso de segundo nivel no se mira nada de la carpeta personal
             for e in _lista_usuario(a, sistema):
                 destino = _usuario(e, home, sistema)
-                if destino is None or not _cuenta(e.get("tipo", "")) or _normal(os.path.relpath(destino, home)) in compartidos:
+                if destino is None or not _cuenta(e.get("tipo", "")) or _normal(_relativa_a_home(destino, home)) in compartidos:
                     continue
                 tipo = (e.get("tipo") or "").lower()
                 fuerte = ident not in MARCOS and not tipo.startswith("carpeta") and "obsoleto" not in tipo
