@@ -880,10 +880,10 @@ def escribir_oraculo(base: Path, estado: dict) -> None:
         "## Resumen",
         "",
         f"- Niveles esperados (Claude Code): comprobado {n_comp}, potencial {n_pot}, hipotesis {n_hip}. En opencode: comprobado {oc_comp}, potencial {oc_pot}, hipotesis {oc_hip}.",
-        f"- Casos totales: {len(casos)}. Se esperan como hallazgo: {sum(1 for c in casos if c[4] not in sin_hallazgo)}. "
-        f"No se reportan: {sum(1 for c in casos if c[4] == 'no se reporta')}. "
-        f"No se pudo revisar: {sum(1 for c in casos if c[4] == 'no se pudo revisar')}. "
-        (f"Deben no existir (trampa): {sum(1 for c in casos if c[4] == 'no debe existir')}."),
+        (f"- Casos totales: {len(casos)}. Se esperan como hallazgo: {sum(1 for c in casos if c[4] not in sin_hallazgo)}. "
+         f"No se reportan: {sum(1 for c in casos if c[4] == 'no se reporta')}. "
+         f"No se pudo revisar: {sum(1 for c in casos if c[4] == 'no se pudo revisar')}. "
+         f"Deben no existir (trampa): {sum(1 for c in casos if c[4] == 'no debe existir')}."),
         "- Resultados posibles por hallazgo al comparar: coincide, extra confirmado, falso positivo, omision.",
         "",
     ]

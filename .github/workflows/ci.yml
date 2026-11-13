@@ -13,10 +13,18 @@ jobs:
   pruebas:
     # AgentReach se prueba en Windows, que es la plataforma probada hoy.
     runs-on: windows-latest
+    env:
+      # Las pruebas esperan los mensajes en español; el equipo de GitHub está en inglés.
+      AGENTREACH_IDIOMA: es
+      PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+      - name: Generar el proyecto de prueba (secretos falsos, fuera del repositorio)
+        run: uv run python pruebas/generar_proyecto_prueba.py "$env:RUNNER_TEMP\prueba"
       - name: Pruebas
+        env:
+          AGENTREACH_PROYECTO_PRUEBA: ${{ runner.temp }}\prueba
         run: uv run pytest -q
       - name: Lint
         run: uv run ruff check .
