@@ -38,6 +38,8 @@ def dentro(ruta: str, carpeta: str) -> bool:
             existente = os.path.dirname(existente)  # el primer ancestro que existe: ahí se resuelven los enlaces
         real = os.path.join(os.path.realpath(existente), os.path.basename(destino))
         b = os.path.normcase(os.path.realpath(carpeta))
+        if os.path.splitdrive(real)[0].lower() != os.path.splitdrive(b)[0].lower():
+            return False  # en otra unidad de disco (C: y D:) no puede estar dentro de la carpeta auditada
         if os.path.commonpath([os.path.normcase(real), b]) == b:
             return True
         # un archivo que ya existe y tiene más de un enlace duro podría ser el mismo de la carpeta auditada
@@ -63,10 +65,10 @@ def _carpeta_usable(home: str, auditada: str) -> tuple[str | None, str]:
     if not home or not os.path.isabs(home):
         return None, "sin_home"
     carpeta = carpeta_de_reportes(home)
+    if os.path.lexists(carpeta) and _es_enlace(carpeta):
+        return None, "enlace"  # primero el enlace: es el motivo más concreto y el que se le explica a la persona
     if dentro(carpeta, auditada) or dentro(auditada, carpeta):
         return None, "dentro"
-    if os.path.lexists(carpeta) and _es_enlace(carpeta):
-        return None, "enlace"
     return carpeta, ""
 
 
