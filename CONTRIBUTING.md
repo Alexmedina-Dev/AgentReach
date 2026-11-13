@@ -9,7 +9,7 @@ Para el contexto completo lee `README.md`. La arquitectura vigente está en `_bm
 Necesitas [uv](https://docs.astral.sh/uv/) (gestor de paquetes y entornos de Python). No hace falta instalar Python aparte: uv descarga la versión 3.12 o superior que el proyecto pide.
 
 ```powershell
-git clone <url-del-repositorio>
+git clone -b development https://github.com/Alexmedina-Dev/AgentReach.git
 cd AgentReach
 uv sync                      # crea .venv e instala las dependencias de desarrollo
 uv run agentreach --version  # comprueba que la CLI (interfaz de línea de comandos) funciona
