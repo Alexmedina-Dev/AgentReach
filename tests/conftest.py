@@ -53,10 +53,12 @@ def persona_delante(request, monkeypatch):
     ``n`` a abrir el navegador. Desde la Historia 22 AgentReach no lee nada sin terminal interactiva ni permiso, y NO hay opción de
     la línea de comandos que lo salte: esto solo existe aquí, en las pruebas. Las que prueban la terminal y las preguntas
     se marcan con ``terminal_real`` y ven el comportamiento verdadero."""
+    from agentreach import cli
+
+    monkeypatch.setattr(cli, "_avance_por_defecto", False)  # la línea de avance (Historia 41) solo la prueban las pruebas de esa historia
     if request.node.get_closest_marker("terminal_real"):
         yield
         return
-    from agentreach import cli
 
     monkeypatch.setattr(cli, "_interactivo", lambda: True)
     monkeypatch.setattr(cli, "_resumen_corto_por_defecto", False)  # estas pruebas comparan el reporte completo

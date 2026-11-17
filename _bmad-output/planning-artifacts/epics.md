@@ -408,6 +408,31 @@ Como persona con una terminal de fondo claro u oscuro, quiero que AgentReach se 
 
 *Nota:* la consulta del color de fondo no está probada en Orca ni en Windows Terminal; es una exploración dentro de la historia. Si no funciona, bastan las demás capas. **Depende de:** 4.3. **Tamaño:** M.
 
+### Story 4.10 (Historia 41): Se ve que AgentReach avanza mientras revisa
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que revisa una carpeta grande, quiero ver que AgentReach avanza y cuánto lleva, para no quedarme esperando sin saber si la herramienta funciona o se trabó. FR-27, AD-20. *Hoy no hay ninguna señal de avance: en la corrida real del 2026-11-11 se miraron 2089 archivos, y con carpetas mayores la terminal queda en silencio.* **Decisiones de diseño a confirmar:** (1) el porcentaje solo se muestra si el total se conoce de antemano; si no, un contador («revisando… 1 240 archivos») y la fase actual, para no inventar un porcentaje; (2) el avance sale por la salida de errores y solo si hay terminal interactiva: nunca en el reporte, en `--salida`, en una redirección ni en el HTML; (3) no muestra nombres de archivo (un nombre puede ser de un cliente y lo controla un tercero): solo fase, cantidades y tiempo; (4) respeta el ancho de la terminal y `NO_COLOR` (AD-20) y deja la línea limpia antes de imprimir el reporte. **Depende de:** 4.2. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** una revisión en una terminal interactiva
+**When** AgentReach recorre y analiza la carpeta
+**Then** una sola línea se actualiza en su sitio con la fase («recorriendo», «analizando», «preparando el reporte») y la cantidad de archivos revisados, y con porcentaje solo cuando el total se conoce.
+
+**Given** una carpeta grande o una fase lenta
+**When** pasan unos segundos sin cambio de cantidad
+**Then** la línea sigue mostrando que está viva (por ejemplo el tiempo transcurrido), sin ser una animación que oculte un bloqueo real.
+
+**Given** la salida redirigida, `--salida`, una terminal sin interactividad, `TERM=dumb` o el modo de pruebas
+**When** se ejecuta
+**Then** no se imprime ningún avance y la salida es idéntica a la de hoy.
+
+**Given** el avance en pantalla
+**When** termina la revisión
+**Then** la línea se borra y el reporte no contiene restos del avance; la prueba canario no encuentra nombres de archivo ni valores en el avance.
+
+**And** no escribe archivos, no usa red y no cambia ningún hallazgo ni nivel; respeta el ancho de trabajo de 60 a 100 columnas (AD-20); y Ctrl+C sigue saliendo limpio con código 130.
+
 ## Épica 5: Confiar en que la herramienta no daña ni miente
 
 Pruebas bloqueantes de solo lectura, sin red y sin secretos; oráculo de 67 casos; permiso de lectura dado solo por una persona, en dos niveles. **Estado: terminada salvo la Historia 15 (Story 5.2) y la nueva 5.6; la 5.7 (Historia 30) está construida y revisada, falta tu comprobación en Orca.** FR: FR-1, FR-2, FR-3, FR-24, FR-30 (permiso). NFR: 1, 2, 3, 9, 10, 11.
