@@ -37,7 +37,7 @@ def mundo(tmp_path: Path) -> dict:
 class Mundo:
     """Un ejemplo de uso completo con las costuras de ``cli`` falsas: cuántas veces se consultó, qué se preguntó y si se instaló."""
 
-    def __init__(self, monkeypatch, respuesta_version=NUEVA, a_la_pregunta="s", con_uv=True, instala=True):
+    def __init__(self, monkeypatch, respuesta_version=NUEVA, a_la_pregunta="s", con_uv=True, instala=True, windows=False):
         self.consultas: list[str] = []
         self.instalaciones = 0
         self.textos: list[str] = []
@@ -60,6 +60,7 @@ class Mundo:
         monkeypatch.setattr(cli, "_consultar_version", consultar)
         monkeypatch.setattr(cli, "_instalar_version", instalar)
         monkeypatch.setattr(cli, "_instalado_con_uv", lambda: con_uv)
+        monkeypatch.setattr(cli, "_puede_instalar_sola", lambda: not windows)  # el mismo resultado en cualquier sistema de pruebas
 
     def preguntar(self, texto: str) -> str:
         self.textos.append(texto)
@@ -535,10 +536,53 @@ def test_la_pantalla_de_que_hace_y_que_no_hace_lo_dice(mundo, monkeypatch, capsy
 
 
 def test_las_palabras_de_tono_siguen_neutras_en_los_textos_nuevos():
-    for clave in ("intro_red", "version_nueva", "version_comando", "version_pregunta", "version_instalando", "version_instalada", "version_manual"):
+    for clave in ("intro_red", "version_nueva", "version_comando", "version_pregunta", "version_instalando", "version_instalada", "version_manual",
+                  "version_windows"):
         texto = cli._ERROR[clave][cli.Idioma.ES].lower()
         for palabra in (" tú ", " tu ", " usted ", " tus ", " sus "):
             assert palabra not in " " + texto + " ", (clave, palabra)
+
+
+# ---- Windows: con AgentReach abierto, uv falla y deja la instalación rota (probado a mano), así que no se lanza -----------------------------
+
+
+def test_puede_instalar_sola_solo_fuera_de_windows(monkeypatch):
+    for sistema, esperado in (("win32", False), ("darwin", True), ("linux", True)):
+        monkeypatch.setattr(act.sys, "platform", sistema)
+        assert act.puede_instalar_sola() is esperado, sistema
+
+
+def test_en_windows_con_s_no_lanza_uv_y_dice_que_cierre_y_ejecute_el_comando(mundo, monkeypatch, capsys):
+    m = Mundo(monkeypatch, a_la_pregunta="s", windows=True)
+    m.correr(mundo)
+    err = " ".join(capsys.readouterr().err.split())
+    assert m.instalaciones == 0
+    assert "En Windows AgentReach no se puede reemplazar mientras está abierto" in err
+    assert "Cierra esta ventana y ejecuta: uv tool install --reinstall git+https://github.com/Alexmedina-Dev/AgentReach" in err
+    assert "Instalando la versión nueva" not in err and "Listo: la versión nueva" not in err and "No se pudo instalar sola" not in err
+
+
+def test_en_windows_en_ingles(mundo, monkeypatch, capsys):
+    m = Mundo(monkeypatch, a_la_pregunta="y", windows=True)
+    m.correr(mundo, "--idioma", "en")
+    err = " ".join(capsys.readouterr().err.split())
+    assert m.instalaciones == 0
+    assert "On Windows AgentReach cannot be replaced while it is open" in err
+    assert "Close this window and run: uv tool install --reinstall git+https://github.com/Alexmedina-Dev/AgentReach" in err
+
+
+def test_en_windows_con_n_no_dice_nada_mas_ni_lanza_nada(mundo, monkeypatch, capsys):
+    m = Mundo(monkeypatch, a_la_pregunta="n", windows=True)
+    m.correr(mundo)
+    err = " ".join(capsys.readouterr().err.split())
+    assert m.instalaciones == 0 and "En Windows AgentReach" not in err and "Cierra esta ventana" not in err
+
+
+def test_fuera_de_windows_con_s_sigue_instalando_como_antes(mundo, monkeypatch, capsys):
+    m = Mundo(monkeypatch, a_la_pregunta="s", windows=False)
+    m.correr(mundo)
+    err = " ".join(capsys.readouterr().err.split())
+    assert m.instalaciones == 1 and "Listo: la versión nueva" in err and "En Windows AgentReach" not in err
 
 
 # ---- estáticas: dónde vive la red y dónde el lanzamiento de un programa ------------------------------------------------------------------

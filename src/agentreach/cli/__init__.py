@@ -126,6 +126,11 @@ _ERROR = {
     "version_manual": {
         Idioma.ES: "No se pudo instalar sola (o AgentReach no está instalado con uv). Para hacerlo a mano:\n  {comando}",
         Idioma.EN: "It could not be installed automatically (or AgentReach is not installed with uv). To do it by hand:\n  {comando}"},
+    "version_windows": {
+        Idioma.ES: ("En Windows AgentReach no se puede reemplazar mientras está abierto: la instalación quedaría rota. "
+                    "Cierra esta ventana y ejecuta:\n  {comando}"),
+        Idioma.EN: ("On Windows AgentReach cannot be replaced while it is open: the installation would be left broken. "
+                    "Close this window and run:\n  {comando}")},
     "pregunta_leer": {
         Idioma.ES: "¿Se permite que AgentReach lea esta carpeta?\n  {ruta}\n{aviso}(S/N) ",
         Idioma.EN: "Is AgentReach allowed to read this folder?\n  {ruta}\n{aviso}(Y/N) "},
@@ -609,11 +614,12 @@ def _presentar(lineas: list[str], idioma: Idioma) -> None:
     _decir("\n".join(_ERROR[k][idioma] for k in ("intro_que", "intro_hace", "intro_no_hace", "intro_red")) + "\n")
 
 
-_PENDIENTE: list[bool] = []  # la persona dijo S a la versión nueva: se instala al terminar
+_PENDIENTE: list[bool] = []  # la persona dijo S a la versión nueva: se instala al terminar (en Windows, solo se muestra el comando)
 _comprobar_version_por_defecto = True  # solo las pruebas lo cambian (sin red)
 _consultar_version = actualizacion.consultar  # idem: las pruebas ponen una respuesta falsa
 _instalar_version = actualizacion.instalar
 _instalado_con_uv = actualizacion.instalado_con_uv
+_puede_instalar_sola = actualizacion.puede_instalar_sola  # idem: las pruebas eligen el sistema
 _DIAS_ENTRE_COMPROBACIONES = 15
 
 
@@ -647,11 +653,16 @@ def _avisar_version(args: argparse.Namespace, carpeta: str, idioma: Idioma, ahor
 
 
 def _terminar_actualizacion(idioma: Idioma) -> None:
-    """Con S, al terminar: ``uv tool install --reinstall …`` (sin shell, con tiempo límite) si está instalado con uv; si no, solo el comando."""
+    """Con S, al terminar: ``uv tool install --reinstall …`` (sin shell, con tiempo límite) si está instalado con uv; si no, solo el comando.
+    En Windows nunca se lanza: con AgentReach abierto uv falla y deja la instalación rota, así que se muestra el comando para ejecutarlo
+    después de cerrarlo."""
     if not _PENDIENTE:
         return
     _PENDIENTE.clear()
     comando = " ".join(actualizacion.COMANDO)
+    if not _puede_instalar_sola():
+        _decir(_ERROR["version_windows"][idioma].format(comando=comando))
+        return
     if _instalado_con_uv():
         _decir(_ERROR["version_instalando"][idioma])
         if _instalar_version():

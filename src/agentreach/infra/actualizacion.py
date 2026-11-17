@@ -20,7 +20,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-__all__ = ["COMANDO", "REPOSITORIO", "URL_VERSION", "consultar", "es_mas_nueva", "instalado_con_uv", "instalar", "version_valida"]
+__all__ = ["COMANDO", "REPOSITORIO", "URL_VERSION", "consultar", "es_mas_nueva", "instalado_con_uv", "instalar", "puede_instalar_sola",
+           "version_valida"]
 
 REPOSITORIO = "git+https://github.com/Alexmedina-Dev/AgentReach"
 COMANDO = ("uv", "tool", "install", "--reinstall", REPOSITORIO)  # el comando exacto que se muestra y, con permiso, se ejecuta
@@ -82,6 +83,13 @@ def instalado_con_uv() -> bool:
     """¿AgentReach corre desde un entorno de ``uv tool`` (…/uv/tools/agentreach)? Solo en ese caso se intenta reinstalar."""
     partes = [p.lower() for p in os.path.normpath(sys.prefix).split(os.sep)]
     return any(partes[i:i + 3] == ["uv", "tools", "agentreach"] for i in range(len(partes) - 2)) and shutil.which("uv") is not None
+
+
+def puede_instalar_sola() -> bool:
+    """``False`` en Windows: ahí no se puede reemplazar un programa mientras corre. Probado: con AgentReach abierto, ``uv tool install
+    --reinstall`` falla con «Acceso denegado» y deja la instalación rota (``No module named 'agentreach'``). Quien lanza ``uv`` es el
+    propio AgentReach, que sigue abierto, así que en Windows solo se muestra el comando para ejecutarlo con AgentReach cerrado."""
+    return sys.platform != "win32"
 
 
 def instalar(tiempo: float = 300.0) -> bool:
