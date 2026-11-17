@@ -30,7 +30,7 @@ Las pruebas de `tests/reglas_no_negociables/` comprueban las reglas de abajo (so
 Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 
 1. **Solo lectura.** AgentReach nunca modifica el proyecto ni el entorno que analiza. No se abren archivos para "probar" permisos. (PRD, FR-1) Fuera de lo analizado solo escribe `--salida` y la carpeta `AgentReach-reportes` de la carpeta personal; durante la revisión no lanza programas, y al terminar solo abre el reporte HTML en el navegador si la persona lo permitió. (Historia 21)
-2. **Sin red por defecto.** Ninguna conexión de red salvo que el usuario la active de forma explícita. No se añaden dependencias que usen red. (PRD, FR-2)
+2. **Sin red durante la revisión.** Ninguna conexión de red salvo la consulta del número de versión (Historia 31): solo al abrir, cada 15 días como máximo, en `infra/actualizacion.py`. No se añaden dependencias que usen red. (PRD, FR-2)
 3. **Sin valores de secretos.** Ningún reporte, registro ni mensaje de error contiene el valor de un secreto: solo ubicación, tipo y nivel de confianza. (PRD, FR-3)
 4. **Solo biblioteca estándar** de Python como dependencia en tiempo de ejecución. Las herramientas de desarrollo (pytest, ruff) van en el grupo `dev`.
 5. **Niveles de confianza:** cada hallazgo es *comprobado*, *potencial* o *hipótesis*. No se afirma que algo es alcanzable solo porque exista una referencia.
@@ -56,6 +56,8 @@ Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 - Mensajes de commit según `.github/commit_template.md`: `tipo: resumen en imperativo, en minúscula y sin punto final`.
   Tipos: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `style`, `chore`, `ci`, `revert`.
 - Un commit = un cambio con sentido, con sus pruebas y documentación.
+- **Versiones:** al lanzar se sube el tercer número (`0.1.0` → `0.1.1` → `0.1.2`) en `pyproject.toml`. El aviso de versión compara esos tres números con los de `main`.
+- Las historias se hacen de una en una: una rama desde `development` y un Pull Request por historia.
 
 ## Proponer un adaptador nuevo
 

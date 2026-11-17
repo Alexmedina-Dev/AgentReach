@@ -486,3 +486,6 @@ Lo que sigue **sin pareja** en el oráculo (se cubre con archivos de ejemplo de 
 
 ## Historia 35. Los demás textos de la plantilla HTML siguen el tono elegido (pendiente)
 - **Estado:** pendiente. Hoy los textos propios de `plantilla_reporte.html` (`T_`) usan «usted» fijo; deben seguir `--tono` (tú/usted) igual que «Cómo leer este reporte».
+
+## Historia 31. Aviso de versión nueva
+- **Estado:** terminada (2026-11-17), rehecha sobre `development`. Ver `implementation-artifacts/spec-historia-31-aviso-de-version-nueva.md`.
