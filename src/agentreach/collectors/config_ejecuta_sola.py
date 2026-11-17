@@ -79,9 +79,9 @@ class DetectorConfigEjecutaSola:
         for caso in resultado.config_proyecto:
             if caso.clave in _DEL_ADAPTADOR:
                 tipo, rotulo = _DEL_ADAPTADOR[caso.clave]
-                hallazgos.append(self._hallazgo(caso.ubicacion.ruta, caso.ubicacion.linea, tipo, rotulo))
+                hallazgos.append(self._hallazgo(caso.ubicacion.ruta, caso.ubicacion.linea, tipo, rotulo, claude_code=True))
         for relativa in (".claude/settings.json", ".claude/settings.local.json"):
-            hallazgos += self._bandera(os.path.join(proyecto, *relativa.split("/")), pendientes)
+            hallazgos += self._bandera(os.path.join(proyecto, *relativa.split("/")), pendientes, claude_code=True)
         hallazgos += self._mcp_json(os.path.join(proyecto, ".mcp.json"), pendientes, "mcpServers")
         hallazgos += self._mcp_json(os.path.join(proyecto, ".vscode", "mcp.json"), pendientes, "servers")
         hallazgos += self._tasks(os.path.join(proyecto, ".vscode", "tasks.json"), pendientes)
@@ -132,7 +132,9 @@ class DetectorConfigEjecutaSola:
     def _linea(texto: str, *ruta_clave: str | int) -> int | Linea:
         return localizar_clave(texto, "jsonc", tuple(ruta_clave)) or Linea.NO_DETERMINADA
 
-    def _hallazgo(self, ruta: str, linea: int | Linea, tipo: Tipo, rotulo: str) -> Finding:
+    def _hallazgo(self, ruta: str, linea: int | Linea, tipo: Tipo, rotulo: str, claude_code: bool = False) -> Finding:
+        """``claude_code``: solo lo que sale del adaptador o de ``.claude/settings*.json`` es de Claude Code; los
+        nombres que comparten varios agentes (``.mcp.json``, ``.vscode/``) quedan sin agente (FR-31)."""
         ubicacion = Location(Ruta(ruta), linea)
         clave = (ubicacion.ruta, ubicacion.linea, tipo.value)
         self.rotulos[clave] = tuple(sorted({*self.rotulos.get(clave, ()), rotulo}))
@@ -143,14 +145,15 @@ class DetectorConfigEjecutaSola:
             nivel=Nivel.HIPOTESIS,  # provisional: la Historia 11 lo calcula (máximo potencial)
             motivo=Motivo.NO_DETERMINADO,
             ajeno_a_tarea=Ajeno.NO_DETERMINADO,
-            plataforma=Plataforma.NO_DETERMINADA,
-            agente=Etiqueta("sin-agente"),
+            plataforma=Plataforma.CLAUDE_CODE if claude_code else Plataforma.NO_DETERMINADA,
+            agente=Etiqueta("claude-code" if claude_code else "sin-agente"),
             postura=Postura.NO_DETERMINADA,
         )
 
     # ---- archivos ----------------------------------------------------------------------------------------------------
 
-    def _bandera(self, ruta: str, pendientes: list[NoRevisado], texto: str | None = None) -> list[Finding]:
+    def _bandera(self, ruta: str, pendientes: list[NoRevisado], texto: str | None = None,
+                 claude_code: bool = False) -> list[Finding]:
         """La bandera que salta los permisos, buscada en el texto SIN comentarios (si se puede limpiar).
         Del texto solo se conserva el número de línea."""
         if texto is None:
@@ -161,7 +164,7 @@ class DetectorConfigEjecutaSola:
             texto = limpiar_jsonc(texto)  # una mención en un comentario no cuenta
         except JsoncNoInterpretable:
             pass  # no se puede limpiar: se busca en el texto tal cual (ante la duda, se reporta)
-        return [self._hallazgo(ruta, n, Tipo.SALTO_DE_PERMISOS, "bandera_salto_de_permisos")
+        return [self._hallazgo(ruta, n, Tipo.SALTO_DE_PERMISOS, "bandera_salto_de_permisos", claude_code=claude_code)
                 for n, linea in enumerate(_SALTO.split(texto), start=1) if _BANDERA.search(linea)]
 
     def _mcp_json(self, ruta: str, pendientes: list[NoRevisado], clave: str) -> list[Finding]:

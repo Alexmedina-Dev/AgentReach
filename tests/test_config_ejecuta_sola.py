@@ -469,3 +469,40 @@ def test_enabled_mcpjson_servers_solo_cuenta_con_nombres_de_verdad(tmp_path: Pat
     p = tmp_path / "proyecto"
     _escribir(p / ".claude" / "settings.json", {"enabledMcpjsonServers": lista})
     assert _tipos(_auditar(p)[0]) == esperado
+
+
+# ---- Historia 46: a qué agente pertenece cada hallazgo ---------------------------------------------------------------------------
+
+
+def _agente(h: Finding) -> tuple:
+    return (h.plataforma, str(h.agente))
+
+
+@pytest.mark.parametrize("relativa,contenido,tipo", [
+    (".claude/settings.json", HOOKS, TH14),
+    (".claude/settings.json", {"enableAllProjectMcpServers": True}, TH14),
+    (".claude/settings.json", {"enabledMcpjsonServers": ["local"]}, TH14),
+    (".claude/settings.local.json", {"permissions": {"defaultMode": "bypassPermissions"}}, TH15),
+    (".claude/settings.json", {"x": "claude --dangerously-skip-permissions"}, TH15),
+])
+def test_h46_lo_de_claude_settings_es_de_claude_code(tmp_path: Path, relativa, contenido, tipo):
+    from agentreach.contracts import Plataforma
+    p = tmp_path / "proyecto"
+    _escribir(p / relativa, contenido)
+    hallazgos, _ = _auditar(p)
+    assert hallazgos and all(h.tipo is tipo and _agente(h) == (Plataforma.CLAUDE_CODE, "claude-code") for h in hallazgos)
+    assert all(h.nivel is Nivel.HIPOTESIS for h in hallazgos)  # el nivel y el motivo no cambian
+
+
+@pytest.mark.parametrize("relativa,contenido", [
+    (".mcp.json", {"mcpServers": {"a": {"command": "x"}}}),
+    (".vscode/mcp.json", {"servers": {"a": {"command": "x"}}}),
+    (".vscode/tasks.json", {"tasks": [{"runOptions": {"runOn": "folderOpen"}}]}),
+    (".vscode/settings.json", {"chat.tools.autoApprove": True, "task.allowAutomaticTasks": "on"}),
+])
+def test_h46_lo_que_comparten_varios_agentes_sigue_sin_agente(tmp_path: Path, relativa, contenido):
+    from agentreach.contracts import Plataforma
+    p = tmp_path / "proyecto"
+    _escribir(p / relativa, contenido)
+    hallazgos, _ = _auditar(p)
+    assert hallazgos and all(_agente(h) == (Plataforma.NO_DETERMINADA, "sin-agente") for h in hallazgos)
