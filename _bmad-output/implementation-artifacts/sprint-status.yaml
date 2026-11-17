@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-11-2026 17:30
-last_updated: 12-11-2026 09:00
+last_updated: 17-11-2026 18:30
 project: agent-reach
 project_key: NOKEY
 tracking_system: file-system
@@ -45,7 +45,7 @@ development_status:
   1-5-historia-5-ubicaciones-sensibles-ssh-nube-npm: done
   1-6-historia-5b-primera-ejecución-completa: done
   1-7-historia-6-variables-de-entorno-con-nombre-de-credencial: done
-  1-8-historia-47-el-tope-de-tamano-dice-el-numero-real: review  # implementada 2026-11-12 sin ruta completa (texto derivado de LIMITE_BYTES + prueba)
+  1-8-historia-47-el-tope-de-tamano-dice-el-numero-real: done  # rehecha y unida en development el 2026-11-17 (PR #14); pruebas y revision automatica en verde
   epic-1-retrospective: optional
 
   epic-2: done
@@ -67,7 +67,7 @@ development_status:
   3-10-historia-12-ajeno-a-la-tarea: done
   3-11-historia-27-tope-por-nombre-y-letras-de-las-preguntas: done
   3-12-historia-38-orca-pane-key-es-una-credencial-confirmar-antes: backlog  # ficha; origen sprint-change-proposal-2026-11-11 (R3); confirmar con quien conoce Orca antes de tocar la regla
-  3-13-historia-46-lo-que-sale-de-claude-settings-es-de-claude-code: review  # origen Alex 2026-11-12; oraculo: opencode baja a 30 potenciales
+  3-13-historia-46-lo-que-sale-de-claude-settings-es-de-claude-code: done  # rehecha y unida en development el 2026-11-17 (PR #13); pruebas y revision automatica en verde
   epic-3-retrospective: optional
 
   epic-4: in-progress
@@ -80,9 +80,9 @@ development_status:
   4-6-historia-21-uso-diario: done
   4-7-historia-29-colores-legibles-en-cualquier-terminal: done
   4-9-historia-37-un-mismo-archivo-y-linea-en-varios-agentes-lo-dice: backlog  # ficha; origen sprint-change-proposal-2026-11-11 (R2); no colapsa reportes (FR-17)
-  4-10-historia-41-se-ve-que-agentreach-avanza-mientras-revisa: review  # implementada 2026-11-12: paso X de 12 + carpetas + tiempo; falta la comprobacion manual de Alex en una terminal real
-  4-11-historia-43-los-filtros-de-nivel-dicen-cual-esta-activo: review  # ficha con criterios; origen Alex 2026-11-12 (captura de las fichas Caminos/Comprobado/Potencial/Hipotesis)
-  4-12-historia-44-aviso-cuando-la-carpeta-contiene-varios-proyectos: review  # implementada 2026-11-12: funcion pura sobre el recorrido existente; aviso en terminal y HTML (wide_folder)
+  4-10-historia-41-se-ve-que-agentreach-avanza-mientras-revisa: done  # rehecha y unida en development el 2026-11-17 (PR #9); pruebas y revision automatica en verde; pendiente: la comprobacion manual de Alex en una terminal real
+  4-11-historia-43-los-filtros-de-nivel-dicen-cual-esta-activo: done  # rehecha y unida en development el 2026-11-17 (PR #11); pruebas y revision automatica en verde
+  4-12-historia-44-aviso-cuando-la-carpeta-contiene-varios-proyectos: done  # rehecha y unida en development el 2026-11-17 (PR #12); pruebas y revision automatica en verde
   epic-4-retrospective: optional
 
   epic-5: in-progress
@@ -105,8 +105,8 @@ development_status:
   6-3-historia-26-github-copilot-un-solo-agente-cuando-la-señal-es: done
   6-4-historia-32-el-reporte-explica-cada-término-técnico-en-lengu: done
   6-9-historia-39-la-caja-de-efecto-posible-no-queda-vacia: backlog  # ficha; origen sprint-change-proposal-2026-11-11 (R4); nunca mostrar el comando del hook
-  6-10-historia-40-un-agente-analizado-sin-senales-de-configuracion-lo-dice: review  # implementada (gate.plataformas_mostradas; tests/test_historia_40.py); falta revision y la comprobacion manual de Alex sobre proyecto real local
-  6-11-historia-42-como-leer-este-reporte-en-corto: review  # ficha con criterios; origen Alex 2026-11-12; solo cambia la vista (frase corta + Ver mas), sin tocar el catalogo
+  6-10-historia-40-un-agente-analizado-sin-senales-de-configuracion-lo-dice: done  # rehecha y unida en development el 2026-11-17 (PR #8); pruebas y revision automatica en verde; pendiente: la comprobacion manual de Alex sobre proyecto real local
+  6-11-historia-42-como-leer-este-reporte-en-corto: done  # rehecha y unida en development el 2026-11-17 (PR #10); pruebas y revision automatica en verde
   epic-6-retrospective: optional
 
   epic-7: backlog
