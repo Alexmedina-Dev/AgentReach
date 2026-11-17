@@ -326,6 +326,35 @@ Como persona que describe su tarea, quiero que AgentReach marque lo que no tiene
 Como persona que lee el reporte, quiero que una credencial reconocida solo por su nombre nunca salga «comprobada», para que AgentReach no afirme lo que no pudo ver. FR-7. *(La parte de las letras `(S/N)` y `(Y/N)` es de FR-30, Épica 5.)*
 **Criterios de aceptación:** ver `spec-historia-27-letras-y-tope-por-nombre.md`. **Estado:** terminada (2026-11-11). Consecuencias para el código de salida y el oráculo: 13 comprobado, 33 potencial y 2 hipótesis por agente.
 
+### Story 3.13 (Historia 46): Lo que sale de `.claude/settings*.json` es de Claude Code
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que lee el reporte, quiero que un hallazgo de un archivo propio de Claude Code aparezca en la pestaña de Claude Code, para no ver `.claude/settings.json` bajo «Sin agente específico». FR-14, FR-17, FR-31. *Hoy `collectors/config_ejecuta_sola.py` (`_hallazgo`, l.~146) marca todos sus hallazgos TH-14 como `Plataforma.NO_DETERMINADA` y agente «sin-agente», aunque dos de los tres archivos que revisa (`.claude/settings.json` y `.claude/settings.local.json`) solo los lee Claude Code. `.mcp.json` sí lo leen varios agentes y sigue «sin agente».* **Enfoque:** el detector atribuye a Claude Code lo que sale de `.claude/settings*.json` y deja `.mcp.json` sin agente. No cambia ningún nivel: solo a qué agente pertenece el hallazgo. **Cuidado:** los conteos por agente del oráculo cambian (más para Claude Code y menos para «sin agente»), así que `tests/oraculo/expected.json` y las cifras de SM-7 en el PRD (§7.3) se recalculan y se documentan; los 67 casos siguen siendo los mismos. **Depende de:** 2.2 y 3.5. **Tamaño:** S a M.
+
+**Criterios de aceptación:**
+
+**Given** un proyecto con `hooks` en `.claude/settings.json` o `.claude/settings.local.json`
+**When** se genera el reporte (terminal y HTML)
+**Then** el hallazgo TH-14 sale en la pestaña de Claude Code, con su agente «Claude Code», y no bajo «Sin agente específico».
+
+**Given** un servidor de comando en `.mcp.json`
+**When** se genera el reporte
+**Then** el hallazgo sigue bajo «Sin agente específico» (el nombre lo comparten varios agentes, FR-31).
+
+**Given** `--agente opencode` en un proyecto con `.claude/settings.json`
+**When** se genera el reporte
+**Then** el hallazgo de `.claude/` no sale (es de otro agente), y el de `.mcp.json` sí.
+
+**Given** un proyecto donde solo existe `.claude/settings.json` (sin otras señales)
+**When** se genera el reporte
+**Then** Claude Code figura entre los agentes configurados y tiene pestaña, así que la regla de la Historia 40 no lo oculta.
+
+**Given** cualquier hallazgo TH-14
+**When** se calcula su nivel
+**Then** el nivel y el motivo son los mismos que antes (potencial como máximo), y no cambia ningún otro hallazgo ni la autocomprobación.
+
+**And** el oráculo sigue resolviendo los 67 casos y su `expected.json` documenta qué casos cambiaron de agente; el PRD §7.3 (SM-7) y FR-17 reflejan las cifras nuevas; una prueba cubre los tres casos (`.claude/settings.json`, `.claude/settings.local.json` y `.mcp.json`).
+
 ## Épica 4: Entender el resultado de un vistazo
 
 El usuario lee el reporte en la terminal y en el navegador, en español o inglés, con color accesible, `doctor` y un flujo diario simple, en **cualquier** terminal. **Estado: terminada; la corrección 4.7 (Historia 29) está construida y revisada, falta tu comprobación en Orca.** Verificaciones manuales de Alex (2026-11-11): 19, 20 y 21 confirmadas; 13b y 13c revisadas en Orca de fondo claro, de donde salieron las dos correcciones. FR: FR-9 a FR-12, FR-17, FR-20, FR-21, FR-23, FR-27, FR-28. UX-DR: 1 a 14.
