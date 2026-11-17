@@ -326,6 +326,35 @@ Como persona que describe su tarea, quiero que AgentReach marque lo que no tiene
 Como persona que lee el reporte, quiero que una credencial reconocida solo por su nombre nunca salga «comprobada», para que AgentReach no afirme lo que no pudo ver. FR-7. *(La parte de las letras `(S/N)` y `(Y/N)` es de FR-30, Épica 5.)*
 **Criterios de aceptación:** ver `spec-historia-27-letras-y-tope-por-nombre.md`. **Estado:** terminada (2026-11-11). Consecuencias para el código de salida y el oráculo: 13 comprobado, 33 potencial y 2 hipótesis por agente.
 
+### Story 3.13 (Historia 46): Lo que sale de `.claude/settings*.json` es de Claude Code
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que lee el reporte, quiero que un hallazgo de un archivo propio de Claude Code aparezca en la pestaña de Claude Code, para no ver `.claude/settings.json` bajo «Sin agente específico». FR-14, FR-17, FR-31. *Hoy `collectors/config_ejecuta_sola.py` (`_hallazgo`, l.~146) marca todos sus hallazgos TH-14 como `Plataforma.NO_DETERMINADA` y agente «sin-agente», aunque dos de los tres archivos que revisa (`.claude/settings.json` y `.claude/settings.local.json`) solo los lee Claude Code. `.mcp.json` sí lo leen varios agentes y sigue «sin agente».* **Enfoque:** el detector atribuye a Claude Code lo que sale de `.claude/settings*.json` y deja `.mcp.json` sin agente. No cambia ningún nivel: solo a qué agente pertenece el hallazgo. **Cuidado:** los conteos por agente del oráculo cambian (más para Claude Code y menos para «sin agente»), así que `tests/oraculo/expected.json` y las cifras de SM-7 en el PRD (§7.3) se recalculan y se documentan; los 67 casos siguen siendo los mismos. **Depende de:** 2.2 y 3.5. **Tamaño:** S a M.
+
+**Criterios de aceptación:**
+
+**Given** un proyecto con `hooks` en `.claude/settings.json` o `.claude/settings.local.json`
+**When** se genera el reporte (terminal y HTML)
+**Then** el hallazgo TH-14 sale en la pestaña de Claude Code, con su agente «Claude Code», y no bajo «Sin agente específico».
+
+**Given** un servidor de comando en `.mcp.json`
+**When** se genera el reporte
+**Then** el hallazgo sigue bajo «Sin agente específico» (el nombre lo comparten varios agentes, FR-31).
+
+**Given** `--agente opencode` en un proyecto con `.claude/settings.json`
+**When** se genera el reporte
+**Then** el hallazgo de `.claude/` no sale (es de otro agente), y el de `.mcp.json` sí.
+
+**Given** un proyecto donde solo existe `.claude/settings.json` (sin otras señales)
+**When** se genera el reporte
+**Then** Claude Code figura entre los agentes configurados y tiene pestaña, así que la regla de la Historia 40 no lo oculta.
+
+**Given** cualquier hallazgo TH-14
+**When** se calcula su nivel
+**Then** el nivel y el motivo son los mismos que antes (potencial como máximo), y no cambia ningún otro hallazgo ni la autocomprobación.
+
+**And** el oráculo sigue resolviendo los 67 casos y su `expected.json` documenta qué casos cambiaron de agente; el PRD §7.3 (SM-7) y FR-17 reflejan las cifras nuevas; una prueba cubre los tres casos (`.claude/settings.json`, `.claude/settings.local.json` y `.mcp.json`).
+
 ## Épica 4: Entender el resultado de un vistazo
 
 El usuario lee el reporte en la terminal y en el navegador, en español o inglés, con color accesible, `doctor` y un flujo diario simple, en **cualquier** terminal. **Estado: terminada; la corrección 4.7 (Historia 29) está construida y revisada, falta tu comprobación en Orca.** Verificaciones manuales de Alex (2026-11-11): 19, 20 y 21 confirmadas; 13b y 13c revisadas en Orca de fondo claro, de donde salieron las dos correcciones. FR: FR-9 a FR-12, FR-17, FR-20, FR-21, FR-23, FR-27, FR-28. UX-DR: 1 a 14.
@@ -436,6 +465,54 @@ Como persona que revisa una carpeta, quiero que el reporte me avise cuando esa c
 **Then** pasan sin cambios (el aviso no es un hallazgo).
 
 **And** el dato viaja como campo aditivo y opcional en el esquema del HTML, pasa por la compuerta (AD-15) y la prueba cubre los cinco casos de arriba.
+### Story 4.11 (Historia 43): Los filtros de nivel dicen cuál está activo y qué muestran
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que filtra el reporte por nivel, quiero ver claramente qué niveles están activos y qué se muestra, para no tener que adivinarlo. FR-28, UX-DR2. *Hoy las fichas «Caminos / Comprobado / Potencial / Hipótesis» son botones de filtro, pero la activa y la inactiva se parecen: la inactiva solo cambia a fondo sólido y tachado en el número («0» y «5» tachados parecen datos borrados, no un filtro apagado), y la ficha «Caminos» (el total) parece un botón más aunque no lo es.* **Enfoque:** la ficha activa se rellena con un tinte de su color de nivel y lleva una marca no solo de color (por ejemplo una palomita); la inactiva queda apagada y sin tachar; «Caminos» se ve como un total, no como un botón; y una línea debajo dice qué se está mostrando («Mostrando 5 caminos: Potencial»). También se revisan los demás grupos de selección del reporte (pestañas de agente, vistas, idioma, tema) para que su estado seleccionado se distinga sin depender solo del color. **Depende de:** 4.5. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** el reporte con los tres niveles activos
+**When** se mira la fila de fichas
+**Then** cada ficha de nivel activa tiene el contenedor coloreado con el tinte de su nivel y una marca que no es solo de color, y «Caminos» se ve distinto de las fichas que se pueden pulsar.
+
+**Given** una ficha de nivel apagada con el filtro
+**When** se mira
+**Then** se ve apagada (sin color de nivel en el contenedor) y su número no aparece tachado; con lector de pantalla se anuncia como no activa (`aria-pressed`).
+
+**Given** cualquier combinación de filtros
+**When** cambia el filtro
+**Then** una línea junto a las fichas dice qué niveles se muestran y cuántos caminos (en español, tú y usted, e inglés), y si no queda ninguno lo dice.
+
+**Given** los demás grupos de selección (pestañas de agente, vistas, idioma, tema)
+**When** se revisan
+**Then** el estado seleccionado se distingue con contraste 3:1 y sin depender solo del color, en tema claro y oscuro y en la vista de contraste alto.
+
+**And** el filtrado no cambia ningún hallazgo ni su nivel, los textos nuevos pasan por los diccionarios de la plantilla, con foco visible y uso con teclado, y una prueba comprueba los estados activo e inactivo de las fichas.
+### Story 4.10 (Historia 41): Se ve que AgentReach avanza mientras revisa
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que revisa una carpeta grande, quiero ver que AgentReach avanza y cuánto lleva, para no quedarme esperando sin saber si la herramienta funciona o se trabó. FR-27, AD-20. *Hoy no hay ninguna señal de avance: en la corrida real del 2026-11-11 se miraron 2089 archivos, y con carpetas mayores la terminal queda en silencio.* **Decisiones de diseño a confirmar:** (1) el porcentaje solo se muestra si el total se conoce de antemano; si no, un contador («revisando… 1 240 archivos») y la fase actual, para no inventar un porcentaje; (2) el avance sale por la salida de errores y solo si hay terminal interactiva: nunca en el reporte, en `--salida`, en una redirección ni en el HTML; (3) no muestra nombres de archivo (un nombre puede ser de un cliente y lo controla un tercero): solo fase, cantidades y tiempo; (4) respeta el ancho de la terminal y `NO_COLOR` (AD-20) y deja la línea limpia antes de imprimir el reporte. **Depende de:** 4.2. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** una revisión en una terminal interactiva
+**When** AgentReach recorre y analiza la carpeta
+**Then** una sola línea se actualiza en su sitio con la fase («recorriendo», «analizando», «preparando el reporte») y la cantidad de archivos revisados, y con porcentaje solo cuando el total se conoce.
+
+**Given** una carpeta grande o una fase lenta
+**When** pasan unos segundos sin cambio de cantidad
+**Then** la línea sigue mostrando que está viva (por ejemplo el tiempo transcurrido), sin ser una animación que oculte un bloqueo real.
+
+**Given** la salida redirigida, `--salida`, una terminal sin interactividad, `TERM=dumb` o el modo de pruebas
+**When** se ejecuta
+**Then** no se imprime ningún avance y la salida es idéntica a la de hoy.
+
+**Given** el avance en pantalla
+**When** termina la revisión
+**Then** la línea se borra y el reporte no contiene restos del avance; la prueba canario no encuentra nombres de archivo ni valores en el avance.
+
+**And** no escribe archivos, no usa red y no cambia ningún hallazgo ni nivel; respeta el ancho de trabajo de 60 a 100 columnas (AD-20); y Ctrl+C sigue saliendo limpio con código 130.
 
 ## Épica 5: Confiar en que la herramienta no daña ni miente
 
@@ -551,6 +628,59 @@ Como persona que no es experta en seguridad, quiero que el reporte me diga qué 
 **And** una prueba falla si en el resumen de la terminal aparece un identificador técnico (`hooks.PreToolUse`, `funcion_no_modelada`, `TH-n`) sin su explicación al lado, salvo con `--detalle`.
 
 **Fuente de diseño:** `ux-designs/ux-agent-reach-2026-11-11/EXPERIENCE.md` (glosario de 11 fichas con los textos en tú, usted e inglés, reglas de cuándo y dónde aparece cada explicación, y dependencias técnicas) y `DESIGN.md` (colores y componentes). **División acordada:** la Historia 32 construye el catálogo de términos, la autocomprobación que dice cuál hallazgo y la **terminal**; el HTML «Cómo leer este reporte» es la Historia 33 (Story 6.5) y la paridad con el README la Historia 34 (Story 6.6), pendientes. **Depende de:** 4.1, 4.5 y 6.2, y de un cambio de código: `gate.py` descarta hoy la ubicación, el tipo y el nivel de cada hallazgo corregido por la autocomprobación. **Tamaño:** L (partir en terminal, HTML y README si la primera pasada falla).
+
+### Story 6.11 (Historia 42): «Cómo leer este reporte», en corto
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que abre el reporte HTML, quiero que «Cómo leer este reporte» se lea en medio minuto, para entender los niveles sin leer una pared de texto. FR-11, UX-DR15, AD-16, AD-17. *Hoy la sección abierta muestra 4 términos (los tres niveles y el camino de alcance) con tres bloques cada uno («Qué es», «Qué significa», «Qué puedes hacer»): unas 360 palabras, y 8 términos más plegados (unas 745).* **Enfoque:** no se reescribe el catálogo (AD-16: una sola fuente para terminal, HTML y README). Cada ficha ya tiene una frase corta (`line`); la vista por defecto muestra solo esas cuatro frases y el detalle (`what_is`, `means`, `to_do`) queda plegado en «Ver más» dentro de cada término. **Depende de:** 6.5. **Tamaño:** S.
+
+**Criterios de aceptación:**
+
+**Given** cualquier reporte HTML
+**When** se abre
+**Then** «Cómo leer este reporte» sigue siendo lo primero y abierto por defecto, pero a la vista hay solo la frase de introducción y la frase corta de los tres niveles y del camino de alcance (no más de 80 palabras en total, en español y en inglés).
+
+**Given** un término de esa lista
+**When** la persona pulsa «Ver más»
+**Then** aparecen, con el texto del catálogo sin cambios, «Qué es», «Qué significa» y «Qué puedes hacer»; con teclado y lector de pantalla el control se anuncia como plegable.
+
+**Given** los otros términos (hook, sandbox, no determinado, etc.)
+**When** se abre el reporte
+**Then** siguen plegados en «Otros términos», como hoy.
+
+**Given** la vista Imprimir
+**When** se imprime
+**Then** sale la versión corta, abierta.
+
+**And** ningún texto de ayuda se pierde ni se inventa en la plantilla (AD-17): todo sale del glosario de los datos; los identificadores `term-<id>` se conservan (la Historia 36 los enlazará y abrirá el detalle); y una prueba cuenta las palabras visibles por defecto y comprueba que el texto completo sigue en la página.
+### Story 6.10 (Historia 40): Un agente que no está en la carpeta ni en el equipo no aparece
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17); ficha (origen: Alex, 2026-11-12; reformulada ese día: pasa de «etiquetar» a «no mostrar»)*
+Como persona que lee el reporte de un proyecto real, quiero ver solo los agentes que de verdad están en ese proyecto o en mi equipo, para no leer una pestaña de opencode que no existe aquí. FR-14, FR-15, FR-17, FR-31, AD-2, AD-18. *Hoy el reporte arma una pestaña por cada agente que AgentReach sabe analizar (Claude Code y opencode), con sus hallazgos, aunque el agente no esté detectado: en la corrida real del 2026-11-12 opencode tuvo 4 hallazgos y no figuraba entre los agentes configurados.* **Reglas decididas por Alex:** (1) solo hay pestaña y hallazgos para los agentes detectados como configurados (en el proyecto o en el equipo); (2) si no se detecta ningún agente con adaptador, se muestran los dos como hoy, con la aclaración «analizado sin señales de configuración»; (3) con `--agente` se muestra el pedido aunque no se detecte; (4) el código de salida cuenta solo los agentes que se muestran. **Depende de:** 6.1. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** un proyecto donde solo se detecta Claude Code
+**When** se genera el reporte (terminal y HTML)
+**Then** hay pestaña y hallazgos de Claude Code y de «Sin agente específico», y ninguna de opencode.
+
+**Given** un proyecto donde se detectan los dos agentes (el proyecto de prueba del oráculo)
+**When** se genera el reporte
+**Then** salen los dos con los mismos hallazgos y niveles de siempre (los 67 casos del oráculo no cambian).
+
+**Given** una carpeta sin señales de ningún agente con adaptador
+**When** se genera el reporte
+**Then** salen los dos agentes con la aclaración «analizado sin señales de configuración» (español con tú o usted, e inglés), y nunca un reporte sin agentes.
+
+**Given** `--agente opencode` en un proyecto sin opencode
+**When** se genera el reporte
+**Then** sale opencode con esa aclaración.
+
+**Given** un agente no detectado con un hallazgo comprobado
+**When** se calcula el código de salida
+**Then** no cuenta; con el agente detectado, sí cuenta como siempre.
+
+**And** no cambia el cálculo de ningún nivel, y una prueba cubre el proyecto de proyecto real local (solo Claude Code) y el del oráculo (ambos).
 
 ## Épica 7: Dejar el producto listo para publicarse con confianza *(nueva, pendiente)*
 

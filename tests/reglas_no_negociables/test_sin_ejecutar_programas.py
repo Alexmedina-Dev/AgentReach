@@ -65,6 +65,9 @@ def test_el_gancho_ve_cada_via_de_lanzar_programas(sin_procesos):
     INTENTOS.clear()
 
 
+EXCEPCION_DE_ACTUALIZACION = "actualizacion.py"  # Historia 31: ``uv tool install --reinstall`` con permiso, al terminar
+
+
 def _fuentes():
     raiz = Path(cli.__file__).resolve().parents[1]
     for archivo in raiz.rglob("*.py"):
@@ -74,6 +77,8 @@ def _fuentes():
 def test_el_producto_no_contiene_ninguna_via_para_lanzar_programas():
     """Estática: sin ``subprocess`` ni llamadas que lancen procesos, y sin una opción en la ayuda que lo permita."""
     for archivo, arbol in _fuentes():
+        if archivo.name == EXCEPCION_DE_ACTUALIZACION:
+            continue  # la única excepción (Historia 31), acotada y vigilada en test_historia_31.py
         for nodo in ast.walk(arbol):
             if isinstance(nodo, ast.Import):
                 assert all(a.name.split(".")[0] not in ("subprocess", "_winapi", "pty") for a in nodo.names), (

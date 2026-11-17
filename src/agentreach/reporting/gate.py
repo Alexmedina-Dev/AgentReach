@@ -33,7 +33,7 @@ from agentreach.core.nivel import Hechos
 from agentreach.infra.lectura_segura import leer_seguro
 from agentreach.reporting.limpieza import escribir_peligrosos
 
-__all__ = ["AgenteConfiguradoVista", "CausaVista", "CorreccionVista", "DatosReporte", "HallazgoVista", "NoRevisadoVista", "RastroSinDecidirVista", "ReglaVista", "codigo_de_salida", "preparar", "ruta_visible"]
+__all__ = ["AgenteConfiguradoVista", "CausaVista", "CorreccionVista", "DatosReporte", "HallazgoVista", "NoRevisadoVista", "RastroSinDecidirVista", "ReglaVista", "codigo_de_salida", "plataformas_mostradas", "preparar", "ruta_visible"]
 
 _SALTO = re.compile(r"\r\n|\r|\n")
 
@@ -128,6 +128,7 @@ class DatosReporte:
     causas: tuple[CausaVista, ...] = ()  # por qué hay niveles «no determinado» (archivo y clave, sin valores)
     sin_decidir: tuple[RastroSinDecidirVista, ...] = ()  # rastros compartidos que no permiten decir qué agente es
     proyectos_anidados: int = 0  # carpetas internas que parecen proyectos aparte (Historia 44); solo cantidad, no es hallazgo
+    sin_senales: frozenset[Plataforma] = frozenset()  # agentes mostrados sin que se detectara configuración suya (Historia 40)
 
 
 class LectorSeguro:
@@ -171,6 +172,20 @@ def codigo_de_salida(hallazgos: tuple[Finding, ...] | tuple[HallazgoVista, ...],
     return 1 if estricto and hay_no_revisados else 0
 
 
+_PLATAFORMA_DE_ID = {"claude-code": Plataforma.CLAUDE_CODE, "opencode": Plataforma.OPENCODE}  # id del catálogo de agentes -> plataforma
+
+
+def plataformas_mostradas(agentes, agente: Plataforma | None = None) -> tuple[frozenset[Plataforma], frozenset[Plataforma]]:
+    """Historia 40: qué agentes con adaptador se muestran, y de cuáles se dice «analizado sin señales de configuración».
+
+    Regla única: se muestra el que aparece entre los «Agentes configurados» (con cualquier confianza). Si no se detecta ninguno
+    se muestran los dos, con la aclaración. Con ``--agente`` se muestra el pedido, detectado o no (sin aclaración si se detectó).
+    """
+    detectados = frozenset(_PLATAFORMA_DE_ID[a.id] for a in agentes if a.analizado and a.id in _PLATAFORMA_DE_ID)
+    mostradas = frozenset({agente}) if agente is not None else (detectados or frozenset(_PLATAFORMA_DE_ID.values()))
+    return mostradas, (mostradas - detectados)
+
+
 def preparar(
     resultado,
     carpeta: str,
@@ -185,7 +200,9 @@ def preparar(
     carpeta = os.path.abspath(carpeta)
     hechos: Mapping[Finding, Hechos] = getattr(resultado, "hechos", {})
     revisado = autocomprobar(resultado.hallazgos, hechos, lector or LectorSeguro())  # type: ignore[arg-type]
-    visibles = [c for c in revisado.correcciones if agente is None or c.plataforma in (agente, Plataforma.NO_DETERMINADA)]
+    mostradas, sin_senales = plataformas_mostradas(getattr(resultado, "agentes", ()), agente)
+    permitidas = mostradas | {Plataforma.NO_DETERMINADA}  # lo que no depende de un agente sigue como siempre
+    visibles = [c for c in revisado.correcciones if c.plataforma in permitidas]
     escritos = False
 
     def ver(ubicacion: Location) -> str:
@@ -196,8 +213,8 @@ def preparar(
 
     hallazgos: list[HallazgoVista] = []
     for h in revisado.hallazgos:
-        if agente is not None and h.plataforma not in (agente, Plataforma.NO_DETERMINADA):
-            continue  # --agente: nada de los otros agentes
+        if h.plataforma not in permitidas:
+            continue  # nada de un agente que no se muestra (no detectado, o distinto del pedido con --agente)
         linea = h.ubicacion.linea if isinstance(h.ubicacion.linea, int) else None
         regla = f"{ver(h.regla)}:{h.regla.linea}" if h.regla and isinstance(h.regla.linea, int) else (ver(h.regla) if h.regla else None)
         hallazgos.append(HallazgoVista(
@@ -216,7 +233,7 @@ def preparar(
     esquemas: list[tuple[Plataforma, str]] = []
     causas: list[CausaVista] = []
     for plataforma, contexto in getattr(resultado, "contextos", ()):
-        if agente is not None and plataforma is not agente:
+        if plataforma not in mostradas:
             continue
         if contexto.limpieza_de_entorno:
             limpieza.add(plataforma)
@@ -283,4 +300,5 @@ def preparar(
         sin_decidir=tuple(sin_decidir),
         causas=tuple(causas),
         proyectos_anidados=int(getattr(resultado, "proyectos_anidados", 0) or 0),
+        sin_senales=sin_senales,
     )

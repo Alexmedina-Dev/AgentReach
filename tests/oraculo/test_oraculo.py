@@ -160,8 +160,9 @@ def test_expected_json_tiene_los_67_casos_y_las_cifras_del_oraculo():
     assert len(CASOS) == 67 and len(set(IDS)) == 67
     # Cifras tras la decisión de Alex del 2026-11-11 (Historia 27): una variable reconocida solo por su nombre nunca pasa de potencial.
     # El oráculo original daba 18 comprobado, 28 potencial y 2 hipótesis por agente (5 casos TH-1 y AJ-01 pasaron a potencial).
+    # Historia 46: TH-14 y TH-15 de `.claude/settings*.json` (AT-04, AT-12, AT-06) son solo de Claude Code; opencode no los reporta.
     for agente, esperado in (("claude-code", {"comprobado": 13, "potencial": 33, "hipotesis": 2}),
-                             ("opencode", {"comprobado": 13, "potencial": 33, "hipotesis": 2})):
+                             ("opencode", {"comprobado": 13, "potencial": 30, "hipotesis": 2})):
         cuenta = {n: 0 for n in esperado}
         for c in CASOS:
             n = c["esperado"][agente] if isinstance(c["esperado"], dict) else c["esperado"]

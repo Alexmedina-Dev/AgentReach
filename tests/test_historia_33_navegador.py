@@ -71,11 +71,12 @@ def test_plegar_y_desplegar_se_conserva_al_cambiar_de_idioma(navegador, tmp_path
     assert pg.evaluate("document.querySelector('#howto > details').open") is False
 
 
-def test_beforeprint_abre_todo_y_afterprint_restaura_aunque_beforeprint_se_repita(navegador, tmp_path: Path):
+def test_beforeprint_abre_la_seccion_y_afterprint_restaura_aunque_beforeprint_se_repita(navegador, tmp_path: Path):
     pg, _ = _abrir(navegador, tmp_path, html_de(datos([finding()])))
     pg.locator("#howto details.fold >> nth=0").evaluate("d => d.open = true")
     pg.evaluate("window.dispatchEvent(new Event('beforeprint')); window.dispatchEvent(new Event('beforeprint'))")
-    assert pg.locator("#howto details[open]").count() == 1 + 8  # la sección y los 8 plegados
+    # Historia 42: en papel sale la versión corta; solo está abierto lo que la persona ya había abierto (antes se abrían los 8 plegados)
+    assert pg.locator("#howto details[open]").count() == 1 + 1  # la sección y el plegado que la persona abrió
     pg.evaluate("window.dispatchEvent(new Event('afterprint'))")
     assert pg.locator("#howto > details[open]").count() == 1
     assert pg.locator("#howto details.fold[open]").count() == 1  # solo el que la persona había abierto

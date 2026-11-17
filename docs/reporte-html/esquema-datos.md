@@ -49,6 +49,7 @@ La plantilla muestra un selector con un botón por entrada ("Claude Code (12)", 
 Cada entrada: `{id, name, env_cleaning, rules[], findings[]}`.
 
 - `env_cleaning`: `DatosReporte.limpieza_de_entorno` contiene esa plataforma.
+- `no_signals` (opcional, Historia 40): `true` si el agente se muestra aunque no se detectó configurado (ninguno detectado, o pedido con `--agente`); la plantilla escribe «analizado sin señales de configuración». Un agente con adaptador solo tiene entrada si aparece en `configured_agents` o lleva `no_signals`.
 - `rules[]`: de `DatosReporte.reglas` (`ReglaVista`): `{posture, tool, location}` con `posture` en `allow|ask|deny|no_determinada`, `tool` = `ReglaVista.herramienta` (ya escrita sin peligros) y `location` = `ReglaVista.ubicacion` (`archivo:línea`). Son contexto, no hallazgos.
 
 ### `findings[]` (los ocho campos del PRD, FR-9)

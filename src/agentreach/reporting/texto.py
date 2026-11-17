@@ -164,6 +164,9 @@ _T: dict[str, dict[Idioma, str]] = {
     "cfg_indeterminado": {
         Idioma.ES: "No determinado: {ruta} lo leen varios agentes ({candidatos}); no dice cuál está configurado.",
         Idioma.EN: "Not determined: {ruta} is read by several agents ({candidatos}); it does not say which one is configured."},
+    "cfg_sin_senales": {
+        Idioma.ES: "Agentes analizados sin señales de configuración: {agentes}",
+        Idioma.EN: "Agents analyzed without configuration signals: {agentes}"},
     "nd_titulo": {Idioma.ES: "POR QUÉ HAY NIVELES «NO DETERMINADO»", Idioma.EN: "WHY SOME LEVELS ARE \"NOT DETERMINED\""},
     "nd_afecta": {Idioma.ES: "{n} hallazgos dependen de esto", Idioma.EN: "{n} findings depend on this"},
     "urgentes": {Idioma.ES: "LO MÁS URGENTE", Idioma.EN: "MOST URGENT"},
@@ -423,7 +426,11 @@ class _Texto:
     def configurados(self) -> None:
         """Los agentes configurados según el catálogo de firmas: «configurado», nunca «ejecutado»."""
         i, d = self.i, self.d
+        sin = [_PLATAFORMA[p] for p in (Plataforma.CLAUDE_CODE, Plataforma.OPENCODE) if p in d.sin_senales]
         if not d.configurados and not d.sin_decidir:
+            if sin:  # Historia 40: ninguno detectado; una sola línea propia, sin el título de agentes configurados
+                self.linea(self._t("cfg_sin_senales", i).format(agentes=", ".join(sin)), 0, 2)
+                self.linea()
             return
         self.linea(self._t("cfg_titulo", i))
         if any(not c.marco and not c.analizado for c in d.configurados):  # la ficha ya dice que no es «se ejecutó»
@@ -446,6 +453,8 @@ class _Texto:
                     self.crudo(f"      {ambitos[ambito]}: {ruta}")
         for r in d.sin_decidir:
             self.linea(self._t("cfg_indeterminado", i).format(ruta=r.ruta, candidatos=", ".join(r.candidatos)), 2, 4)
+        if sin:  # Historia 40: un agente pedido con --agente y no detectado, después de la lista
+            self.linea(self._t("cfg_sin_senales", i).format(agentes=", ".join(sin)), 2, 4)
         self.linea()
 
     def no_determinado(self) -> None:

@@ -12,6 +12,7 @@ from enum import Enum
 
 from agentreach.contracts import (
     CATALOGO_EXPLICACIONES,
+    LIMITE_BYTES,
     Ajeno,
     Idioma,
     MotivoNoRevisado,
@@ -20,6 +21,8 @@ from agentreach.contracts import (
     Proveedor,
     Tipo,
 )
+
+_TOPE_MB = LIMITE_BYTES // (1024 * 1024)  # 1 MiB: lo que el recorrido del proyecto no abre (contracts/ports.py)
 
 __all__ = [
     "AJENO",
@@ -84,7 +87,7 @@ TITULO_MOTIVO: dict[MotivoNoRevisado, dict[Idioma, str]] = {
     MotivoNoRevisado.UBICACION_SENSIBLE_SIN_ACTIVAR: {ES: "Ubicación sensible sin activar", EN: "Sensitive location not turned on"},
     MotivoNoRevisado.ARCHIVO_ILEGIBLE: {ES: "No se pudo abrir el archivo", EN: "The file could not be opened"},
     MotivoNoRevisado.ARCHIVO_DEMASIADO_GRANDE: {
-        ES: "Archivo demasiado grande (más de 5 MB)", EN: "File too large (over 5 MB)"},
+        ES: f"Archivo demasiado grande (más de {_TOPE_MB} MB)", EN: f"File too large (over {_TOPE_MB} MB)"},   # el tope real del recorrido (Historia 47), no un número escrito a mano
     MotivoNoRevisado.NO_ES_ARCHIVO_REGULAR: {
         ES: "No es un archivo normal (tubería, dispositivo u otro)", EN: "Not a regular file (pipe, device or other)"},
     MotivoNoRevisado.CODIFICACION_NO_UTF8: {
