@@ -193,6 +193,8 @@ uv tool install git+https://github.com/Alexmedina-Dev/AgentReach
 
 Open a new terminal, go into the project you want to review and type `agentreach`. If the terminal does not know the command, run `uv tool update-shell` once and open another new terminal.
 
+**Version notice.** When opened, at most every 15 days, AgentReach asks GitHub only for the latest version number (the one in `pyproject.toml` on `main`), over HTTPS and to `github.com` only. It sends nothing about you or your folder, but like any web request it leaves your IP address, the time and the program name (`AgentReach/<version>`) at GitHub, and every 15 days it reveals that this IP uses AgentReach. If there is a new version it shows it with the exact command and asks `(Y/N)`; with Y, and only if it was installed with uv, it runs `uv tool install --reinstall git+https://github.com/Alexmedina-Dev/AgentReach` when the program ends. **On Windows it does not run it:** Windows cannot replace a program while it is open (uv fails and leaves the installation broken, which we tested), so it shows the same command and asks you to close AgentReach and run it yourself. With no internet, an error, a version it does not understand or no terminal, it says nothing and does not fail. It never runs during the review. Turn it off with `--sin-actualizar` or the `AGENTREACH_SIN_ACTUALIZAR` variable. It is never mixed with `--formato` or `--salida`. The date of the last check is saved in `preferencias.json`, inside `AgentReach-reportes`.
+
 After that, the use is always the same:
 
 1. Open a terminal (Windows Terminal, VS Code, or the one you use).
@@ -201,7 +203,7 @@ After that, the use is always the same:
 4. If you answer `S`, it reviews the folder and shows a short summary. If you answer `N`, it reads nothing and exits.
 5. At the end it tells you where the visual report is and asks if you want to open it in the browser.
 
-The tool only reads your project. It changes nothing in it, does not use the network, does not run your project's programs and does not show secret values. It only saves the report outside the reviewed folder, and only opens the browser with your permission.
+The tool only reads your project. It changes nothing in it, the review does not use the internet (every 15 days it checks only the version number), does not run your project's programs and does not show secret values. It only saves the report outside the reviewed folder, and only opens the browser with your permission.
 
 AgentReach is a terminal tool operated by a person: without an interactive terminal it reads nothing, and there is no flag that answers for you. It shows what it is and what it does, then asks two separate permissions: to read the folder, and to see the rules of your agents outside the project (user and managed configuration; only the rules, never the values; with N nothing outside the project is read and the levels that depend on the rules stay at "potential"). The first one: it asks permission to read the folder (only `s`/`S` or `n`/`N` count; Enter alone does not decide; three invalid answers and it exits without reading). Without a folder (`uv run agentreach`) it reviews the current folder. It prints a short summary by level with the three most urgent findings; `--detalle` prints the full list.
 When it finishes it also saves an HTML report in `AgentReach-reportes` inside your home folder (never inside the reviewed folder),
@@ -298,7 +300,7 @@ These design rules are not negotiable.
 
 - **Read-only.** AgentReach never changes the repository or the environment it analyzes. It only warns about what it finds.
 - **No secret values.** Reports show the location, the type, and the confidence level. They never show the value.
-- **No network.** It does not send private information to external servers, and the visual report works offline.
+- **No internet during the review.** The review does not use the internet; every 15 days it checks only the version number (see *Version notice*). It never sends anything about you or your folder, and the visual report works offline.
 - **Permission first.** It asks before it reads a folder. No option answers for you, and without an interactive terminal it reads nothing.
 - **It writes only the report.** The report goes outside the reviewed folder, and the browser opens only with your permission.
 - **Sensitive user locations** (`~/.aws`, `~/.ssh`, `~/.npmrc`) are **opt-in**. They are off by default. They read metadata only (existence and permissions), never content.

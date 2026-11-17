@@ -59,6 +59,7 @@ def persona_delante(request, monkeypatch):
     from agentreach import cli
 
     monkeypatch.setattr(cli, "_interactivo", lambda: True)
+    monkeypatch.setattr(cli, "_comprobar_version_por_defecto", False)  # la consulta de versión (Historia 31) solo la prueban sus pruebas
     monkeypatch.setattr(cli, "_resumen_corto_por_defecto", False)  # estas pruebas comparan el reporte completo
     monkeypatch.setattr(cli, "_crear_reporte_por_defecto", False)  # y no escriben en la carpeta personal
     monkeypatch.setattr(cli, "_preguntar_por_defecto", _respuesta_de_prueba)

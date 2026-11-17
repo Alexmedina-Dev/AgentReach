@@ -14,7 +14,7 @@ import re
 import shutil
 import sys
 from collections.abc import Callable
-from datetime import datetime
+from datetime import datetime, timedelta
 from importlib import metadata
 
 from agentreach.app.auditar import auditar
@@ -23,10 +23,17 @@ from agentreach.app.doctor import codigo_de_salida as codigo_doctor
 from agentreach.app.doctor import comprobar as comprobar_entorno
 from agentreach.app.doctor import formatear as formatear_doctor
 from agentreach.cli.reportes import dentro as _dentro
-from agentreach.cli.reportes import escribir_reporte, guardar_preferencia, leer_preferencia
+from agentreach.cli.reportes import (
+    escribir_reporte,
+    guardar_comprobacion,
+    guardar_preferencia,
+    leer_comprobacion,
+    leer_preferencia,
+)
 from agentreach.config import Configuracion, archivo_global_por_defecto, cargar_configuracion
 from agentreach.contracts import Idioma, Plataforma
 from agentreach.core.catalogo_explicaciones import TITULO_MOTIVO, Tono
+from agentreach.infra import actualizacion
 from agentreach.infra.navegador import abrir as abrir_navegador
 from agentreach.reporting.formato import (
     Color,
@@ -88,10 +95,42 @@ _ERROR = {
         Idioma.EN: ("What it does: it walks the folder's files and the agents' configuration, and reports what an agent could reach, "
                     "with evidence and a confidence level.")},
     "intro_no_hace": {
-        Idioma.ES: ("Qué no hace: no cambia nada del proyecto, no usa la red, no ejecuta los programas del proyecto y no muestra valores de "
+        Idioma.ES: ("Qué no hace: no cambia nada del proyecto, no usa la red durante la revisión, no ejecuta los programas del proyecto y no muestra valores de "
                     "secretos. Solo guarda el reporte fuera de la carpeta revisada, y solo abre el navegador con permiso."),
-        Idioma.EN: ("What it does not do: it changes nothing in the project, uses no network, runs none of the project's programs and shows "
+        Idioma.EN: ("What it does not do: it changes nothing in the project, uses no network during the review, runs none of the project's programs and shows "
                     "no secret values. It only saves the report outside the reviewed folder, and only opens the browser with permission.")},
+    "intro_red": {
+        Idioma.ES: ("Una excepción, fuera de la revisión: al abrir, como máximo cada 15 días, consulta por internet solo el número de la última "
+                    "versión. Esa consulta deja en GitHub la dirección IP, la hora y el nombre del programa, y cada 15 días revela que esa IP "
+                    "usa AgentReach. No envía nada de la persona ni de su carpeta. Se apaga con --sin-actualizar o con la variable "
+                    "AGENTREACH_SIN_ACTUALIZAR."),
+        Idioma.EN: ("One exception, outside the review: when opened, at most every 15 days, it asks the internet only for the number of the "
+                    "latest version. That request leaves the IP address, the time and the program name at GitHub, and every 15 days it reveals "
+                    "that this IP uses AgentReach. It sends nothing about the person or the folder. Turn it off with --sin-actualizar or the "
+                    "AGENTREACH_SIN_ACTUALIZAR variable.")},
+    "version_nueva": {
+        Idioma.ES: "Hay una versión nueva ({version}).",
+        Idioma.EN: "There is a new version ({version})."},
+    "version_comando": {
+        Idioma.ES: "Comando exacto:\n  {comando}",
+        Idioma.EN: "Exact command:\n  {comando}"},
+    "version_pregunta": {
+        Idioma.ES: "¿Descargarla ahora? (S/N) ",
+        Idioma.EN: "Download it now? (Y/N) "},
+    "version_instalando": {
+        Idioma.ES: "Instalando la versión nueva (puede tardar)...",
+        Idioma.EN: "Installing the new version (it may take a while)..."},
+    "version_instalada": {
+        Idioma.ES: "Listo: la versión nueva se usa la próxima vez que se abra AgentReach.",
+        Idioma.EN: "Done: the new version is used the next time AgentReach is opened."},
+    "version_manual": {
+        Idioma.ES: "No se pudo instalar sola (o AgentReach no está instalado con uv). Para hacerlo a mano:\n  {comando}",
+        Idioma.EN: "It could not be installed automatically (or AgentReach is not installed with uv). To do it by hand:\n  {comando}"},
+    "version_windows": {
+        Idioma.ES: ("En Windows AgentReach no se puede reemplazar mientras está abierto: la instalación quedaría rota. "
+                    "Cierra esta ventana y ejecuta:\n  {comando}"),
+        Idioma.EN: ("On Windows AgentReach cannot be replaced while it is open: the installation would be left broken. "
+                    "Close this window and run:\n  {comando}")},
     "pregunta_leer": {
         Idioma.ES: "¿Se permite que AgentReach lea esta carpeta?\n  {ruta}\n{aviso}(S/N) ",
         Idioma.EN: "Is AgentReach allowed to read this folder?\n  {ruta}\n{aviso}(Y/N) "},
@@ -240,6 +279,8 @@ def construir_parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-abrir", action="store_true", dest="no_abrir", help="no abre el reporte en el navegador ni pregunta")
     parser.add_argument("--sin-reporte-html", action="store_true", dest="sin_reporte_html",
                         help="no crea el reporte HTML en AgentReach-reportes (carpeta personal)")
+    parser.add_argument("--sin-actualizar", action="store_true", dest="sin_actualizar",
+                        help="no consulta si hay una versión nueva (también AGENTREACH_SIN_ACTUALIZAR=1)")
     parser.add_argument("--estricto", action="store_true", help="código de salida 1 también si hay entradas no revisadas")
     parser.add_argument("--ancho", type=int, metavar="N", help="ancho en columnas (solo para pruebas)")
     return parser
@@ -447,7 +488,10 @@ def main(argv: list[str] | None = None, ahora: Callable[[], datetime] | None = N
     try:
         if comando == "doctor":
             return _doctor(args)
-        return _ejecutar(args, idioma, ahora, preguntar or _preguntar_por_defecto)
+        _PENDIENTE.clear()
+        codigo = _ejecutar(args, idioma, ahora, preguntar or _preguntar_por_defecto)
+        _terminar_actualizacion(idioma)  # lo que la persona aceptó al abrir se hace al terminar, no durante la revisión
+        return codigo
     except KeyboardInterrupt:  # Ctrl+C: se corta sin traza, y lo que no se alcanzó a revisar no se muestra a medias
         _decir("\n" + _ERROR["cancelado_ctrl_c"][idioma])
         return 130
@@ -567,7 +611,64 @@ def _presentar(lineas: list[str], idioma: Idioma) -> None:
     """El banner (con su aire) y qué es AgentReach, qué hace y qué no, antes de pedir permiso."""
     if lineas:
         _escribir(sys.stdout, "\n".join(lineas) + "\n\n")
-    _decir("\n".join(_ERROR[k][idioma] for k in ("intro_que", "intro_hace", "intro_no_hace")) + "\n")
+    _decir("\n".join(_ERROR[k][idioma] for k in ("intro_que", "intro_hace", "intro_no_hace", "intro_red")) + "\n")
+
+
+_PENDIENTE: list[bool] = []  # la persona dijo S a la versión nueva: se instala al terminar (en Windows, solo se muestra el comando)
+_comprobar_version_por_defecto = True  # solo las pruebas lo cambian (sin red)
+_consultar_version = actualizacion.consultar  # idem: las pruebas ponen una respuesta falsa
+_instalar_version = actualizacion.instalar
+_instalado_con_uv = actualizacion.instalado_con_uv
+_puede_instalar_sola = actualizacion.puede_instalar_sola  # idem: las pruebas eligen el sistema
+_DIAS_ENTRE_COMPROBACIONES = 15
+
+
+def _avisar_version(args: argparse.Namespace, carpeta: str, idioma: Idioma, ahora: Callable[[], datetime] | None,
+                    preguntar: Callable[[str], str]) -> None:
+    """Historia 31: al abrir, como máximo cada 15 días, consulta el número de la última versión (nada de la persona ni de su carpeta). Nunca
+    durante la revisión, nunca con ``--formato``/``--salida``/``--json``, y sin internet o con cualquier error no dice ni falla."""
+    if (not _comprobar_version_por_defecto or args.sin_actualizar or os.environ.get("AGENTREACH_SIN_ACTUALIZAR")
+            or args.formato != "texto" or args.salida or args.json):
+        return
+    try:
+        home = args.home or os.path.expanduser("~")
+        hoy = (ahora or datetime.now)().date()
+        ultima = leer_comprobacion(home, carpeta)
+        if ultima is not None and ultima <= hoy and hoy - ultima < timedelta(days=_DIAS_ENTRE_COMPROBACIONES):
+            return
+        if not guardar_comprobacion(home, carpeta, hoy):  # sin poder anotar la fecha no se puede espaciar: no se consulta
+            return
+        actual = _version()
+        nueva = _consultar_version(actual)
+        if nueva is None or not actualizacion.es_mas_nueva(nueva, actual):
+            return
+        _decir(_ERROR["version_nueva"][idioma].format(version=nueva))
+        _decir(_ERROR["version_comando"][idioma].format(comando=" ".join(actualizacion.COMANDO)))
+        if _confirmar(preguntar, _ERROR["version_pregunta"][idioma], idioma):
+            _PENDIENTE.append(True)
+    except KeyboardInterrupt:
+        raise
+    except Exception:  # noqa: BLE001 - el aviso nunca hace fallar la revisión
+        return
+
+
+def _terminar_actualizacion(idioma: Idioma) -> None:
+    """Con S, al terminar: ``uv tool install --reinstall …`` (sin shell, con tiempo límite) si está instalado con uv; si no, solo el comando.
+    En Windows nunca se lanza: con AgentReach abierto uv falla y deja la instalación rota, así que se muestra el comando para ejecutarlo
+    después de cerrarlo."""
+    if not _PENDIENTE:
+        return
+    _PENDIENTE.clear()
+    comando = " ".join(actualizacion.COMANDO)
+    if not _puede_instalar_sola():
+        _decir(_ERROR["version_windows"][idioma].format(comando=comando))
+        return
+    if _instalado_con_uv():
+        _decir(_ERROR["version_instalando"][idioma])
+        if _instalar_version():
+            _decir(_ERROR["version_instalada"][idioma])
+            return
+    _decir(_ERROR["version_manual"][idioma].format(comando=comando))
 
 
 def _pedir_lectura(carpeta: str, args: argparse.Namespace, idioma: Idioma, preguntar: Callable[[str], str]) -> bool:
@@ -675,6 +776,7 @@ def _ejecutar(args: argparse.Namespace, idioma: Idioma, ahora: Callable[[], date
     if lineas:
         lineas = [*_ESPACIO_ANTES, *lineas, *_ESPACIO_DESPUES]  # aire alrededor del banner: tres líneas en blanco antes y después
     _presentar(lineas, idioma)
+    _avisar_version(args, carpeta, idioma, ahora, preguntar)
     if not _pedir_lectura(carpeta, args, idioma, preguntar):
         return 2
     lectura_fuera = _pedir_reglas(args, idioma, tono, preguntar)  # segundo nivel: las reglas de los agentes fuera del proyecto
