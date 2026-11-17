@@ -176,6 +176,10 @@
         "env_cleaning": {
           "type": "boolean"
         },
+        "no_signals": {
+          "type": "boolean",
+          "description": "Optional. True when this agent is shown although no configuration of it was detected (analyzed without configuration signals). Absent or false otherwise."
+        },
         "not_determined": {
           "type": "array",
           "maxItems": 200,

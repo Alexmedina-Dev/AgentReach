@@ -221,6 +221,9 @@ def test_con_n_el_reporte_de_terminal_dice_por_que_y_como_cambiarlo(mundo, monke
 
 def test_con_n_el_html_dice_por_que_y_cumple_el_esquema(mundo):
     destino = mundo["tmp"] / "r.html"
+    # Historia 40: sin permiso del segundo nivel no se mira ~/.claude, y un agente solo se muestra si se detecta: el proyecto lo declara
+    (mundo["proyecto"] / ".claude").mkdir()
+    (mundo["proyecto"] / ".claude" / "settings.json").write_text("{}", encoding="utf-8")
     correr(mundo, ["s", "n"], "--formato", "html", "--salida", str(destino))
     datos = json_de(destino.read_text(encoding="utf-8"))
     _validar(datos, ESQUEMA)
