@@ -76,9 +76,9 @@ context:
 |---|---------|----------|-----------|------|-----------|
 | 1 | Brechas | `doctor` y la revisión no tienen prueba con tema desconocido | medium | patch (hecho) | Solo `--help` pasaba por el cableado; revertir `claro_marca` hace fallar 2 pruebas nuevas (mutación comprobada) |
 | 2 | Casos límite y ciego | `colores_de_marca` sin uso en runtime; dos fuentes de verdad | low | patch (hecho) | Prueba que ata `_PALETA` con la función para blanco y negro; ya coincidían |
-| 3 | Casos límite | REACH <3:1 sobre fondos crema con `--tema claro` | low | rechazado | El tema claro/oscuro asume blanco o negro puro; el fondo RGB real espera la Historia 31 |
+| 3 | Casos límite | REACH <3:1 sobre fondos crema con `--tema claro` | low | rechazado | El tema claro/oscuro asume blanco o negro puro; el fondo RGB real espera la Historia 48 |
 | 4 | Ciego | Versión y lema del banner sin tema siguen en paleta oscura (lema 1,9:1 sobre blanco) | medium | patch (hecho) | Roles `marca_sec` y `marca_lema`; sin tema, gris 767676 (≥4,5:1) y ESC[90m en 16 colores |
-| 5 | Ciego | Sin detección, Windows Terminal y Orca ven el menta-teal de reserva aun en oscuro | low | diferido | Compromiso aprobado en la spec; lo resuelve la Historia 31 (`deferred-work.md`) |
+| 5 | Ciego | Sin detección, Windows Terminal y Orca ven el menta-teal de reserva aun en oscuro | low | diferido | Compromiso aprobado en la spec; lo resuelve la Historia 48 (`deferred-work.md`) |
 | 6 | Casos límite y ciego | Centinela `_SIN_DECIDIR` tipado como `object` | low | rechazado | Función privada con dos llamadores fijos; sin daño demostrado |
 | 7 | Casos límite y ciego | `COLORFGBG` con un solo valor, `default;default` o índice >15 | low | rechazado | Igual que el `fondo_claro` previo; `_tema_colorfgbg` ya devuelve desconocido fuera de 0 a 15 |
 | 8 | Casos límite y ciego | `AGENTREACH_TEMA` inválido se ignora en silencio | low | rechazado | Igual que `resolver_tema` antes de esta historia |
@@ -88,7 +88,7 @@ context:
 | 12 | Ciego | Cota 0,1<luminancia<0,5 sin justificar en el barrido | low | rechazado | Es de prueba, no de producto |
 | 13 | Ciego | Comentario de `_PALETA` desactualizado | low | patch (hecho) | Corregido |
 | 14 | Ciego | Nombre `contraste` repetido entre formato y una prueba | low | rechazado | Alcances distintos, sin colisión real |
-| 15 | Ciego | `resolver_tema` y `resolver_tema_marca` casi duplicadas | low | rechazado | Tocaría una función con contrato probado; se reevalúa con la Historia 31 |
+| 15 | Ciego | `resolver_tema` y `resolver_tema_marca` casi duplicadas | low | rechazado | Tocaría una función con contrato probado; se reevalúa con la Historia 48 |
 | 16 | Ciego | Costo y log INFO de `colores_de_marca` en cada banner | false | rechazado | Esa función no se llama en ejecución |
 | 17 | Brechas | `pintar` con `claro=None` en otros roles sin prueba | low | rechazado | Comportamiento documentado en el docstring y sin cambio respecto a antes |
 

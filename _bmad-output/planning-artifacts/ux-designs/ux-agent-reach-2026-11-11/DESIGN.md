@@ -94,7 +94,7 @@ Fuente de verdad de los valores: `docs/boceto-reporte/colores.md` (Paleta A, ele
 
 **Logo adaptativo (decisión de la Historia 29; AGENT y REACH deben combinar sobre cualquier fondo).**
 - Con fondo conocido: REACH conserva el matiz menta y mueve solo la luminosidad hasta lograr ≥3:1 contra ese fondo; AGENT usa `{colors.brand-ink}` o `{colors.brand-bg}`, el de más contraste.
-- Sin saber el fondo (hoy el caso normal; la detección del fondo real, OSC 11, es la Historia 31): AGENT usa el texto normal de la terminal y REACH usa `{colors.brand-mint-neutral}`, que da ≥4,5:1 sobre blanco y sobre negro. En 16 colores, REACH usa el cian normal (36).
+- Sin saber el fondo (hoy el caso normal; la detección del fondo real, OSC 11, es la Historia 48): AGENT usa el texto normal de la terminal y REACH usa `{colors.brand-mint-neutral}`, que da ≥4,5:1 sobre blanco y sobre negro. En 16 colores, REACH usa el cian normal (36).
 - Versión y lema: gris `{colors.brand-muted}` sin tema, legible sobre blanco y negro.
 - Nunca se pinta el fondo de la terminal: se respeta la de la persona.
 

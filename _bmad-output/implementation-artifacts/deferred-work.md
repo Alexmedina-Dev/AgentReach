@@ -8,15 +8,15 @@
   evidence: Dividida de la Historia 29 por el estandar de una sola meta por spec; se construye justo despues, en una segunda pasada (Alex pidio las dos, en ese orden). Origen: en Orca se vio "Solo g / uarda".
 
 - source_spec: spec-historia-29-colores-legibles-en-cualquier-terminal.md
-  summary: Historia 31 (por escribir): detectar el color de fondo real de la terminal (consulta OSC 11) para que el logo y el cuerpo del reporte se adapten a CUALQUIER fondo, no solo claro/oscuro.
+  summary: Historia 48 (por escribir): detectar el color de fondo real de la terminal (consulta OSC 11) para que el logo y el cuerpo del reporte se adapten a CUALQUIER fondo, no solo claro/oscuro.
   evidence: Fuera de la 29 porque exige leer la entrada de la terminal (choca con FR-30 y con la Story 7.4/M1) y no se puede verificar sin una terminal real. Primero Alex prueba con una sonda si Orca responde a la consulta; si no responde, se queda el caso "desconocido".
 - source_spec: spec-historia-29-colores-legibles-en-cualquier-terminal.md
   summary: Colores del CUERPO del reporte (comprobado, potencial, etc.) cuando el tema es desconocido y la terminal es de 24 bits sobre fondo claro (p. ej. el ambar sobre blanco da 1,9:1).
-  evidence: La 29 solo corrige el logo para no cambiar el aspecto del reporte en las terminales oscuras, que son la mayoria; el cuerpo se resuelve mejor con la deteccion real del fondo (Historia 31).
+  evidence: La 29 solo corrige el logo para no cambiar el aspecto del reporte en las terminales oscuras, que son la mayoria; el cuerpo se resuelve mejor con la deteccion real del fondo (Historia 48).
 
 - source_spec: spec-historia-30-todo-lo-impreso-respeta-el-ancho.md
   summary: Una ruta con espacios (p. ej. «Program Files») puede partirse entre palabras en la pregunta de permiso y en «guardado en» cuando es mas larga que el ancho.
-  evidence: El ajuste parte por espacios; protegerla exige reconocer que una linea es una ruta. Es legible pero no se puede copiar de un tiron. Se resuelve junto con la Historia 31 o con un marcador de ruta en los textos.
+  evidence: El ajuste parte por espacios; protegerla exige reconocer que una linea es una ruta. Es legible pero no se puede copiar de un tiron. Se resuelve junto con la Historia 48 o con un marcador de ruta en los textos.
 
 - source_spec: spec-historia-32-la-terminal-explica-cada-termino.md
   summary: Historia 33 (Story 6.5): seccion plegable «Como leer este reporte» en el HTML con las 11 fichas, un ejemplo por nivel, enlace «¿que es esto?» junto a cada termino, y retirar el «usted» fijo de la plantilla (que siga el tono elegido).

@@ -23,4 +23,4 @@
 `tests/test_historia_31.py` (123): versión estricta, petición sin datos, cuerpos raros, límites, errores, redirecciones, comando exacto, instalación sin shell, flujo S/N/Enter en ES y EN, 15 días, preferencias corruptas, interruptores, nunca durante la revisión, revisión sin red con sockets bloqueados, transparencia y pruebas estáticas.
 
 ## No verificado
-Instalación real con `uv` (la prueba usa un falso); reinstalar en Windows con `agentreach.exe` abierto puede fallar (entonces solo se muestra el comando); una terminal real.
+Verificado en Windows con una consola real (2026-11-17): reinstalar con AgentReach abierto falla y deja la instalación rota; con nada abierto la repara (por eso en Windows solo se muestra el comando). Sin verificar: la reinstalación con el programa abierto en macOS y Linux, y `uv tool upgrade` (no se usa).

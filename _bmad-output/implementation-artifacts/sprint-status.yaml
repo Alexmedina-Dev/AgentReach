@@ -71,7 +71,7 @@ development_status:
   epic-3-retrospective: optional
 
   epic-4: in-progress
-  4-8-historia-31-detectar-el-color-de-fondo-real-de-la-terminal: backlog  # ficha sin criterios; probar primero con una sonda si Orca responde a la consulta del fondo; coordinar con 7-4 (M1)
+  4-8-historia-48-detectar-el-color-de-fondo-real-de-la-terminal: backlog  # ficha sin criterios; probar primero con una sonda si Orca responde a la consulta del fondo; coordinar con 7-4 (M1)
   4-1-historia-13-reporte-con-ocho-campos-idiomas-orden-autocompro: done
   4-2-historia-13b-reporte-de-terminal-ancho-color-codificación-y: done
   4-3-historia-13c-marca-doctor-tema-y-tono: done
@@ -109,7 +109,7 @@ development_status:
   6-11-historia-42-como-leer-este-reporte-en-corto: done  # rehecha y unida en development el 2026-11-17 (PR #10); pruebas y revision automatica en verde
   epic-6-retrospective: optional
 
-  epic-7: backlog
+  epic-7: in-progress
   7-1-el-oráculo-corre-en-la-suite-por-defecto: backlog  # LISTA PARA CONSTRUIR: criterios completos; antes verificar que el generador admite una ruta temporal
   7-2-nombres-de-agentes-bilingües: backlog  # LISTA PARA CONSTRUIR: criterios completos
   7-3-medir-la-determinabilidad-en-una-configuración-real-sm-8: backlog  # BLOQUEADA: ficha sin criterios; falta la pregunta 31 (umbral de SM-8)
@@ -118,4 +118,5 @@ development_status:
   7-6-redact-paths: backlog  # DECIDIDA 2026-11-11 (pregunta 9): opcion apagada por defecto, modo para compartir; falta escribir criterios | evidencia: ruta con usuario y nombres de clientes (R5)
   7-7-preparar-el-repositorio-público: backlog  # BLOQUEADA: ficha sin criterios; decision de Alex pendiente (pregunta 30)
   7-8-historia-45-agentreach-funciona-y-se-prueba-en-macos-y-linux: backlog  # BLOQUEADA: decision previa de Alex (nivel maximo en POSIX); depende de 7-1 y 7-4; origen Alex 2026-11-12
+  7-9-historia-31-aviso-de-version-nueva-al-abrir: done  # unida en development el 2026-11-17 (PR #7); sin la reinstalacion automatica en Windows (decision de Alex tras la prueba real)
   epic-7-retrospective: optional

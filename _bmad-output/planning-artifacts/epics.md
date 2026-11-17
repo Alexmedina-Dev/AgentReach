@@ -243,9 +243,9 @@ Como persona que lee el reporte, quiero que un hallazgo de un archivo propio de 
 El usuario lee el reporte en la terminal y en el navegador, en español o inglés, con color accesible, `doctor` y un flujo diario simple, en **cualquier** terminal.
 **Historias:** 13, 13b, 13c, 19, 20, 21 (terminadas) · **29 (nueva)** · **37 (nueva, 2026-11-11)** · **41 (nueva, 2026-11-12)** · **43 (nueva, 2026-11-12)** · **FR:** FR-9 a FR-12, FR-17, FR-20, FR-21, FR-23, FR-27, FR-28 · **Estado:** terminada con **1 corrección nueva** y verificaciones manuales cerradas por Alex el 2026-11-11 (19, 20, 21; la 13b y la 13c con los defectos hallados en Orca).
 
-### Story 4.8 (Historia 31): Detectar el color de fondo real de la terminal
+### Story 4.8 (Historia 48): Detectar el color de fondo real de la terminal
 
-*Estado: nueva, pendiente; ficha*
+*Estado: nueva, pendiente; ficha (antes llevaba el número 31, que se usó para el aviso de versión; renumerada el 2026-11-17 con la aprobación de Alex)*
 Como persona con cualquier tema de terminal, quiero que AgentReach detecte el color de fondo real, para que el logo y el cuerpo del reporte se adapten a **cualquier** fondo y no solo a claro u oscuro. FR-27, UX-DR2. *Hoy, sin `COLORFGBG` (Orca y Windows Terminal), el logo usa los colores del propio tema.* **Condición previa:** probar con una sonda de un minuto si Orca responde a la consulta del color de fondo (OSC 11); leer la respuesta de la terminal debe respetar FR-30 y la Story 7.4. **Depende de:** 4.7. **Tamaño:** M. Ver `deferred-work.md`.
 
 ### Story 4.9 (Historia 37): Un mismo archivo y línea que sale en varios agentes lo dice
@@ -856,3 +856,28 @@ Como programador que usa macOS o Linux, quiero poder instalar y correr AgentReac
 **Then** el reporte va a `AgentReach-reportes` dentro de la carpeta personal, sin escribir nada dentro del proyecto, y se abre con el navegador del sistema (`open` en macOS, `xdg-open` en Linux) solo con permiso.
 
 **And** el README dice qué sistemas se soportan y con qué límites (por ejemplo, sin el segundo cálculo del permiso en POSIX), y el PRD §7.2 deja de decir «se extienden después».
+
+### Story 7.9 (Historia 31): Aviso de versión nueva al abrir
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17, PR #7); origen: Alex, 2026-11-17 (se decide sin pedir permiso antes, cada 15 días como máximo)*
+Como persona que instaló AgentReach, quiero enterarme de que hay una versión nueva sin ir a mirar GitHub, para no seguir con una versión vieja sin saberlo. FR-2 (excepción única). *Es la única conexión a internet del programa: la revisión no usa red.* Ficha: `implementation-artifacts/spec-historia-31-aviso-de-version-nueva.md`.
+
+**Criterios de aceptación:**
+
+**Given** que pasaron 15 días o más desde la última comprobación y hay una terminal interactiva
+**When** se abre AgentReach (después de la pantalla «qué hace y qué no hace» y antes de las preguntas de permiso)
+**Then** consulta solo el número de la última versión (HTTPS, 4 s de tiempo límite, sin datos ni cookies) y, si es más nueva, dice «Hay una versión nueva (X).», muestra el comando exacto y pregunta «¿Descargarla ahora? (S/N)».
+
+**Given** que la persona responde S
+**When** AgentReach termina (nunca durante la revisión)
+**Then** fuera de Windows, si está instalado con uv, ejecuta el comando sin shell y con tiempo límite; si no puede, muestra el comando. **En Windows nunca lo lanza:** muestra «Cierra esta ventana y ejecuta: <comando>», porque reemplazarse mientras corre falla con «Acceso denegado» y deja la instalación rota (probado el 2026-11-17).
+
+**Given** que la persona responde N, o no hay internet, o la versión no se entiende, o no hay terminal
+**When** se abre AgentReach
+**Then** sigue con normalidad y sin mostrar errores; con N vuelve a avisar a los 15 días.
+
+**Given** `--formato`, `--salida`, `--json`, `--sin-actualizar` o la variable `AGENTREACH_SIN_ACTUALIZAR`
+**When** se ejecuta AgentReach
+**Then** no se consulta nada.
+
+**And** la pantalla inicial dice que la consulta deja la IP, la hora y el nombre del programa, y cómo apagarla; la fecha se guarda en `ultima_comprobacion_de_version` de `preferencias.json`. Pruebas: `tests/test_historia_31.py`.

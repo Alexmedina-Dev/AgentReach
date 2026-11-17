@@ -324,7 +324,7 @@ Entorno de ejecución: un solo proceso local, sin servidor ni red; instalación 
 
 Se documentan con franqueza; ninguno es un fallo oculto.
 
-- **Fondo de la terminal.** No hay detección real del color de fondo (Historia 31 pendiente). El tema sale de opciones y variables; si no se sabe, se usa el texto normal y un menta-teal legible (AD-20).
+- **Fondo de la terminal.** No hay detección real del color de fondo (Historia 48 pendiente). El tema sale de opciones y variables; si no se sabe, se usa el texto normal y un menta-teal legible (AD-20).
 - **Rutas largas con espacios.** Una ruta con espacios muy larga puede partirse entre palabras.
 - **Historial de git.** No se revisa el historial de commits (fase 2).
 - **Procesos y red.** Los procesos en marcha y la red alcanzable están fuera del MVP.
@@ -347,7 +347,7 @@ Se documentan con franqueza; ninguno es un fallo oculto.
 | Linux y macOS verificados (AD-5) | Solo Windows 11 es la plataforma del MVP. | Antes de anunciar soporte fuera de Windows: ACL POSIX, verificador independiente, pruebas obligatorias en integración continua. |
 | Historial de git | Requiere ejecutar git con defensas o leer los objetos de git. | Fase 2, en un puerto aparte con entorno limpio, ruta absoluta del binario y lista cerrada de comandos de solo lectura. |
 | Procesos y red alcanzable | Piden dependencias o programas externos y contradicen AD-4 y AD-6. | Cuando se decida un componente separado, apagado por defecto y declarado en el reporte. |
-| Detección real del fondo de la terminal (AD-20) | El tema de tres estados ya evita un logo ilegible. | Al construir la Historia 31, si se prueba un método que no ejecute programas ni lea más de lo permitido. |
+| Detección real del fondo de la terminal (AD-20) | El tema de tres estados ya evita un logo ilegible. | Al construir la Historia 48, si se prueba un método que no ejecute programas ni lea más de lo permitido. |
 | M1: leer la respuesta del teclado físico (AD-13) | Es un requisito de lanzamiento público, no del MVP actual. | Antes del lanzamiento público (Historia 7.4); verificar con un pseudoterminal. |
 | Fuente verificada por tipo (`FUENTE_VERIFICADA`, AD-11) | Mientras sea falso, el nivel es prudente: nunca sube sin fuente. | Al confirmar con fuente primaria cada tipo y regla (FR-7) y los 22 casos del oráculo. |
 | Prevención y observabilidad (fases 2 y 3) | Fuera del MVP; el eje «actividad» y la capacidad «bloquear» están reservados. | Al iniciar la fase 2; exigirá su propia versión de «detectar sin retener» sobre registros. |
