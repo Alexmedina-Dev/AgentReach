@@ -76,6 +76,11 @@ _T: dict[str, dict[Idioma, str]] = {
                     "solo dice dónde están y de qué tipo son."),
         Idioma.EN: ("(i) No secret values are shown. AgentReach never copies passwords, tokens or keys: "
                     "it only says where they are and what type they are.")},
+    "varios_proyectos": {  # Historia 44: solo la cantidad, sin nombres ni rutas; sin pronombres (no necesita variante tú/usted)
+        Idioma.ES: ("Esta carpeta contiene {n} carpetas que parecen proyectos distintos. El reporte mezcla los hallazgos de todas; "
+                    "para un reporte más claro conviene revisar un proyecto a la vez."),
+        Idioma.EN: ("This folder contains {n} folders that look like separate projects. The report mixes the findings of all of them; "
+                    "for a clearer report, review one project at a time.")},
     "resumen": {Idioma.ES: "RESUMEN", Idioma.EN: "SUMMARY"},
     "archivos": {Idioma.ES: "archivos mirados", Idioma.EN: "files looked at"},
     "no_revisar": {Idioma.ES: "NO SE PUDO REVISAR", Idioma.EN: "COULD NOT CHECK"},
@@ -300,6 +305,9 @@ class _Texto:
         self.linea()
         self.linea(self._t("aviso", i), 0, 4, rol="info")
         self.linea()
+        if self.d.proyectos_anidados:  # ya pasó el umbral en ``auditar``; no es un hallazgo: solo la cantidad
+            self.linea(aviso_varios_proyectos(self.d.proyectos_anidados, i), rol="info")
+            self.linea()
 
     def resumen(self) -> None:
         i, d = self.i, self.d
@@ -638,6 +646,11 @@ class _Texto:
 def aviso_de_secretos(idioma: Idioma) -> str:
     """El aviso fijo de «no se muestran valores de secretos», sin el «(i)» (lo usa también el reporte HTML)."""
     return _T["aviso"][idioma].removeprefix("(i) ")
+
+
+def aviso_varios_proyectos(n: int, idioma: Idioma) -> str:
+    """El aviso de «la carpeta contiene varios proyectos» (Historia 44); solo la cantidad, sin nombres ni rutas."""
+    return _T["varios_proyectos"][idioma].format(n=n)
 
 
 def _pasada(d: DatosReporte, idioma: Idioma, detalle: bool, ancho: int, simbolos: bool, forzar_nota: bool,

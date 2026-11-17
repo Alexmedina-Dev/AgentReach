@@ -572,6 +572,8 @@ footer{margin-top:18px;color:var(--text2);font-size:13px;padding:12px 18px}
 
 <div class="glass notice" role="note"><svg class="ic lg" aria-hidden="true"><use href="#i-i"/></svg>
   <div><p id="secrets"></p><small id="meta"></small></div></div>
+<div class="glass notice" id="wide" role="note" hidden><svg class="ic lg" aria-hidden="true"><use href="#i-i"/></svg>
+  <div><p id="wideTxt"></p></div></div>
 
 <section class="glass cfg" id="cfg" aria-labelledby="cfgTitle"></section>
 
@@ -686,6 +688,8 @@ const GLOSS=(()=>{
   return terms.length?{labels:{what_is:I18(g.labels.what_is,''),means:I18(g.labels.means,''),to_do:I18(g.labels.to_do,'')},terms}:null;
 })();
 const HOW_OPEN=['nivel_comprobado','nivel_potencial','nivel_hipotesis','camino_de_alcance'];   // a la vista; el resto, plegado
+const WIDE=Number.isInteger(DATA.wide_folder)&&DATA.wide_folder>=2?DATA.wide_folder:0;   // opcional: carpeta con varios proyectos (solo la cantidad)
+const WIDE_TXT={en:n=>'This folder contains '+n+' folders that look like separate projects. The report mixes the findings of all of them; for a clearer report, review one project at a time.',es:n=>'Esta carpeta contiene '+n+' carpetas que parecen proyectos distintos. El reporte mezcla los hallazgos de todas; para un reporte más claro conviene revisar un proyecto a la vez.'};
 const SECRETS=I18(DATA.secrets_notice,'No secret values are shown. AgentReach never copies passwords, tokens or keys. It only says where they are and what kind they are.');
 let AGENTS_DEF=[], CFG=[], UNDET=[], F=[], byId={}, AG=null;
 (function(){
@@ -1217,7 +1221,7 @@ function legendBar(){
 }
 function renderStatic(){
   const T_=t();document.documentElement.lang=lang;
-  $('#h1').innerHTML=T_.title;$('#lead').textContent=T_.lead;$('#eyebrow').textContent=T_.eyebrow;$('#secrets').textContent=L(SECRETS);$('#meta').textContent=T_.folderLbl+': '+META.folder+' · '+META.files+' '+T_.files+(META.at?' · '+T_.generated+': '+META.at:'')+' · '+META.tool+(META.ver?' '+META.ver:'')+' · '+T_.readOnly;
+  $('#h1').innerHTML=T_.title;$('#lead').textContent=T_.lead;$('#eyebrow').textContent=T_.eyebrow;$('#secrets').textContent=L(SECRETS);$('#wide').hidden=!WIDE;if(WIDE)$('#wideTxt').textContent=WIDE_TXT[lang==='es'?'es':'en'](WIDE);$('#meta').textContent=T_.folderLbl+': '+META.folder+' · '+META.files+' '+T_.files+(META.at?' · '+T_.generated+': '+META.at:'')+' · '+META.tool+(META.ver?' '+META.ver:'')+' · '+T_.readOnly;
   document.title='AgentReach · '+(lang==='es'?'Informe de camino de alcance':'Reach route report');
   $('#skip').textContent=T_.skip;
   $('#gTheme [data-theme=dark]').textContent=T_.dark;$('#gTheme [data-theme=light]').textContent=T_.light;

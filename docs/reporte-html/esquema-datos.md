@@ -25,6 +25,7 @@ generated_at        texto de la fecha y hora (reloj inyectado, parámetro `ahora
 folder              carpeta auditada, ya "visible" (ver Seguridad)
 files_looked_at     archivos mirados (DatosReporte.archivos_mirados)
 secrets_notice      {en, es}: "No se muestran valores de secretos..." (el texto fijo del reporte de terminal)
+wide_folder         (opcional) entero ≥ 2: cuántas carpetas dentro de la revisada tienen su propio punto de partida (`.git/config`, `CLAUDE.md`, `.claude/settings*.json`, `opencode.json`…). Solo está si hay aviso («conviene revisar un proyecto a la vez»); solo la cantidad, nunca nombres ni rutas. No es un hallazgo.
 agents[]            una entrada por agente (ver abajo). Nunca se mezclan niveles entre agentes.
 catalog             textos fijos por clave (ver abajo)
 not_reviewed[]      {path, reason}: lo que no se pudo revisar

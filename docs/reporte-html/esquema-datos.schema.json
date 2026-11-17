@@ -263,6 +263,11 @@
     "secrets_notice": {
       "$ref": "#/$defs/i18n"
     },
+    "wide_folder": {
+      "type": "integer",
+      "minimum": 2,
+      "description": "Optional. Number of folders inside the reviewed one that have their own starting point (a repository or an agent's settings). Present only when 2 or more: the page shows a notice to review one project at a time. Quantity only, never names or paths. Not a finding."
+    },
     "agents": {
       "type": "array",
       "minItems": 1,

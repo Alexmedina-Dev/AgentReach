@@ -212,6 +212,7 @@ def construir_datos(d: DatosReporte, *, tono: Tono = Tono.CERCANO, version: str 
         "folder": d.carpeta,
         "files_looked_at": d.archivos_mirados,
         "secrets_notice": _i18n(aviso_de_secretos),
+        **({"wide_folder": d.proyectos_anidados} if d.proyectos_anidados else {}),  # opcional: solo si hay aviso (Historia 44)
         "agents": _agentes(d, agente),
         "configured_agents": _configurados(d),
         "undetermined_traces": [{"path": r.ruta, "candidates": list(r.candidatos)} for r in d.sin_decidir],

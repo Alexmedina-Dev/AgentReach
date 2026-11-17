@@ -26,6 +26,10 @@ from agentreach.collectors.entorno import DetectorEntorno
 from agentreach.collectors.git_meta import DetectorGit
 from agentreach.collectors.instrucciones_fuera import DetectorInstruccionesFuera
 from agentreach.collectors.invisibles import DetectorInvisibles
+from agentreach.collectors.proyectos_anidados import (
+    UMBRAL_PROYECTOS_ANIDADOS,
+    contar_proyectos_anidados,
+)
 from agentreach.collectors.ubicaciones_usuario import DetectorUbicacionesUsuario
 from agentreach.config import Configuracion
 from agentreach.contracts import (
@@ -56,6 +60,7 @@ class ResultadoAuditoria:
     contextos: tuple[tuple[Plataforma, ResultadoAdaptador], ...] = ()  # reglas de cada agente, como contexto
     agentes: tuple[AgenteDetectado, ...] = ()  # agentes CONFIGURADOS según el catálogo de firmas (no es «ejecutados»)
     sin_decidir: tuple[NoDeterminado, ...] = ()  # rastros compartidos que no dicen cuál de varios agentes es
+    proyectos_anidados: int = 0  # carpetas internas con punto de partida propio (Historia 44), 0 si no llegan al umbral; no es un hallazgo
 
 
 # Registro: una línea por detector. Cada fábrica recibe (fs del proyecto, configuración).
@@ -190,6 +195,7 @@ def auditar(
     for n in recorrido.no_revisados:  # carpetas ilegibles, enlaces, archivos grandes: nunca se omiten en silencio
         pendientes[(n.ruta_real or n.ruta, n.motivo.value)] = n
     agentes, sin_decidir = detectar_agentes(carpeta, config.home or os.path.expanduser("~"), os.environ, leer_usuario=config.lectura_fuera)  # solo existencia y nombres
+    anidados = contar_proyectos_anidados(recorrido.archivos, carpeta)  # solo un número, con lo ya recorrido
     return ResultadoAuditoria(
         hallazgos=tuple(hallazgos),
         no_revisados=tuple(pendientes[k] for k in sorted(pendientes)),
@@ -198,4 +204,5 @@ def auditar(
         contextos=tuple((d.adaptador.plataforma, d.resultado) for d in detectores if hasattr(d, "adaptador")),
         agentes=agentes,
         sin_decidir=sin_decidir,
+        proyectos_anidados=anidados if anidados >= UMBRAL_PROYECTOS_ANIDADOS else 0,  # 0 = sin aviso
     )
