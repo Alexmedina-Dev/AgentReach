@@ -408,6 +408,35 @@ Como persona con una terminal de fondo claro u oscuro, quiero que AgentReach se 
 
 *Nota:* la consulta del color de fondo no está probada en Orca ni en Windows Terminal; es una exploración dentro de la historia. Si no funciona, bastan las demás capas. **Depende de:** 4.3. **Tamaño:** M.
 
+### Story 4.12 (Historia 44): Aviso cuando la carpeta revisada contiene varios proyectos
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que revisa una carpeta, quiero que el reporte me avise cuando esa carpeta parece contener varios proyectos distintos, para no leer los hallazgos de todos como si fueran de uno solo. FR-20, FR-27, FR-28. *Hoy un reporte de una carpeta que reúne varios proyectos (por ejemplo `C:\dev`) sale igual que uno de un solo proyecto; la carpeta solo aparece en el encabezado.* **Cómo se decide (sin recorridos nuevos ni inteligencia artificial):** con los archivos que el recorrido ya vio, se cuentan las carpetas **dentro** de la revisada (no ella misma) que tienen su propio punto de partida de un agente o de un repositorio: `.git/config`, `.claude/settings.json`, `.claude/settings.local.json`, `CLAUDE.md`, `opencode.json`, `opencode.jsonc` o `.opencode/opencode.json`. Se ignoran las carpetas internas de herramientas (`.git`, `node_modules`, `.claude`, `.opencode`). Si hay **2 o más**, se avisa. Un monorepo con muchos `package.json` no cuenta: los manifiestos no son una señal. **El aviso** dice cuántas son, sin nombres (pueden ser de clientes) y sugiere revisar un proyecto a la vez. No es un hallazgo: no cambia ningún nivel, ningún conteo ni el código de salida. **Depende de:** 4.4. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** una carpeta con 2 o más subcarpetas que tienen su propio `.git/config`, `.claude/settings.json`, `CLAUDE.md` u `opencode.json`
+**When** se genera el reporte (terminal y HTML)
+**Then** sale un aviso arriba, antes de los hallazgos, que dice cuántas carpetas parecen proyectos distintos y que los hallazgos son de todas ellas, en español (tú y usted) e inglés.
+
+**Given** un proyecto normal, con o sin `.git` en su raíz y con o sin una subcarpeta con su propio punto de partida
+**When** se genera el reporte
+**Then** no sale ningún aviso.
+
+**Given** un monorepo con varios `package.json` y un solo `.git`
+**When** se genera el reporte
+**Then** no sale ningún aviso.
+
+**Given** el aviso
+**When** se lee
+**Then** no contiene nombres de carpeta ni rutas, y el código de salida, los niveles y los conteos son los mismos que sin él.
+
+**Given** el proyecto de prueba del oráculo
+**When** se ejecutan el oráculo y las reglas no negociables
+**Then** pasan sin cambios (el aviso no es un hallazgo).
+
+**And** el dato viaja como campo aditivo y opcional en el esquema del HTML, pasa por la compuerta (AD-15) y la prueba cubre los cinco casos de arriba.
+
 ## Épica 5: Confiar en que la herramienta no daña ni miente
 
 Pruebas bloqueantes de solo lectura, sin red y sin secretos; oráculo de 67 casos; permiso de lectura dado solo por una persona, en dos niveles. **Estado: terminada salvo la Historia 15 (Story 5.2) y la nueva 5.6; la 5.7 (Historia 30) está construida y revisada, falta tu comprobación en Orca.** FR: FR-1, FR-2, FR-3, FR-24, FR-30 (permiso). NFR: 1, 2, 3, 9, 10, 11.

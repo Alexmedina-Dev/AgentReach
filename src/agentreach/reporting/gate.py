@@ -127,6 +127,7 @@ class DatosReporte:
     configurados: tuple[AgenteConfiguradoVista, ...] = ()  # agentes con archivos de configuración (no es «ejecutado»)
     causas: tuple[CausaVista, ...] = ()  # por qué hay niveles «no determinado» (archivo y clave, sin valores)
     sin_decidir: tuple[RastroSinDecidirVista, ...] = ()  # rastros compartidos que no permiten decir qué agente es
+    proyectos_anidados: int = 0  # carpetas internas que parecen proyectos aparte (Historia 44); solo cantidad, no es hallazgo
 
 
 class LectorSeguro:
@@ -281,4 +282,5 @@ def preparar(
         configurados=tuple(configurados),
         sin_decidir=tuple(sin_decidir),
         causas=tuple(causas),
+        proyectos_anidados=int(getattr(resultado, "proyectos_anidados", 0) or 0),
     )
