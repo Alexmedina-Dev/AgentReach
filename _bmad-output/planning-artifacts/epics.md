@@ -577,6 +577,30 @@ Como persona que no es experta en seguridad, quiero que el reporte me diga qué 
 
 **Fuente de diseño:** `ux-designs/ux-agent-reach-2026-11-11/EXPERIENCE.md` (glosario de 11 fichas con los textos en tú, usted e inglés, reglas de cuándo y dónde aparece cada explicación, y dependencias técnicas) y `DESIGN.md` (colores y componentes). **División acordada:** la Historia 32 construye el catálogo de términos, la autocomprobación que dice cuál hallazgo y la **terminal**; el HTML «Cómo leer este reporte» es la Historia 33 (Story 6.5) y la paridad con el README la Historia 34 (Story 6.6), pendientes. **Depende de:** 4.1, 4.5 y 6.2, y de un cambio de código: `gate.py` descarta hoy la ubicación, el tipo y el nivel de cada hallazgo corregido por la autocomprobación. **Tamaño:** L (partir en terminal, HTML y README si la primera pasada falla).
 
+### Story 6.11 (Historia 42): «Cómo leer este reporte», en corto
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que abre el reporte HTML, quiero que «Cómo leer este reporte» se lea en medio minuto, para entender los niveles sin leer una pared de texto. FR-11, UX-DR15, AD-16, AD-17. *Hoy la sección abierta muestra 4 términos (los tres niveles y el camino de alcance) con tres bloques cada uno («Qué es», «Qué significa», «Qué puedes hacer»): unas 360 palabras, y 8 términos más plegados (unas 745).* **Enfoque:** no se reescribe el catálogo (AD-16: una sola fuente para terminal, HTML y README). Cada ficha ya tiene una frase corta (`line`); la vista por defecto muestra solo esas cuatro frases y el detalle (`what_is`, `means`, `to_do`) queda plegado en «Ver más» dentro de cada término. **Depende de:** 6.5. **Tamaño:** S.
+
+**Criterios de aceptación:**
+
+**Given** cualquier reporte HTML
+**When** se abre
+**Then** «Cómo leer este reporte» sigue siendo lo primero y abierto por defecto, pero a la vista hay solo la frase de introducción y la frase corta de los tres niveles y del camino de alcance (no más de 80 palabras en total, en español y en inglés).
+
+**Given** un término de esa lista
+**When** la persona pulsa «Ver más»
+**Then** aparecen, con el texto del catálogo sin cambios, «Qué es», «Qué significa» y «Qué puedes hacer»; con teclado y lector de pantalla el control se anuncia como plegable.
+
+**Given** los otros términos (hook, sandbox, no determinado, etc.)
+**When** se abre el reporte
+**Then** siguen plegados en «Otros términos», como hoy.
+
+**Given** la vista Imprimir
+**When** se imprime
+**Then** sale la versión corta, abierta.
+
+**And** ningún texto de ayuda se pierde ni se inventa en la plantilla (AD-17): todo sale del glosario de los datos; los identificadores `term-<id>` se conservan (la Historia 36 los enlazará y abrirá el detalle); y una prueba cuenta las palabras visibles por defecto y comprueba que el texto completo sigue en la página.
 ### Story 6.10 (Historia 40): Un agente que no está en la carpeta ni en el equipo no aparece
 
 *Estado: terminada, rehecha sobre `development` (2026-11-17); ficha (origen: Alex, 2026-11-12; reformulada ese día: pasa de «etiquetar» a «no mostrar»)*

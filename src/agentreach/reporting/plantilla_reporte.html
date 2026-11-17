@@ -323,13 +323,17 @@ ol.chain>li.nc{border-left-style:dashed;border-left-color:var(--lc-c)}
 .howto>details>summary{cursor:pointer;list-style-position:inside}
 .howto>details>summary h2{display:inline;margin:0;font:700 22px/1.2 var(--f-head)}
 .howto .howlead{margin:8px 0 0;color:var(--text2)}
-.howto .terms{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
+.howto .terms{display:grid;align-items:start;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
 .howto .term{padding:10px 12px;border-radius:12px;border:1px solid var(--edge);background:var(--sunk)}
 .howto .term h3{margin:0 0 4px;font:700 15px/1.3 var(--f-head)}
 .howto .term .tline{margin:0 0 6px;color:var(--text2);font-size:14px}
 .howto dl{margin:0}.howto dt{font:700 13px/1.3 var(--f-head);margin-top:6px}.howto dd{margin:2px 0 0;font-size:14px}
 .howto h3.other{margin:16px 0 8px;font:700 15px/1.3 var(--f-head)}
 .howto details.fold .term{border:0;background:none;padding:2px 12px 10px}
+.howto .term .tline strong{color:var(--text)}
+.howto details.more{margin-top:2px}
+.howto details.more>summary{cursor:pointer;font:600 13px var(--f-head);color:var(--mint-text);list-style-position:inside}
+.howto details.more>dl{margin-top:4px}
 .limits{background:var(--glass-hi);margin-top:22px;padding:18px 20px}
 .limits h2{margin:0 0 4px;font:700 22px/1.2 var(--f-head);display:flex;gap:10px;align-items:center}
 .limits .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:12px}
@@ -489,6 +493,7 @@ footer{margin-top:18px;color:var(--text2);font-size:13px;padding:12px 18px}
   .stage-card{break-inside:auto}
   .printcard{box-shadow:none;border-radius:0;padding:0;max-width:none;margin:0}
   .howto .term,.howto details.fold{break-inside:avoid}
+  .howto details.more{display:none}
   .pathcard,.printcard tr,.printcard .det,.step,.cfg-item,.limits .it{break-inside:avoid}
   .core{animation:none}
 }
@@ -726,7 +731,7 @@ const LIMITS_ALSO=DATA.limits_also?I18(DATA.limits_also,''):null;
 const META={tool:san(DATA.tool||'AgentReach'),ver:san(DATA.tool_version||''),folder:san(DATA.folder||''),files:san(DATA.files_looked_at==null?'':DATA.files_looked_at),at:san(DATA.generated_at||'')};
 
 const T = {
- en:{skip:'Skip to the routes',howTitle:'How to read this report',howLead:'What each word in this report means.',howOther:'Other terms',cfgTitle:'Configured agents',cfgBadge:'configured',cfgNone:'No configuration of any known agent was found in this folder or in the user configuration.',cfgNote:'AgentReach saw configuration files; it does not know whether this agent was run.',ndBecause:'AgentReach does not interpret',ndNote:(n,items)=>n+(n===1?' finding has':' findings have')+' no determined level, so none can be Verified. AgentReach does not interpret: '+items+'.',scope:{project:'Project',user:'User',managed:'Managed',environment:'Environment variable (name only)'},confBadge:{high:'configured',potential:'probably configured',hypothesis:'hint only'},frameworkOn:names=>'framework installed on '+(names.length?names.join(', '):'an agent'),notAnalyzed:'AgentReach does not analyze what this agent can reach yet.',noSignals:'Analyzed without configuration signals in what AgentReach could check.',undetTitle:'Not determined',undetText:(p,c)=>p+' is read by several agents ('+c.join(', ')+'); it does not say which one is configured.',partFolder:'In this folder',partTool:'Tool limits',noneFolder:'Everything AgentReach tried to open could be read.',folderLbl:'Folder',eyebrow:'Read-only report',readOnly:'Read-only: nothing is changed or saved.',ovLabel:'Folders with findings, in alphabetical order of path',ovDepth:d=>'first '+d+' path levels',ovTop:'top-level folders',ovInfo:(n,g,d)=>n+' findings in '+g+' folders ('+d+'), listed in alphabetical order of path. AgentReach does not record the order in which it visited folders.',ovHint:'With more than 60 findings this overview is a static summary: nothing here can be selected. Use the list, the table or print to see each finding.',title:'Reach <span>route</span>',
+ en:{skip:'Skip to the routes',howTitle:'How to read this report',howLead:'What each word in this report means.',howOther:'Other terms',noSignals:'Analyzed without configuration signals in what AgentReach could check.',howMore:'See more',cfgTitle:'Configured agents',cfgBadge:'configured',cfgNone:'No configuration of any known agent was found in this folder or in the user configuration.',cfgNote:'AgentReach saw configuration files; it does not know whether this agent was run.',ndBecause:'AgentReach does not interpret',ndNote:(n,items)=>n+(n===1?' finding has':' findings have')+' no determined level, so none can be Verified. AgentReach does not interpret: '+items+'.',scope:{project:'Project',user:'User',managed:'Managed',environment:'Environment variable (name only)'},confBadge:{high:'configured',potential:'probably configured',hypothesis:'hint only'},frameworkOn:names=>'framework installed on '+(names.length?names.join(', '):'an agent'),notAnalyzed:'AgentReach does not analyze what this agent can reach yet.',undetTitle:'Not determined',undetText:(p,c)=>p+' is read by several agents ('+c.join(', ')+'); it does not say which one is configured.',partFolder:'In this folder',partTool:'Tool limits',noneFolder:'Everything AgentReach tried to open could be read.',folderLbl:'Folder',eyebrow:'Read-only report',readOnly:'Read-only: nothing is changed or saved.',ovLabel:'Folders with findings, in alphabetical order of path',ovDepth:d=>'first '+d+' path levels',ovTop:'top-level folders',ovInfo:(n,g,d)=>n+' findings in '+g+' folders ('+d+'), listed in alphabetical order of path. AgentReach does not record the order in which it visited folders.',ovHint:'With more than 60 findings this overview is a static summary: nothing here can be selected. Use the list, the table or print to see each finding.',title:'Reach <span>route</span>',
   lead:'One agent at a time: how far can it get? Each finding is a chain from the agent to what it might open. Levels belong to each agent and are never mixed.',
   
   dark:'Dark',light:'Light',graph:'Route map',table:'Table',list:'List',print:'Print',view:'View',theme:'Theme',lang:'Language',
@@ -768,7 +773,7 @@ const T = {
   narrow:'The graph needs a wider window. Showing the list instead.',lvlScale:'Levels reported by this agent',
   radarCap:'Closer to the center = more certain',copyRule:'Copy rule',ruleLbl:'Example rule (illustrative syntax: adapt it to your agent before using it)',ruleNote:'AgentReach changes no files. Any change is yours to make.',
   sorted:(k,d)=>'Sorted by '+k+(d>0?', ascending':', descending'),collapsedGroup:'collapsed'},
- es:{skip:'Saltar a los caminos',howTitle:'Cómo leer este reporte',howLead:'Qué significa cada palabra de este reporte.',howOther:'Otros términos',cfgTitle:'Agentes configurados',cfgBadge:'configurado',cfgNone:'No se encontró configuración de ningún agente conocido en esta carpeta ni en la configuración del usuario.',cfgNote:'AgentReach vio archivos de configuración; no sabe si este agente se ejecutó.',ndBecause:'AgentReach no interpreta',ndNote:(n,items)=>n+(n===1?' hallazgo no tiene':' hallazgos no tienen')+' nivel determinado, por eso ninguno puede ser Comprobado. AgentReach no interpreta: '+items+'.',scope:{project:'Proyecto',user:'Usuario',managed:'Gestionada',environment:'Variable de entorno (solo el nombre)'},confBadge:{high:'configurado',potential:'probablemente configurado',hypothesis:'solo un indicio'},frameworkOn:names=>'marco instalado sobre '+(names.length?names.join(', '):'un agente'),notAnalyzed:'AgentReach todavía no analiza qué puede alcanzar este agente.',noSignals:'Analizado sin señales de configuración en lo que AgentReach pudo revisar.',undetTitle:'No determinado',undetText:(p,c)=>p+' lo leen varios agentes ('+c.join(', ')+'); no dice cuál está configurado.',partFolder:'En esta carpeta',partTool:'Límites de la herramienta',noneFolder:'Todo lo que AgentReach intentó abrir se pudo leer.',folderLbl:'Carpeta',eyebrow:'Informe de solo lectura',readOnly:'Solo lectura: no se cambia ni se guarda nada.',ovLabel:'Carpetas con hallazgos, en orden alfabético de ruta',ovDepth:d=>'primeros '+d+' niveles de ruta',ovTop:'carpetas de primer nivel',ovInfo:(n,g,d)=>n+' hallazgos en '+g+' carpetas ('+d+'), en orden alfabético de ruta. AgentReach no registra el orden en que visitó las carpetas.',ovHint:'Con más de 60 hallazgos este resumen es estático: aquí no se puede seleccionar nada. Use la lista, la tabla o imprimir para ver cada hallazgo.',title:'Camino de <span>alcance</span>',
+ es:{skip:'Saltar a los caminos',howTitle:'Cómo leer este reporte',howLead:'Qué significa cada palabra de este reporte.',howOther:'Otros términos',noSignals:'Analizado sin señales de configuración en lo que AgentReach pudo revisar.',howMore:'Ver más',cfgTitle:'Agentes configurados',cfgBadge:'configurado',cfgNone:'No se encontró configuración de ningún agente conocido en esta carpeta ni en la configuración del usuario.',cfgNote:'AgentReach vio archivos de configuración; no sabe si este agente se ejecutó.',ndBecause:'AgentReach no interpreta',ndNote:(n,items)=>n+(n===1?' hallazgo no tiene':' hallazgos no tienen')+' nivel determinado, por eso ninguno puede ser Comprobado. AgentReach no interpreta: '+items+'.',scope:{project:'Proyecto',user:'Usuario',managed:'Gestionada',environment:'Variable de entorno (solo el nombre)'},confBadge:{high:'configurado',potential:'probablemente configurado',hypothesis:'solo un indicio'},frameworkOn:names=>'marco instalado sobre '+(names.length?names.join(', '):'un agente'),notAnalyzed:'AgentReach todavía no analiza qué puede alcanzar este agente.',undetTitle:'No determinado',undetText:(p,c)=>p+' lo leen varios agentes ('+c.join(', ')+'); no dice cuál está configurado.',partFolder:'En esta carpeta',partTool:'Límites de la herramienta',noneFolder:'Todo lo que AgentReach intentó abrir se pudo leer.',folderLbl:'Carpeta',eyebrow:'Informe de solo lectura',readOnly:'Solo lectura: no se cambia ni se guarda nada.',ovLabel:'Carpetas con hallazgos, en orden alfabético de ruta',ovDepth:d=>'primeros '+d+' niveles de ruta',ovTop:'carpetas de primer nivel',ovInfo:(n,g,d)=>n+' hallazgos en '+g+' carpetas ('+d+'), en orden alfabético de ruta. AgentReach no registra el orden en que visitó las carpetas.',ovHint:'Con más de 60 hallazgos este resumen es estático: aquí no se puede seleccionar nada. Use la lista, la tabla o imprimir para ver cada hallazgo.',title:'Camino de <span>alcance</span>',
   lead:'Un agente a la vez: ¿hasta dónde puede llegar? Cada hallazgo es una cadena desde el agente hasta lo que podría abrir. Los niveles son de cada agente y nunca se mezclan.',
   
   dark:'Oscuro',light:'Claro',graph:'Recorrido',table:'Tabla',list:'Lista',print:'Imprimir',view:'Vista',theme:'Tema',lang:'Idioma',
@@ -1127,11 +1132,16 @@ function renderHowto(){
   const T_=t(),prev=box.querySelector('details');
   const wasOpen=prev?prev.open:true;                                  // se conserva lo que la persona plegó o abrió
   const openIds=new Set([...box.querySelectorAll('details.fold[open]')].map(d=>d.dataset.term));
-  const card=(x,head)=>(head===false?'':'<h3>'+esc(L(x.name))+'</h3>')+'<p class="tline">'+esc(L(x.line))+'</p><dl><dt>'+esc(L(GLOSS.labels.what_is))+'</dt><dd>'+esc(L(x.what_is))+'</dd><dt>'+esc(L(GLOSS.labels.means))+'</dt><dd>'+esc(L(x.means))+'</dd><dt>'+esc(L(GLOSS.labels.to_do))+'</dt><dd>'+esc(L(x.to_do))+'</dd></dl>';
+  const openMore=new Set([...box.querySelectorAll('details.more[open]')].map(d=>d.dataset.more));   // «Ver más» abiertos se conservan al cambiar de idioma
+  const dl=x=>'<dl><dt>'+esc(L(GLOSS.labels.what_is))+'</dt><dd>'+esc(L(x.what_is))+'</dd><dt>'+esc(L(GLOSS.labels.means))+'</dt><dd>'+esc(L(x.means))+'</dd><dt>'+esc(L(GLOSS.labels.to_do))+'</dt><dd>'+esc(L(x.to_do))+'</dd></dl>';
+  const card=(x,head)=>(head===false?'':'<h3>'+esc(L(x.name))+'</h3>')+'<p class="tline">'+esc(L(x.line))+'</p>'+dl(x);
+  // Historia 42: a la vista solo la frase corta del catálogo (la etiqueta de la frase (lo que va antes de los dos puntos) en negrita; sin etiqueta, el nombre del término); el detalle, plegado en «Ver más»
+  const brief=x=>{const nm=L(x.name),ln=L(x.line),c=ln.indexOf(':');return '<p class="tline">'+(c>0&&c<=30?'<strong>'+esc(ln.slice(0,c+1))+'</strong>'+esc(ln.slice(c+1)):'<strong>'+esc(nm)+'.</strong> '+esc(ln))+'</p>';};
+  const more=x=>'<details class="more" data-more="'+esc(x.id)+'"'+(openMore.has(x.id)?' open':'')+'><summary>'+esc(T_.howMore)+'<span class="sr">: '+esc(L(x.name))+'</span></summary>'+dl(x)+'</details>';
   const shown=HOW_OPEN.map(id=>GLOSS.terms.find(x=>x.id===id)).filter(Boolean),rest=GLOSS.terms.filter(x=>!HOW_OPEN.includes(x.id));
   box.hidden=false;box.setAttribute('aria-labelledby','howTitle');
   box.innerHTML='<details id="howDetails"'+(wasOpen?' open':'')+'><summary><h2 id="howTitle">'+esc(T_.howTitle)+'</h2></summary><p class="howlead">'+esc(T_.howLead)+'</p>'+
-    '<div class="terms">'+shown.map(x=>'<article class="term" id="term-'+x.id+'">'+card(x)+'</article>').join('')+'</div>'+
+    '<div class="terms">'+shown.map(x=>'<article class="term" id="term-'+x.id+'">'+brief(x)+more(x)+'</article>').join('')+'</div>'+
     (rest.length?'<h3 class="other">'+esc(T_.howOther)+'</h3>'+rest.map(x=>'<details class="fold" id="term-'+x.id+'" data-term="'+x.id+'"'+(openIds.has(x.id)?' open':'')+'><summary>'+esc(L(x.name))+'</summary><div class="term">'+card(x,false)+'</div></details>').join(''):'')+'</details>';
 }
 
@@ -1385,7 +1395,7 @@ let rz=0;window.addEventListener('resize',()=>{cancelAnimationFrame(rz);rz=reque
 mqWide.addEventListener('change',()=>render());
 let howWas=[];
 window.addEventListener('beforeprint',()=>{
-  if(!howWas.length)howWas=[...document.querySelectorAll('#howto details')].map(d=>[d,d.open]);howWas.forEach(([d])=>{d.open=true;});   // en papel, «Cómo leer este reporte» sale abierto
+  if(!howWas.length)howWas=[...document.querySelectorAll('#howDetails')].map(d=>[d,d.open]);howWas.forEach(([d])=>{d.open=true;});   // en papel, «Cómo leer este reporte» sale abierto y en corto (Historia 42): sin abrir «Ver más» ni los plegados
   if(effView()==='print')renderPrint();
   const sc=$('#stageCard');if(effView()==='graph'&&!$('#stage').hidden){const w=sc.offsetWidth;if(w>680){sc.style.width=w+'px';sc.style.zoom=String(680/w);}}
 });
