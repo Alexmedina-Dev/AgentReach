@@ -10,13 +10,14 @@ import json
 import os
 import re
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 
-__all__ = ["CARPETA", "ResultadoReporte", "carpeta_de_reportes", "dentro", "escribir_reporte", "guardar_preferencia", "leer_preferencia"]
+__all__ = ["CARPETA", "ResultadoReporte", "carpeta_de_reportes", "dentro", "escribir_reporte", "guardar_comprobacion", "guardar_preferencia", "leer_comprobacion", "leer_preferencia"]
 
 CARPETA = "AgentReach-reportes"
 PREFERENCIAS = "preferencias.json"
 _CLAVE = "abrir_en_navegador"
+_COMPROBACION = "ultima_comprobacion_de_version"
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,21 +94,18 @@ def escribir_reporte(html: str, home: str, auditada: str, momento: datetime) -> 
     return ResultadoReporte(None, "escritura")
 
 
-def leer_preferencia(home: str, auditada: str) -> bool | None:
-    """La respuesta recordada a «¿abrir en el navegador?», o ``None`` si no hay una (o no se entiende)."""
-    carpeta, _ = _carpeta_usable(home, auditada)
-    if carpeta is None:
-        return None
+def _leer_todo(carpeta: str) -> dict:
+    """Todo ``preferencias.json``; vacío si no existe, está corrupto o no es un objeto (nunca falla)."""
     try:
         with open(os.path.join(carpeta, PREFERENCIAS), encoding="utf-8") as f:
-            valor = json.load(f).get(_CLAVE)
-    except (OSError, ValueError, AttributeError):
-        return None
-    return valor if isinstance(valor, bool) else None
+            datos = json.load(f)
+    except (OSError, ValueError, RecursionError):
+        return {}
+    return datos if isinstance(datos, dict) else {}
 
 
-def guardar_preferencia(home: str, auditada: str, abrir: bool) -> str | None:
-    """Recuerda la respuesta. Devuelve la ruta del archivo, o ``None`` si no se pudo."""
+def _guardar_clave(home: str, auditada: str, clave: str, valor: object) -> str | None:
+    """Cambia SOLO ``clave`` (conserva las demás; un archivo corrupto se reemplaza). ``None`` si no se pudo escribir."""
     carpeta, _ = _carpeta_usable(home, auditada)
     if carpeta is None:
         return None
@@ -116,9 +114,42 @@ def guardar_preferencia(home: str, auditada: str, abrir: bool) -> str | None:
         ruta = os.path.join(carpeta, PREFERENCIAS)
         if os.path.lexists(ruta) and (os.path.islink(ruta) or os.stat(ruta).st_nlink > 1):
             return None  # un enlace (simbólico o duro) podría llevar la escritura a otro archivo: no se escribe
-        with open(ruta, "w", encoding="utf-8", newline="\n") as f:
-            json.dump({_CLAVE: abrir}, f)
-            f.write("\n")
+        datos = _leer_todo(carpeta)
+        datos[clave] = valor
+        with open(ruta, "w", encoding="utf-8", newline=chr(10)) as f:
+            json.dump(datos, f)
+            f.write(chr(10))
         return ruta
     except OSError:
         return None
+
+
+def leer_preferencia(home: str, auditada: str) -> bool | None:
+    """La respuesta recordada a «¿abrir en el navegador?», o ``None`` si no hay una (o no se entiende)."""
+    carpeta, _ = _carpeta_usable(home, auditada)
+    if carpeta is None:
+        return None
+    valor = _leer_todo(carpeta).get(_CLAVE)
+    return valor if isinstance(valor, bool) else None
+
+
+def guardar_preferencia(home: str, auditada: str, abrir: bool) -> str | None:
+    """Recuerda la respuesta. Devuelve la ruta del archivo, o ``None`` si no se pudo."""
+    return _guardar_clave(home, auditada, _CLAVE, abrir)
+
+
+def leer_comprobacion(home: str, auditada: str) -> date | None:
+    """La fecha de la última comprobación de versión nueva, o ``None`` si no hay una o no se entiende (archivo corrupto, texto raro)."""
+    carpeta, _ = _carpeta_usable(home, auditada)
+    if carpeta is None:
+        return None
+    valor = _leer_todo(carpeta).get(_COMPROBACION)
+    try:
+        return date.fromisoformat(valor) if isinstance(valor, str) and len(valor) == 10 else None
+    except ValueError:
+        return None
+
+
+def guardar_comprobacion(home: str, auditada: str, dia: date) -> bool:
+    """Anota el día de la comprobación. ``False`` si no se pudo (entonces no se consulta: sin la fecha no se puede espaciar)."""
+    return _guardar_clave(home, auditada, _COMPROBACION, dia.isoformat()) is not None

@@ -108,7 +108,7 @@ def test_flujo_completo_respeta_el_ancho_y_no_parte_palabras(tmp_path, monkeypat
     assert any(linea.strip() == ruta for linea in preguntas[0].split(CR))  # la ruta larga queda entera en su línea
 
     _comprobar_lineas(errores, columnas, "stderr")
-    assert _plano(errores) == _plano(" ".join(E[k] for k in ("intro_que", "intro_hace", "intro_no_hace")))
+    assert _plano(errores) == _plano(" ".join(E[k] for k in ("intro_que", "intro_hace", "intro_no_hace", "intro_red")))
 
     marcador = E["reporte_donde"].split("{ruta}")[0].strip()
     assert marcador in salida, "el aviso de reporte guardado no salió"

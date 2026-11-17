@@ -597,7 +597,10 @@
   "tipos": [
    "TH-14"
   ],
-  "esperado": "potencial",
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "no_se_reporta"
+  },
   "linea": 20,
   "fuente_primaria": "https://code.claude.com/docs/en/hooks ; https://code.claude.com/docs/en/settings",
   "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
@@ -626,7 +629,10 @@
   "tipos": [
    "TH-15"
   ],
-  "esperado": "potencial",
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "no_se_reporta"
+  },
   "fuente_primaria": "https://code.claude.com/docs/en/settings ; https://code.claude.com/docs/en/permissions",
   "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",
   "verificado_en_fuente": true
@@ -796,7 +802,10 @@
   "tipos": [
    "TH-14"
   ],
-  "esperado": "potencial",
+  "esperado": {
+   "claude-code": "potencial",
+   "opencode": "no_se_reporta"
+  },
   "linea": 19,
   "fuente_primaria": "https://code.claude.com/docs/en/mcp",
   "confirmado_por": "agente independiente (sin acceso a src ni al nivel esperado), 2026-11-10; docs/oraculo-confirmacion/confirmacion.md",

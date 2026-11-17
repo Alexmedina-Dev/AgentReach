@@ -29,7 +29,7 @@ Una entrada por caso (67). Campos: `id`, `raiz`, `rutas` (sufijos de ruta), `tip
 `confirmado_por`. `esperado` es un nivel (`comprobado`, `potencial`, `hipotesis`), `no_se_reporta`, `no_se_pudo_revisar`,
 `no_aplicable`, `no_debe_existir`, o un objeto por agente (`claude-code`, `opencode`). Se derivó a mano de la tabla del oráculo y de
 su sección «Niveles por agente»; una prueba comprueba que los IDs son exactamente los del oráculo y que las cifras
-(18 comprobado, 28 potencial, 2 hipótesis por agente; 16 «no se reporta») coinciden.
+(Claude Code: 13 comprobado, 33 potencial, 2 hipótesis; opencode: 13, 30 y 2, porque desde la Historia 46 AT-04, AT-12 y AT-06 son solo de Claude Code; 16 «no se reporta» como cadena) coinciden.
 
 Clasificación por caso y agente: **coincide**, **falso positivo** (hay hallazgo donde no debe, o con un nivel más alto: un
 «comprobado» falso), **omisión** (falta el hallazgo, o con un nivel más bajo) o **no aplicable**.
