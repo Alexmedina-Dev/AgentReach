@@ -38,6 +38,34 @@ git checkout -b mi-cambio
 
 Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian, la carpeta no.
 
+### Mantén tu copia al día antes de empezar y antes de abrir el Pull Request
+
+`development` cambia cada vez que se une un Pull Request. Si tu copia se queda atrás, tu Pull Request puede **chocar** con cambios nuevos o deshacerlos sin querer. Por eso, **siempre trae lo nuevo de `development` antes de crear tu rama y otra vez antes de abrir el Pull Request**:
+
+```powershell
+# Una sola vez: registra el repositorio original con el nombre "upstream"
+# (solo si trabajas desde tu fork; quien mantiene el repo ya lo tiene como "origin")
+git remote add upstream https://github.com/Alexmedina-Dev/AgentReach.git
+
+# Antes de crear tu rama: pon tu development al día
+git checkout development
+git fetch upstream
+git merge --ff-only upstream/development   # quien mantiene el repo usa: git pull --ff-only origin development
+git checkout -b mi-cambio
+
+# Antes de abrir el Pull Request: trae lo nuevo a tu rama y vuelve a correr las pruebas
+git fetch upstream
+git rebase upstream/development            # quien mantiene el repo usa: git rebase origin/development
+uv run pytest
+git push --force-with-lease origin mi-cambio
+```
+
+- Si `git rebase` marca un **conflicto**, git te dice qué archivos chocan. Arréglalos, usa `git add <archivo>` y `git rebase --continue`. Si te pierdes, `git rebase --abort` deja todo como estaba.
+- Tu fork en GitHub también tiene un botón **Sync fork** que hace lo mismo para tu `development`.
+- Aunque tengas el permiso, **nunca subas directo a `development` ni a `main`**: todo cambio entra por Pull Request. GitHub lo exige.
+
+Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian, la carpeta no.
+
 ## Correr las pruebas y el estilo
 
 ```powershell
