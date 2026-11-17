@@ -35,6 +35,7 @@ from agentreach.contracts import Idioma, Plataforma
 from agentreach.core.catalogo_explicaciones import TITULO_MOTIVO, Tono
 from agentreach.infra import actualizacion
 from agentreach.infra.navegador import abrir as abrir_navegador
+from agentreach.reporting.avance import Avance
 from agentreach.reporting.formato import (
     Color,
     activar_vt,
@@ -556,6 +557,7 @@ def _doctor(args: argparse.Namespace) -> int:
 
 
 INTENTOS = 3  # veces que se repite una pregunta antes de rendirse
+_avance_por_defecto = True  # solo las pruebas lo cambian (la línea de avance de la Historia 41 no se mezcla con la salida que comparan)
 _resumen_corto_por_defecto = True  # solo las pruebas lo cambian (para comparar el listado completo sin repetir --detalle)
 _crear_reporte_por_defecto = True  # solo las pruebas lo cambian (sin escribir en la carpeta personal)
 _preguntar_por_defecto = input  # solo las pruebas lo cambian: la línea de comandos no tiene ninguna opción que responda por la persona
@@ -736,6 +738,16 @@ def _reporte_html(datos, carpeta: str, args: argparse.Namespace, idioma: Idioma,
         _decir(_ERROR["no_abrio"][idioma])
 
 
+def _crear_avance(args: argparse.Namespace, idioma: Idioma, solo_ascii: bool, color: Color, claro: bool) -> Avance | None:
+    """El indicador de avance (Historia 41), solo con una terminal interactiva de punta a punta (entrada, salida y errores) y nada que
+    lo apague: ni ``--salida`` ni ``--json`` ni ``TERM=dumb``. En cualquier otro caso no hay avance y la salida es la de siempre."""
+    if (not _avance_por_defecto or args.salida or args.json or os.environ.get("TERM") == "dumb"
+            or not (_es_terminal(sys.stdin) and _es_terminal(sys.stdout) and _es_terminal(sys.stderr))):
+        return None
+    return Avance(sys.stderr, idioma, lambda: shutil.get_terminal_size(fallback=(80, 24)).columns,
+                  ascii_=solo_ascii or not _es_utf8(sys.stderr), color=color, claro=claro)
+
+
 def _ejecutar(args: argparse.Namespace, idioma: Idioma, ahora: Callable[[], datetime] | None,
               preguntar: Callable[[str], str]) -> int:
     carpeta = args.carpeta
@@ -784,7 +796,12 @@ def _ejecutar(args: argparse.Namespace, idioma: Idioma, ahora: Callable[[], date
     for n in config.no_revisados:  # el opt-in queda apagado: se avisa en vez de callarlo
         motivo = TITULO_MOTIVO[n.motivo][idioma] + (f" [{n.motivo.value}]" if args.detalle else "")
         _decir(_ERROR["aviso_config"][idioma].format(motivo=motivo))
-    resultado = auditar(carpeta, config, tarea=args.tarea, trabajo=args.trabajo)
+    avance = _crear_avance(args, idioma, solo_ascii, color, claro)
+    try:
+        resultado = auditar(carpeta, config, tarea=args.tarea, trabajo=args.trabajo, avance=avance)
+    finally:
+        if avance is not None:
+            avance.cerrar()  # la línea se borra antes de cualquier otra salida: el reporte, el error o el aviso de Ctrl+C
     momento = (ahora or datetime.now)()
     datos = preparar(
         resultado, carpeta, ahora=momento, estricto=args.estricto,
