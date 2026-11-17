@@ -108,24 +108,59 @@ def _referencia(trabajo: str, tarea: str | None) -> tuple[Referencia, list[NoRev
     return Referencia(palabras(tarea[:MAX_TAREA]) if tarea else None, readme), pendientes
 
 
+Avance = Callable[[str, int, int], None]  # (evento, a, b): «paso» (n, total), «carpetas» (cantidad), «evaluando», «reporte»
+
+
+class _FsContado:
+    """Envuelve un ``ReadOnlyFs`` y avisa cuántas carpetas DISTINTAS se han listado. No cambia lo que devuelve ni cuándo.
+    Solo cuenta (nunca guarda ni muestra nombres: el aviso lleva una cantidad)."""
+
+    def __init__(self, fs: ReadOnlyFs, avance: Avance) -> None:
+        self._fs = fs
+        self._avance = avance
+        self._vistas: set[str] = set()
+
+    def listar(self, carpeta: Ruta):
+        clave = str(carpeta)
+        if clave not in self._vistas:
+            self._vistas.add(clave)
+            self._avance("carpetas", len(self._vistas), 0)
+        return self._fs.listar(carpeta)
+
+    def metadatos(self, ruta: Ruta):
+        return self._fs.metadatos(ruta)
+
+    def leer_texto(self, ruta: Ruta) -> str:
+        return self._fs.leer_texto(ruta)
+
+
 def auditar(
     carpeta: str,
     config: Configuracion,
     medidores: tuple[Sonda, Sonda | None] | None = None,
     tarea: str | None = None,
     trabajo: str | None = None,
+    avance: Avance | None = None,
 ) -> ResultadoAuditoria:
     """Audita ``carpeta`` solo en lectura. No escribe nada ni lanza programas.
 
     ``medidores`` (sonda, verificador) solo se pasa en pruebas; sin él se usan los del sistema.
     ``tarea`` y ``trabajo`` (el directorio donde se lanzaría el agente; por defecto, la carpeta auditada) alimentan
     el campo «ajeno a la tarea».
+    ``avance`` (opcional) recibe señales de progreso sin nombres ni valores; no cambia el resultado.
     """
     carpeta = os.path.abspath(carpeta)  # la sonda del permiso solo mide rutas absolutas
     proyecto = Ruta(carpeta)
-    fs = FsSoloLectura(carpeta)
+    fs: ReadOnlyFs = FsSoloLectura(carpeta)
+    if avance is not None:
+        fs = _FsContado(fs, avance)
     detectores = [crear(fs, config) for crear in _detectores]
-    candidatos = Pipeline(detectores).ejecutar(proyecto)
+    pipeline = Pipeline(detectores)
+    if avance is None:
+        candidatos = pipeline.ejecutar(proyecto)
+    else:
+        candidatos = pipeline.ejecutar(proyecto, lambda n, total: avance("paso", n, total))
+        avance("evaluando", 0, 0)
     sonda, verificador = medidores if medidores is not None else _medidores()
     adaptadores = [d.adaptador for d in detectores if hasattr(d, "adaptador")]
     evaluador = Evaluador(sonda, verificador, adaptadores, existe=lambda r: os.path.lexists(r))
@@ -150,6 +185,8 @@ def auditar(
         for n in getattr(detector, "no_revisados", ()):
             pendientes[(n.ruta_real or n.ruta, n.motivo.value)] = n  # sin duplicados entre detectores
     recorrido = recorrer(fs, proyecto)
+    if avance is not None:
+        avance("reporte", 0, 0)
     for n in recorrido.no_revisados:  # carpetas ilegibles, enlaces, archivos grandes: nunca se omiten en silencio
         pendientes[(n.ruta_real or n.ruta, n.motivo.value)] = n
     agentes, sin_decidir = detectar_agentes(carpeta, config.home or os.path.expanduser("~"), os.environ, leer_usuario=config.lectura_fuera)  # solo existencia y nombres

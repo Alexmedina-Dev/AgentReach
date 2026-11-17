@@ -8,12 +8,63 @@ Para el contexto completo lee `README.md`. La arquitectura vigente está en `_bm
 
 Necesitas [uv](https://docs.astral.sh/uv/) (gestor de paquetes y entornos de Python). No hace falta instalar Python aparte: uv descarga la versión 3.12 o superior que el proyecto pide.
 
+### Si no mantienes el repositorio (lo normal)
+
+No puedes subir ramas al repositorio original, así que trabajas en una copia propia (*fork*):
+
+1. En GitHub, pulsa **Fork** en la página del repositorio. Eso crea tu copia.
+2. Clona **tu copia**, en la rama `development`, y crea una rama para tu cambio:
+
 ```powershell
-git clone -b development https://github.com/Alexmedina-Dev/AgentReach.git
+git clone -b development https://github.com/<tu-usuario>/AgentReach.git
 cd AgentReach
+git checkout -b mi-cambio    # una rama por cambio; nunca trabajes directo en development
 uv sync                      # crea .venv e instala las dependencias de desarrollo
 uv run agentreach --version  # comprueba que la CLI (interfaz de línea de comandos) funciona
 ```
+
+3. Haz tu cambio, corre las pruebas (ver abajo) y súbelo a tu copia: `git push origin mi-cambio`.
+4. En GitHub, abre un **Pull Request** desde tu rama hacia la rama **`development`** del repositorio original (nunca hacia `main`).
+
+### Si mantienes el repositorio
+
+Clonas directamente el repositorio original, creas una rama desde `development` y abres el Pull Request hacia `development`:
+
+```powershell
+git clone -b development https://github.com/Alexmedina-Dev/AgentReach.git
+cd AgentReach
+git checkout -b mi-cambio
+```
+
+Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian, la carpeta no.
+
+### Mantén tu copia al día antes de empezar y antes de abrir el Pull Request
+
+`development` cambia cada vez que se une un Pull Request. Si tu copia se queda atrás, tu Pull Request puede **chocar** con cambios nuevos o deshacerlos sin querer. Por eso, **siempre trae lo nuevo de `development` antes de crear tu rama y otra vez antes de abrir el Pull Request**:
+
+```powershell
+# Una sola vez: registra el repositorio original con el nombre "upstream"
+# (solo si trabajas desde tu fork; quien mantiene el repo ya lo tiene como "origin")
+git remote add upstream https://github.com/Alexmedina-Dev/AgentReach.git
+
+# Antes de crear tu rama: pon tu development al día
+git checkout development
+git fetch upstream
+git merge --ff-only upstream/development   # quien mantiene el repo usa: git pull --ff-only origin development
+git checkout -b mi-cambio
+
+# Antes de abrir el Pull Request: trae lo nuevo a tu rama y vuelve a correr las pruebas
+git fetch upstream
+git rebase upstream/development            # quien mantiene el repo usa: git rebase origin/development
+uv run pytest
+git push --force-with-lease origin mi-cambio
+```
+
+- Si `git rebase` marca un **conflicto**, git te dice qué archivos chocan. Arréglalos, usa `git add <archivo>` y `git rebase --continue`. Si te pierdes, `git rebase --abort` deja todo como estaba.
+- Tu fork en GitHub también tiene un botón **Sync fork** que hace lo mismo para tu `development`.
+- Aunque tengas el permiso, **nunca subas directo a `development` ni a `main`**: todo cambio entra por Pull Request. GitHub lo exige.
+
+Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian, la carpeta no.
 
 ## Correr las pruebas y el estilo
 
@@ -23,14 +74,34 @@ uv run ruff check .  # revisión de estilo
 uv run ruff format . # formato
 ```
 
-Las pruebas de `tests/reglas_no_negociables/` comprueban las reglas de abajo (solo lectura, sin red, sin ejecutar programas y sin valores de secretos). Un cambio que haga fallar una de ellas no se acepta. Algunas pruebas se omiten (*skipped*) cuando dependen de otro sistema operativo.
+Las pruebas de `tests/reglas_no_negociables/` comprueban las reglas de abajo (solo lectura, sin red, sin ejecutar programas y sin valores de secretos). Un cambio que haga fallar una de ellas no se acepta.
+
+### El proyecto de prueba (secretos falsos)
+
+Varias pruebas, entre ellas todas las de reglas no negociables y las del oráculo, auditan un **proyecto de prueba**: una carpeta con secretos **falsos** que genera `pruebas/generar_proyecto_prueba.py`. Esa carpeta **no se sube al repositorio** y debe estar **fuera** de él (el generador se niega a crearla dentro, o en OneDrive).
+
+```powershell
+# 1. Genera el proyecto de prueba en una carpeta fuera del repositorio
+uv run python pruebas/generar_proyecto_prueba.py "C:\dev\proyecto-prueba-agentreach"
+
+# 2. Dile a las pruebas dónde está
+$env:AGENTREACH_PROYECTO_PRUEBA = "C:\dev\proyecto-prueba-agentreach"
+
+# 3. Corre las pruebas
+uv run pytest
+```
+
+- **Sin la variable `AGENTREACH_PROYECTO_PRUEBA`, más de cien pruebas se omiten** (*skipped*) en silencio. En GitHub, la revisión automática (CI) las trata como fallos, así que conviene correrlas con el proyecto de prueba antes de abrir tu Pull Request.
+- Las pruebas esperan los mensajes en español. Si tu sistema está en otro idioma, usa también `$env:AGENTREACH_IDIOMA = "es"` y `$env:PYTHONUTF8 = "1"`, como hace `.github/workflows/ci.yml`.
+- Las pruebas de enlaces simbólicos se omiten en Windows si tu usuario no puede crearlos (hace falta el modo desarrollador o ser administrador). GitHub sí las corre.
+- Para quitar el proyecto de prueba usa `uv run python pruebas/generar_proyecto_prueba.py --limpiar "<carpeta>"`. Bórralo así y no a mano: el generador deja algunos archivos con permisos negados a propósito.
 
 ## Reglas no negociables
 
 Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 
 1. **Solo lectura.** AgentReach nunca modifica el proyecto ni el entorno que analiza. No se abren archivos para "probar" permisos. (PRD, FR-1) Fuera de lo analizado solo escribe `--salida` y la carpeta `AgentReach-reportes` de la carpeta personal; durante la revisión no lanza programas, y al terminar solo abre el reporte HTML en el navegador si la persona lo permitió. (Historia 21)
-2. **Sin red por defecto.** Ninguna conexión de red salvo que el usuario la active de forma explícita. No se añaden dependencias que usen red. (PRD, FR-2)
+2. **Sin red durante la revisión.** Ninguna conexión de red salvo la consulta del número de versión (Historia 31): solo al abrir, cada 15 días como máximo, en `infra/actualizacion.py`. No se añaden dependencias que usen red. (PRD, FR-2)
 3. **Sin valores de secretos.** Ningún reporte, registro ni mensaje de error contiene el valor de un secreto: solo ubicación, tipo y nivel de confianza. (PRD, FR-3)
 4. **Solo biblioteca estándar** de Python como dependencia en tiempo de ejecución. Las herramientas de desarrollo (pytest, ruff) van en el grupo `dev`.
 5. **Niveles de confianza:** cada hallazgo es *comprobado*, *potencial* o *hipótesis*. No se afirma que algo es alcanzable solo porque exista una referencia.
@@ -56,6 +127,8 @@ Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 - Mensajes de commit según `.github/commit_template.md`: `tipo: resumen en imperativo, en minúscula y sin punto final`.
   Tipos: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `style`, `chore`, `ci`, `revert`.
 - Un commit = un cambio con sentido, con sus pruebas y documentación.
+- **Versiones:** al lanzar se sube el tercer número (`0.1.0` → `0.1.1` → `0.1.2`) en `pyproject.toml`. El aviso de versión compara esos tres números con los de `main`.
+- Las historias se hacen de una en una: una rama desde `development` y un Pull Request por historia.
 
 ## Proponer un adaptador nuevo
 

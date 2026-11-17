@@ -35,7 +35,12 @@ from agentreach.core.catalogo_explicaciones import (
     que_significa,
 )
 from agentreach.core.catalogo_terminos import FICHAS, etiquetas, nombre
-from agentreach.reporting.gate import AgenteConfiguradoVista, DatosReporte, HallazgoVista
+from agentreach.reporting.gate import (
+    AgenteConfiguradoVista,
+    DatosReporte,
+    HallazgoVista,
+    plataformas_mostradas,
+)
 from agentreach.reporting.texto import aviso_de_secretos
 
 __all__ = ["MARCADOR", "MAX_BYTES", "MAX_HALLAZGOS_POR_AGENTE", "generar_html"]
@@ -95,9 +100,10 @@ def _hallazgo(h: HallazgoVista, indice: int) -> dict:
 def _agentes(d: DatosReporte, agente: Plataforma | None) -> list[dict]:
     entradas: list[dict] = []
     orden = (Plataforma.CLAUDE_CODE, Plataforma.OPENCODE, Plataforma.NO_DETERMINADA)
+    mostradas, _ = plataformas_mostradas(d.configurados, agente)  # Historia 40: solo los agentes que aparecen configurados (o pedidos)
     for plataforma in orden:
-        if agente is not None and plataforma not in (agente, Plataforma.NO_DETERMINADA):
-            continue  # --agente: solo ese agente (y lo que no depende de ninguno)
+        if plataforma is not Plataforma.NO_DETERMINADA and plataforma not in mostradas:
+            continue  # un agente que no está en la carpeta ni en el equipo no aparece
         propios = sorted((h for h in d.hallazgos if h.plataforma is plataforma), key=_orden)
         if plataforma is Plataforma.NO_DETERMINADA and not propios:
             continue  # «sin agente específico» solo sale si tiene hallazgos
@@ -116,6 +122,7 @@ def _agentes(d: DatosReporte, agente: Plataforma | None) -> list[dict]:
             "id": _ID[plataforma],
             "name": _NOMBRE[plataforma],
             "env_cleaning": plataforma in d.limpieza_de_entorno,
+            **({"no_signals": True} if plataforma in d.sin_senales else {}),  # campo opcional: analizado sin señales de configuración
             "rules": reglas,
             "not_determined": [  # por qué hay niveles «no determinado»: archivo y clave que no se interpreta (nunca un valor)
                 {"path": c.ruta, "key": c.clave, "reason": c.motivo.value} for c in d.causas if c.plataforma is plataforma

@@ -6,7 +6,7 @@ infraestructura ni reporte. No calcula niveles ni explica nada; eso llega en his
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from agentreach.contracts import Detector, Finding, Ruta, ordenar
 
@@ -24,11 +24,16 @@ class Pipeline:
     def detectores(self) -> tuple[Detector, ...]:
         return tuple(self._detectores)
 
-    def ejecutar(self, proyecto: Ruta) -> list[Finding]:
+    def ejecutar(self, proyecto: Ruta, al_avanzar: Callable[[int, int], None] | None = None) -> list[Finding]:
         """Reúne los hallazgos de todos los detectores. Si un detector falla, el error se
-        propaga con su nombre; nunca se descarta en silencio."""
+        propaga con su nombre; nunca se descarta en silencio.
+
+        ``al_avanzar(indice, total)`` (opcional, indice desde 1) se avisa antes de cada detector; sin él, todo igual."""
         reunidos: list[Finding] = []
-        for detector in self._detectores:
+        total = len(self._detectores)
+        for indice, detector in enumerate(self._detectores, 1):
+            if al_avanzar is not None:
+                al_avanzar(indice, total)
             try:
                 reunidos.extend(detector.detectar(proyecto))
             except Exception as error:
