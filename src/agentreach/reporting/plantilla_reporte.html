@@ -138,10 +138,18 @@ h1 span{color:var(--mint-text)}
 .kpi{flex:1 1 130px;min-height:64px;padding:8px 12px;border-radius:12px;text-align:left;cursor:pointer;display:grid;gap:2px;align-content:center}
 .kpi .big{font:700 26px/1 var(--f-head)}
 .kpi .nm{display:flex;gap:6px;align-items:center;font-weight:700;font-size:14px}
-.kpi.total{cursor:default}
-.kpi.lv-v{border-color:var(--lc-v);border-width:2.5px}.kpi.lv-p{border-color:var(--lc-p)}.kpi.lv-h{border-color:var(--lc-h);border-style:dotted;border-width:2px}
-.kpi[aria-pressed="false"]{background:var(--glass-solid);color:var(--text2)}
-.kpi[aria-pressed="false"] .big{text-decoration:line-through;text-decoration-thickness:2px}
+/* Historia 43: la ficha activa lleva tinte, borde de su color y una marca de forma (✓); la apagada, borde discontinuo y ○; «Caminos» es un total, no un botón */
+.kpi.total{cursor:default;background:none!important;border-color:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding-left:4px;padding-right:4px}
+.kpi.lv-v{--kpi-c:var(--lc-v)}.kpi.lv-p{--kpi-c:var(--lc-p)}.kpi.lv-h{--kpi-c:var(--lc-h)}
+.kpi[aria-pressed]{padding-right:30px}
+.kpi[aria-pressed="true"]{border:2px solid var(--kpi-c);background:color-mix(in srgb,var(--kpi-c) 16%,var(--glass-solid))}
+.kpi.lv-h[aria-pressed="true"]{border-style:dotted}
+.kpi[aria-pressed="false"]{border:2px dashed var(--ctl);background:transparent;color:var(--text2)}
+.kpi[aria-pressed]::after{position:absolute;top:6px;right:10px;font:700 15px/1 var(--f-body)}
+.kpi[aria-pressed="true"]::after{content:"✓";content:"✓"/"";color:var(--kpi-c)}
+.kpi[aria-pressed="false"]::after{content:"○";content:"○"/"";color:var(--text2)}
+.showing{margin:0 0 8px;color:var(--text2);font-size:14px}
+.kpi[aria-disabled="true"]{cursor:not-allowed}
 .stackbar{display:flex;height:12px;border-radius:7px;overflow:hidden;border:1px solid var(--edge);margin-bottom:8px}
 .stackbar i{display:block;height:100%}
 .stackbar i.lv-v{background:var(--lc-v)}.stackbar i.lv-p{background:var(--lc-p)}
@@ -577,6 +585,7 @@ footer{margin-top:18px;color:var(--text2);font-size:13px;padding:12px 18px}
   <div class="glass sum-l">
     <h2 class="sr" id="sumTitle"></h2>
     <div class="kpis" id="kpis"></div>
+    <p class="showing" id="showing" aria-live="polite"></p>
     <div class="stackbar" id="stackbar" aria-hidden="true"></div>
     <p class="facts" id="facts"></p>
     <p class="ndnote" id="ndnote" hidden></p>
@@ -739,7 +748,7 @@ const T = {
   agents:'Agent',agentsLbl:'Agents',folder:'Folder',type:'Type',search:'Search',allF:'All folders',allT:'All types',searchPh:'file, service, ID, text…',
   reset:'Reset filters',json:'Export JSON',csv:'Export CSV',link:'Copy link',
   shown:(n,m)=>n+' of '+m+' routes shown',
-  total:'Routes',files:'files',folders:'folders',types:'types',effects:'effects (not checked)',
+  total:'Routes',showing:(lv)=>'Levels shown: '+lv,lastLevel:'One level always stays on',allLevels:'all levels',files:'files',folders:'folders',types:'types',effects:'effects (not checked)',
   startHere:'Fix first',startNone:'No Verified findings for this agent. Look at the next level.',moreV:n=>'See all '+n+' in the list',
   cols:['Agent','Where','What it is','Possible effect'],
   colsub:['who acts','folder or file, line','what is there','not checked'],
@@ -781,7 +790,7 @@ const T = {
   agents:'Agente',agentsLbl:'Agentes',folder:'Carpeta',type:'Tipo',search:'Buscar',allF:'Todas las carpetas',allT:'Todos los tipos',searchPh:'archivo, servicio, ID, texto…',
   reset:'Quitar filtros',json:'Exportar JSON',csv:'Exportar CSV',link:'Copiar enlace',
   shown:(n,m)=>n+' de '+m+' caminos mostrados',
-  total:'Caminos',files:'archivos',folders:'carpetas',types:'tipos',effects:'efectos (no comprobados)',
+  total:'Caminos',showing:(lv)=>'Niveles visibles: '+lv,lastLevel:'Siempre queda un nivel activo',allLevels:'todos los niveles',files:'archivos',folders:'carpetas',types:'tipos',effects:'efectos (no comprobados)',
   startHere:'Corregir primero',startNone:'Este agente no tiene hallazgos Comprobados. Mire el siguiente nivel.',moreV:n=>'Ver los '+n+' en la lista',
   cols:['Agente','Dónde','Qué es','Efecto posible'],
   colsub:['quién actúa','carpeta o archivo, línea','qué hay','no comprobado'],
@@ -1237,8 +1246,11 @@ function renderTabsAndFilters(){
 }
 function renderSummary(){
   const T_=t(),af=agentF(),fs=visible();
-  $('#kpis').innerHTML='<div class="kpi glass total" style="border-color:var(--edge)"><span class="big">'+af.length+'</span><span class="nm">'+esc(T_.total)+'</span></div>'+
-    AG.levels.map(l=>{const n=af.filter(f=>f.level===l).length;return '<button type="button" class="kpi lv-'+K[l]+'" data-lv="'+l+'" aria-pressed="'+S.levels.has(l)+'"><span class="big">'+n+'</span><span class="nm">'+ico(l,'sm')+esc(lvName(l))+'</span></button>';}).join('');
+  $('#kpis').innerHTML='<div class="kpi total"><span class="big">'+af.length+'</span><span class="nm">'+esc(T_.total)+'</span></div>'+
+    AG.levels.map(l=>{const n=af.filter(f=>f.level===l).length;return '<button type="button" class="kpi lv-'+K[l]+'" data-lv="'+l+'" aria-pressed="'+S.levels.has(l)+'"'+(S.levels.has(l)&&S.levels.size===1?' aria-disabled="true" title="'+esc(T_.lastLevel)+'"':'')+'><span class="big">'+n+'</span><span class="nm">'+ico(l,'sm')+esc(lvName(l))+'</span></button>';}).join('');
+  const lvOn=AG.levels.filter(l=>S.levels.has(l));
+  const showTxt=T_.showing(lvOn.length===AG.levels.length?T_.allLevels:lvOn.map(lvName).join(', '));   // siempre queda un nivel activo (el último no se puede apagar); la cuenta de caminos ya la da #status
+  if($('#showing').textContent!==showTxt)$('#showing').textContent=showTxt;   // aria-live: solo se anuncia si cambia
   const tot=af.length||1;
   $('#stackbar').innerHTML=AG.levels.map(l=>'<i class="lv-'+K[l]+'" style="width:'+(100*af.filter(f=>f.level===l).length/tot)+'%"></i>').join('');
   $('#facts').innerHTML='<span><b>'+new Set(af.map(f=>f.path)).size+'</b> '+esc(T_.files)+'</span><span><b>'+new Set(af.map(f=>f.dir)).size+'</b> '+esc(T_.folders)+'</span><span><b>'+new Set(af.map(f=>f.what.en)).size+'</b> '+esc(T_.types)+'</span><span><b>'+new Set(af.map(f=>f.whose.en)).size+'</b> '+esc(T_.effects)+'</span>';
@@ -1325,7 +1337,7 @@ document.addEventListener('click',e=>{
   if(d.theme){document.documentElement.dataset.theme=d.theme;document.querySelectorAll('#gTheme button').forEach(x=>x.setAttribute('aria-pressed',x===b));fullRender();return;}
   if(d.view){S.view=d.view;render();return;}
   if(d.agent){setAgent(d.agent);renderTabsAndFilters();render();return;}
-  if(d.lv){const l=d.lv;if(S.levels.has(l)){if(S.levels.size>1)S.levels.delete(l);}else S.levels.add(l);render();return;}
+  if(d.lv){const l=d.lv;if(S.levels.has(l)){if(S.levels.size>1)S.levels.delete(l);}else S.levels.add(l);render();{const b2=document.querySelector('#kpis [data-lv="'+l+'"]');if(b2)b2.focus();}return;}
   if(d.lvonly){S.levels=new Set([d.lvonly]);S.view='table';render();return;}
   if(d.open){openFinding(d.open);return;}
   if(d.setfolder){S.folder=d.setfolder;$('#selFolder').value=S.folder;render();return;}

@@ -437,6 +437,30 @@ Como persona con una terminal de fondo claro u oscuro, quiero que AgentReach se 
 
 *Nota:* la consulta del color de fondo no está probada en Orca ni en Windows Terminal; es una exploración dentro de la historia. Si no funciona, bastan las demás capas. **Depende de:** 4.3. **Tamaño:** M.
 
+### Story 4.11 (Historia 43): Los filtros de nivel dicen cuál está activo y qué muestran
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17)*
+Como persona que filtra el reporte por nivel, quiero ver claramente qué niveles están activos y qué se muestra, para no tener que adivinarlo. FR-28, UX-DR2. *Hoy las fichas «Caminos / Comprobado / Potencial / Hipótesis» son botones de filtro, pero la activa y la inactiva se parecen: la inactiva solo cambia a fondo sólido y tachado en el número («0» y «5» tachados parecen datos borrados, no un filtro apagado), y la ficha «Caminos» (el total) parece un botón más aunque no lo es.* **Enfoque:** la ficha activa se rellena con un tinte de su color de nivel y lleva una marca no solo de color (por ejemplo una palomita); la inactiva queda apagada y sin tachar; «Caminos» se ve como un total, no como un botón; y una línea debajo dice qué se está mostrando («Mostrando 5 caminos: Potencial»). También se revisan los demás grupos de selección del reporte (pestañas de agente, vistas, idioma, tema) para que su estado seleccionado se distinga sin depender solo del color. **Depende de:** 4.5. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** el reporte con los tres niveles activos
+**When** se mira la fila de fichas
+**Then** cada ficha de nivel activa tiene el contenedor coloreado con el tinte de su nivel y una marca que no es solo de color, y «Caminos» se ve distinto de las fichas que se pueden pulsar.
+
+**Given** una ficha de nivel apagada con el filtro
+**When** se mira
+**Then** se ve apagada (sin color de nivel en el contenedor) y su número no aparece tachado; con lector de pantalla se anuncia como no activa (`aria-pressed`).
+
+**Given** cualquier combinación de filtros
+**When** cambia el filtro
+**Then** una línea junto a las fichas dice qué niveles se muestran y cuántos caminos (en español, tú y usted, e inglés), y si no queda ninguno lo dice.
+
+**Given** los demás grupos de selección (pestañas de agente, vistas, idioma, tema)
+**When** se revisan
+**Then** el estado seleccionado se distingue con contraste 3:1 y sin depender solo del color, en tema claro y oscuro y en la vista de contraste alto.
+
+**And** el filtrado no cambia ningún hallazgo ni su nivel, los textos nuevos pasan por los diccionarios de la plantilla, con foco visible y uso con teclado, y una prueba comprueba los estados activo e inactivo de las fichas.
 ### Story 4.10 (Historia 41): Se ve que AgentReach avanza mientras revisa
 
 *Estado: terminada, rehecha sobre `development` (2026-11-17)*
