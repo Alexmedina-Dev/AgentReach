@@ -42,3 +42,39 @@
 - source_spec: spec-historia-33-como-leer-este-reporte-en-el-html.md
   summary: Historia 36: enlace «¿que es esto?» junto a cada termino del reporte HTML que abre y lleva a su ficha en «Como leer este reporte» (hoy cada ficha ya tiene id term-… pero nada la enlaza), con foco y lector de pantalla.
   evidence: Descrito en el contrato de UX (EXPERIENCE.md) y fuera de la spec de la 33; Alex lo veria util para gestionar lo que lee.
+
+- source_spec: sprint-change-proposal-2026-11-11.md (R7)
+  summary: Verificar con el segundo proyecto de prueba si «No se pudo revisar» debe poder filtrarse en la UI o basta la seccion de limitaciones.
+  evidence: Primera corrida real (2026-11-11): el nivel esta en el glosario pero no se ofrece como filtro; segun FR-25 es una seccion aparte, asi que puede ser correcto. Visto una sola vez; sin verificar.
+
+- source_spec: sprint-change-proposal-2026-11-11.md (R7)
+  summary: Verificar si la evidencia de los agentes «configurados» se trunca sin avisar en el HTML.
+  evidence: Reportado por la extraccion del reporte del 2026-11-11 (una sola fuente); no se comprobo contra el codigo ni contra otra corrida.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-41-avance-visible-al-revisar.md`
+  summary: Probar en una terminal real si la línea de avance se queda quieta dentro de un detector lento sin carpetas nuevas, y si hace falta una señal de vida adicional.
+  evidence: Sin temporizador (el spec lo prohíbe) la línea solo se redibuja con carpetas nuevas o cambios de paso; con un detector que lea un archivo enorme o espere puede parecer trabada. Se resuelve con una corrida de Alex en una carpeta grande real.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-41-avance-visible-al-revisar.md`
+  summary: Opción para apagar la línea de avance (por ejemplo `--sin-avance` o una variable `AGENTREACH_*`) para lectores de pantalla y entornos sin interacción.
+  evidence: Hoy solo la apagan `--salida`, `--json`, `TERM=dumb` y la falta de terminal; una línea que se reescribe varias veces por segundo puede molestar a lectores de pantalla.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-42-como-leer-este-reporte-en-corto.md`
+  summary: Historia 36: el enlace «¿qué es esto?» que apunta a `#term-<id>` debe abrir también el «Ver más» (o el plegado) del término al que llega.
+  evidence: Con la vista en corto, el detalle de los 4 términos principales va plegado en `details.more`; un enlace al ancla solo muestra la frase corta si no se abre.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-43-filtros-de-nivel-con-estado-claro.md`
+  summary: Decidir si el reporte debe poder apagar todos los niveles (hoy el último se queda activo).
+  evidence: `if(d.lv)` ignora el clic cuando solo queda un nivel; ahora la ficha lo dice con `aria-disabled` y título, pero sigue sin poder verse «cero niveles».
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-40-agentes-detectados.md`
+  summary: La aclaración «analizado sin señales de configuración» del HTML solo sale en la nota del agente; valorar mostrarla también en la pestaña, la vista de impresión y las exportaciones JSON y CSV.
+  evidence: `#agentnote` es el único sitio; en impresión y exportaciones no hay forma de saber que el agente se muestra sin haberse detectado.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-44-carpeta-con-varios-proyectos.md`
+  summary: Decidir si el aviso de «varios proyectos» debe contar solo repositorios (`.git/config`) o también `CLAUDE.md` y `opencode.json`, para no avisar en un monorepo con un `CLAUDE.md` por paquete.
+  evidence: Con `packages/a/CLAUDE.md` y `packages/b/CLAUDE.md` el aviso saldría aunque sea un solo proyecto. Solo contar `.git/config` evita ese falso positivo pero no avisaría en carpetas de proyectos sin `.git`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-historia-44-carpeta-con-varios-proyectos.md`
+  summary: Excluir también `.venv`, `venv`, `vendor`, `site-packages`, `dist` y `target` del conteo de proyectos anidados, y decir «al menos N» si el recorrido quedó incompleto.
+  evidence: Una carpeta de dependencias con un `CLAUDE.md` o `.git/config` inflaría el conteo; con el recorrido truncado (profundidad o archivos grandes) el conteo puede quedar por debajo y el aviso no sale sin decirlo.
