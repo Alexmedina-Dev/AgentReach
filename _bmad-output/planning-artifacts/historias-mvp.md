@@ -467,19 +467,19 @@ Lo que sigue **sin pareja** en el oráculo (se cubre con archivos de ejemplo de 
 - **Estado:** terminada (2026-11-11). Ver `implementation-artifacts/spec-historia-28-permiso-en-dos-niveles.md`.
 
 ## Historia 29. El logo se lee en cualquier fondo de terminal
-- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (5 arreglos aplicados); falta la comprobación visual de Alex en Orca (fondo claro). Ver `implementation-artifacts/spec-historia-29-colores-legibles-en-cualquier-terminal.md`.
+- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (5 arreglos aplicados); verificada por Alex en Orca (fondo claro) el 2026-11-11. Ver `implementation-artifacts/spec-historia-29-colores-legibles-en-cualquier-terminal.md`.
 - **No verificado:** el aspecto real en Orca y Windows Terminal (solo se midió el contraste y se probó con una terminal simulada). La consulta del color de fondo a la terminal (OSC 11) queda como historia aparte.
 
 ## Historia 30. Todo lo que imprime la CLI respeta el ancho
-- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (5 arreglos aplicados); falta la comprobación de Alex en Orca. Ver `implementation-artifacts/spec-historia-30-todo-lo-impreso-respeta-el-ancho.md`.
+- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (5 arreglos aplicados); verificada por Alex en Orca el 2026-11-11. Ver `implementation-artifacts/spec-historia-30-todo-lo-impreso-respeta-el-ancho.md`.
 - **No verificado:** el aspecto real en Orca con la ventana angosta y ancha (solo se probó con una terminal simulada de 30 a 140 columnas). El cuerpo del reporte, el HTML, el banner y `doctor` no se tocaron.
 
 ## Historia 32. La terminal explica cada término técnico en lenguaje llano
-- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (6 arreglos aplicados); falta la comprobación de Alex en Orca con sus hooks reales. Ver `implementation-artifacts/spec-historia-32-la-terminal-explica-cada-termino.md`.
+- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (6 arreglos aplicados); verificada por Alex en Orca con sus hooks reales el 2026-11-11. Ver `implementation-artifacts/spec-historia-32-la-terminal-explica-cada-termino.md`.
 - **No verificado:** la lectura real de Alex en Orca con sus hooks (solo se probó con una terminal simulada y la carpeta de prueba); el término «código de salida», el de «sandbox» y el de «no se pudo revisar» salen en la terminal solo con `--detalle` para no pasar de 12 líneas más.
 
 ## Historia 33. «Cómo leer este reporte» va primero y siempre visible en el HTML
-- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (7 arreglos aplicados) y con prueba de navegador real; falta la comprobación de Alex en su navegador (diseño e impresión). Ver `implementation-artifacts/spec-historia-33-como-leer-este-reporte-en-el-html.md`.
+- **Estado:** terminada (2026-11-11), revisada por tres revisores independientes (7 arreglos aplicados) y con prueba de navegador real; verificada por Alex en su navegador el 2026-11-11 (se ve bien y funciona). Ver `implementation-artifacts/spec-historia-33-como-leer-este-reporte-en-el-html.md`.
 
 ## Historia 34. El README conserva su glosario en inglés con los mismos términos (pendiente)
 - **Estado:** pendiente. Mismos 11 términos y mismo sentido que el catálogo, en el README único en inglés.
