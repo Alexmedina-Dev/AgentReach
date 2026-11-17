@@ -523,6 +523,35 @@ Como persona que no es experta en seguridad, quiero que el reporte me diga qué 
 
 **Fuente de diseño:** `ux-designs/ux-agent-reach-2026-11-11/EXPERIENCE.md` (glosario de 11 fichas con los textos en tú, usted e inglés, reglas de cuándo y dónde aparece cada explicación, y dependencias técnicas) y `DESIGN.md` (colores y componentes). **División acordada:** la Historia 32 construye el catálogo de términos, la autocomprobación que dice cuál hallazgo y la **terminal**; el HTML «Cómo leer este reporte» es la Historia 33 (Story 6.5) y la paridad con el README la Historia 34 (Story 6.6), pendientes. **Depende de:** 4.1, 4.5 y 6.2, y de un cambio de código: `gate.py` descarta hoy la ubicación, el tipo y el nivel de cada hallazgo corregido por la autocomprobación. **Tamaño:** L (partir en terminal, HTML y README si la primera pasada falla).
 
+### Story 6.10 (Historia 40): Un agente que no está en la carpeta ni en el equipo no aparece
+
+*Estado: terminada, rehecha sobre `development` (2026-11-17); ficha (origen: Alex, 2026-11-12; reformulada ese día: pasa de «etiquetar» a «no mostrar»)*
+Como persona que lee el reporte de un proyecto real, quiero ver solo los agentes que de verdad están en ese proyecto o en mi equipo, para no leer una pestaña de opencode que no existe aquí. FR-14, FR-15, FR-17, FR-31, AD-2, AD-18. *Hoy el reporte arma una pestaña por cada agente que AgentReach sabe analizar (Claude Code y opencode), con sus hallazgos, aunque el agente no esté detectado: en la corrida real del 2026-11-12 opencode tuvo 4 hallazgos y no figuraba entre los agentes configurados.* **Reglas decididas por Alex:** (1) solo hay pestaña y hallazgos para los agentes detectados como configurados (en el proyecto o en el equipo); (2) si no se detecta ningún agente con adaptador, se muestran los dos como hoy, con la aclaración «analizado sin señales de configuración»; (3) con `--agente` se muestra el pedido aunque no se detecte; (4) el código de salida cuenta solo los agentes que se muestran. **Depende de:** 6.1. **Tamaño:** M.
+
+**Criterios de aceptación:**
+
+**Given** un proyecto donde solo se detecta Claude Code
+**When** se genera el reporte (terminal y HTML)
+**Then** hay pestaña y hallazgos de Claude Code y de «Sin agente específico», y ninguna de opencode.
+
+**Given** un proyecto donde se detectan los dos agentes (el proyecto de prueba del oráculo)
+**When** se genera el reporte
+**Then** salen los dos con los mismos hallazgos y niveles de siempre (los 67 casos del oráculo no cambian).
+
+**Given** una carpeta sin señales de ningún agente con adaptador
+**When** se genera el reporte
+**Then** salen los dos agentes con la aclaración «analizado sin señales de configuración» (español con tú o usted, e inglés), y nunca un reporte sin agentes.
+
+**Given** `--agente opencode` en un proyecto sin opencode
+**When** se genera el reporte
+**Then** sale opencode con esa aclaración.
+
+**Given** un agente no detectado con un hallazgo comprobado
+**When** se calcula el código de salida
+**Then** no cuenta; con el agente detectado, sí cuenta como siempre.
+
+**And** no cambia el cálculo de ningún nivel, y una prueba cubre el proyecto de proyecto real local (solo Claude Code) y el del oráculo (ambos).
+
 ## Épica 7: Dejar el producto listo para publicarse con confianza *(nueva, pendiente)*
 
 Un tercero puede confiar en AgentReach, extenderlo y publicarlo. Reúne lo que el análisis del 2026-11-11 mostró sin cubrir. **Estado: pendiente.** FR / métricas: FR-30 (M1), FR-11 (deuda), SM-5, SM-8.
