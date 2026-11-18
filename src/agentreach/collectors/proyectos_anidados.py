@@ -2,6 +2,7 @@
 
 Sobre los archivos que el recorrido ya vio: no recorre ni lee contenido (resuelve la raíz una vez) y no muestra nombres ni rutas.
 Solo cuenta. Un nivel interno cuenta si tiene su propio punto de partida de un agente o de un repositorio.
+Lo que cuelga de una carpeta de dependencias (``.venv``, ``venv``, ``vendor``, ``site-packages``, ``dist``, ``target``) tampoco cuenta.
 Los manifiestos (``package.json``, ``pyproject.toml``…) no son señal: un monorepo es un solo proyecto.
 """
 
@@ -17,6 +18,9 @@ UMBRAL_PROYECTOS_ANIDADOS = 2  # con 2 o más carpetas internas con punto de par
 
 _N = os.path.normcase
 _CARPETAS_DE_HERRAMIENTA = frozenset(_N(n) for n in (".git", "node_modules", ".claude", ".opencode"))
+# Carpetas de dependencias o de salida de compilación: lo que traen dentro no es un proyecto aparte. En cualquier nivel y
+# sin distinguir mayúsculas (se compara en minúscula en todos los sistemas).
+_CARPETAS_DE_DEPENDENCIAS = frozenset({".venv", "venv", "vendor", "site-packages", "dist", "target"})
 # Archivo dentro de una carpeta de herramienta: la carpeta del proyecto es la que contiene a esa carpeta.
 _DENTRO_DE_HERRAMIENTA = {
     _N(".git"): frozenset({_N("config")}),
@@ -63,5 +67,7 @@ def contar_proyectos_anidados(archivos: Iterable[Metadatos], raiz: str) -> int:
             continue  # p. ej. un ``config`` suelto que no está en ``.git``
         if not carpeta or any(p in _CARPETAS_DE_HERRAMIENTA for p in carpeta):
             continue  # la raíz nunca cuenta; lo de dentro de herramientas tampoco
+        if any(p.lower() in _CARPETAS_DE_DEPENDENCIAS for p in carpeta):
+            continue  # lo de dentro de carpetas de dependencias o de salida tampoco
         carpetas.add(carpeta)
     return len(carpetas)
