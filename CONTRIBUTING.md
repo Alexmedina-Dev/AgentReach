@@ -2,7 +2,18 @@
 
 AgentReach es una herramienta de código abierto que **audita a qué puede acceder un agente de IA** en tu entorno (archivos, variables de entorno, credenciales, etc.), con evidencias y niveles de confianza. El MVP (producto mínimo viable) ya está construido y en pruebas con agentes reales: puedes instalarlo y usarlo (ver `README.md`).
 
-Para el contexto completo lee `README.md`. La arquitectura vigente está en `_bmad-output/planning-artifacts/architecture/architecture-agent-reach-2026-11-11/ARCHITECTURE-SPINE.md`, y las historias del producto en `_bmad-output/planning-artifacts/historias-mvp.md`.
+Para el contexto completo lee `README.md`. En la rama `development` (la tuya, ver abajo) están la arquitectura vigente, en `_bmad-output/planning-artifacts/architecture/architecture-agent-reach-2026-11-11/ARCHITECTURE-SPINE.md`, y las historias del producto, en `_bmad-output/planning-artifacts/historias-mvp.md`.
+
+Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en inglés: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)). Al participar te comprometes a respetarlo.
+
+## Dónde empezar y qué esperar
+
+- **Aportes bienvenidos:** reportes de errores, ideas, revisión del diseño, casos de prueba (por ejemplo, patrones de exposición bien documentados) y correcciones pequeñas de código.
+- **Por dónde entrar:** busca las *issues* con la etiqueta [`good first issue`](https://github.com/Alexmedina-Dev/AgentReach/labels/good%20first%20issue) o [`help wanted`](https://github.com/Alexmedina-Dev/AgentReach/labels/help%20wanted). Si aún no hay ninguna que te sirva, abre una *issue* contando qué quieres hacer **antes** de empezar un cambio grande.
+- **Tiempos:** quien mantiene el repositorio revisa los Pull Requests cuando puede; no hay un plazo garantizado.
+- **Licencia de tu aporte:** al enviar un Pull Request, tu aporte se publica bajo la licencia Apache-2.0 del proyecto (sección 5 de la licencia).
+- **Sistemas:** hoy el proyecto se prueba solo en Windows (la revisión automática corre en Windows). Si usas macOS o Linux, tu aporte es bienvenido: dilo en el Pull Request, porque las pruebas pueden comportarse distinto.
+- **Tu correo:** tus commits llevan tu nombre y el correo que tengas configurado en git, y este repositorio es público. Si no quieres que se vea tu correo, usa el correo anónimo que GitHub te da (Settings → Emails).
 
 ## Preparar el entorno
 
@@ -118,8 +129,8 @@ Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 | Rama | Para qué sirve |
 |---|---|
 | `main` | Lo publicable. Está protegida y no se empuja a ella directamente. |
-| `development` | Aquí llegan los aportes de contribuyentes. **Tu Pull Request apunta a esta rama.** |
-| `PruebaAlex` | El proyecto con sus historias, decisiones y contexto. Es la rama de trabajo de quien mantiene el repo. |
+| `development` | Aquí llegan los aportes de contribuyentes y se hacen todos los cambios. **Tu Pull Request apunta a esta rama.** También tiene las notas de planificación del proyecto (`_bmad-output/`). |
+| `PruebaAlex` | Archivo de la etapa anterior del proyecto. Ya no se usa: no se contribuye ahí. |
 
 - Crea tu rama desde `development` y abre el Pull Request hacia `development`, nunca hacia `main`.
 - La plantilla `.github/pull_request_template.md` se llena sola con `bmad-create-pr` si usas BMAD; si no, llénala a mano. Antes de abrir el PR corre `uv run pytest` y `uv run ruff check .`: la revisión automática hace lo mismo y debe quedar en verde.
