@@ -71,7 +71,7 @@ Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian
 ```powershell
 uv run pytest        # pruebas
 uv run ruff check .  # revisión de estilo
-uv run ruff format . # formato
+# No corras «ruff format .»: hoy reescribiría ~110 archivos que no cambiaste, y la revisión automática no lo exige.
 ```
 
 Las pruebas de `tests/reglas_no_negociables/` comprueban las reglas de abajo (solo lectura, sin red, sin ejecutar programas y sin valores de secretos). Un cambio que haga fallar una de ellas no se acepta.

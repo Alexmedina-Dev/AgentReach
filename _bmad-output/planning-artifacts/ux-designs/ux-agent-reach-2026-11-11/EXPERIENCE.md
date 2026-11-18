@@ -100,7 +100,7 @@ Visual en `DESIGN.md`. Aquí, el comportamiento.
 ## Terminales y anchos
 
 - Ancho de trabajo = columnas reales, entre 60 y 100 para el reporte. Todo texto impreso (bienvenida, preguntas, avisos, «reporte guardado») se ajusta por un único punto y no parte palabras; una ruta sin espacios va entera; «(S/N)» no se separa (Historia 30).
-- Fondo claro conocido: REACH con luminosidad movida hasta ≥3:1 y AGENT en `{colors.brand-bg}`; fondo oscuro conocido: AGENT en `{colors.brand-ink}`; desconocido (hoy): AGENT en el texto normal, REACH `{colors.brand-mint-neutral}`, 16 colores en cian normal (36). La detección real del fondo es la Historia 31.
+- Fondo claro conocido: REACH con luminosidad movida hasta ≥3:1 y AGENT en `{colors.brand-bg}`; fondo oscuro conocido: AGENT en `{colors.brand-ink}`; desconocido (hoy): AGENT en el texto normal, REACH `{colors.brand-mint-neutral}`, 16 colores en cian normal (36). La detección real del fondo es la Historia 48.
 - Los niveles usan la columna «claro» u «oscuro» de `DESIGN.md`; con fondo desconocido, la variante de mayor contraste en ambos.
 - Cada explicación de una línea cabe en 90 caracteres; con menos de 90 columnas se ajusta a dos líneas, nunca se trunca.
 
@@ -239,4 +239,4 @@ Falla: si la terminal baja de 40 columnas o no admite Unicode, banner mínimo en
 8. **[ASSUMPTION]** La frase de autocomprobación («Se bajó a potencial: …») y el formato de «qué hacer» se afinan al redactar el catálogo; las líneas de terminal de este documento son propuestas.
 9. **[ASSUMPTION]** Una explicación única de hook cuando hay muchos «no determinado», con el resto por referencia.
 10. Abierta: cómo presentar el límite conocido de rutas con espacios largas que se parten entre palabras.
-11. Abierta: Historia 31 (detectar el fondo real, OSC 11) cambiará el logo y los tonos «claro/oscuro» de desconocido a conocido.
+11. Abierta: Historia 48 (detectar el fondo real, OSC 11) cambiará el logo y los tonos «claro/oscuro» de desconocido a conocido.
