@@ -61,6 +61,20 @@ def test_dentro_de_herramientas_no_cuenta(tmp_path):
                    ".opencode/z/opencode.json", "a/node_modules/m/CLAUDE.md") == 0
 
 
+@pytest.mark.parametrize("carpeta", [".venv", "venv", "vendor", "site-packages", "dist", "target"])
+def test_carpetas_de_dependencias_no_cuentan(tmp_path, carpeta):
+    assert _contar(tmp_path, f"{carpeta}/lib/x/CLAUDE.md", f"{carpeta}/x/.git/config", f"{carpeta}/o/opencode.json") == 0
+
+
+def test_dependencias_se_saltan_en_cualquier_nivel_y_sin_mayusculas(tmp_path):
+    assert _contar(tmp_path, "packages/x/.venv/lib/CLAUDE.md", "a/.VENV/CLAUDE.md", "b/Vendor/y/.git/config",
+                   "c/DIST/opencode.json") == 0
+
+
+def test_dependencias_no_tapan_proyectos_reales(tmp_path):
+    assert _contar(tmp_path, ".venv/lib/x/CLAUDE.md", "a/CLAUDE.md", "b/.git/config", "c/vendor/z/CLAUDE.md") == 2
+
+
 def test_git_como_archivo_o_config_suelto_no_cuenta(tmp_path):
     assert _contar(tmp_path, "a/.git", "b/config", "c/.claude/otro.json") == 0
 
