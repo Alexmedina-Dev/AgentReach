@@ -314,7 +314,7 @@ To report a vulnerability, read [`SECURITY.md`](SECURITY.md) and use **Security 
 
 ## Contributing
 
-The project is in testing. There is a basic [`CONTRIBUTING.md`](CONTRIBUTING.md). The most useful contributions today are **ideas, design review, and test cases** (for example, well-documented patterns of exposure). Before you propose big changes, open an issue (a discussion thread on GitHub) to talk about them.
+Contributions are welcome. The project is in testing, so the most useful ones today are **bug reports, ideas, design review, test cases** (for example, well-documented patterns of exposure) and **small code fixes**. Pull Requests go to the `development` branch, not `main`: [`CONTRIBUTING.md`](CONTRIBUTING.md) explains it step by step (in Spanish), including how to work from a fork and how to run the tests. Everyone taking part agrees to follow the [Code of Conduct](CODE_OF_CONDUCT.md). Before you propose big changes, open an issue (a discussion thread on GitHub) to talk about them. To report a vulnerability, see [`SECURITY.md`](SECURITY.md) and do not open a public issue.
 
 The project will document how to add a new adapter without changing the core. This is one of the success criteria of the project.
 
