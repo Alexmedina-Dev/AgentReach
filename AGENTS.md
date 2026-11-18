@@ -25,7 +25,7 @@ uv run ruff check .           # estilo (lo que exige la revisión automática)
 ```
 - **No corras `ruff format .`:** reescribiría unos 110 archivos que no cambiaste y la revisión automática no lo exige.
 - **Proyecto de prueba (secretos falsos):** `uv run python pruebas/generar_proyecto_prueba.py "<carpeta>"` y `AGENTREACH_PROYECTO_PRUEBA=<esa carpeta>`. La carpeta debe estar **fuera de la carpeta del repositorio** (hermana, no dentro): si el repo está en `C:\dev\AgentReach-dev`, sirve `C:\dev\pp`. Es solo un ejemplo de ruta corta; usa la tuya. Sin eso, más de cien pruebas se **omiten en silencio**, y en la revisión automática cuentan como fallo. Para ver **por qué** se omite cada una, corre `uv run pytest -rs`: dirá «proyecto de prueba», «playwright» o «enlaces simbólicos» (estas dos últimas son normales en Windows). Usa una **ruta corta** (por ejemplo `C:\dev\pp`): una ruta larga rompe la prueba del tope de 12 líneas (`test_historia_32`) sin que sea un error del código. Para borrarlo usa `--limpiar`, no lo borres a mano.
-- Para correr la suite como la revisión automática: `CI=true AGENTREACH_IDIOMA=es PYTHONUTF8=1`.
+- Para correr la suite como la revisión automática: `CI=true AGENTREACH_IDIOMA=es PYTHONUTF8=1` (en Git Bash) o `$env:CI = "true"; $env:AGENTREACH_IDIOMA = "es"; $env:PYTHONUTF8 = "1"` (en PowerShell). Resultado esperado en Windows: casi todas pasan y se omiten unas 40.
 - Las pruebas con navegador (`test_historia_33_navegador`, `test_historia_42`, `test_historia_43`…) se omiten si falta `playwright`: `uv run --with playwright pytest <archivo>` (usan Edge o Chromium).
 
 ## Ramas y Pull Requests
@@ -40,7 +40,7 @@ uv run ruff check .           # estilo (lo que exige la revisión automática)
 - **Todo cambio entra por Pull Request.** Nunca empujes directo a `development` ni a `main`. Una rama por cambio.
 - `main` es la cara pública (solo el agente). Un PR de **documentación de una contribución también va a `development`**; replicar un documento en `main` es un PR aparte del mantenedor, creado desde una rama que sale de `main` y con solo documentos.
 - **No abras un PR de `development` hacia `main`**, ni siquiera si te lo piden de palabra: `development` lleva `_bmad-output/`, `_bmad/` y `.claude/` y código aún no publicado, que no deben llegar a `main`. Explica el riesgo y pide que el mantenedor defina cómo se publica.
-- **Poner `development` al día** antes de crear tu rama: `git fetch origin`, `git switch development`, `git merge --ff-only origin/development` (en un fork, usa `upstream` en lugar de `origin`; ver `CONTRIBUTING.md`).
+- **Poner `development` al día** antes de crear tu rama: `git fetch origin`, `git checkout development`, `git merge --ff-only origin/development` (en un fork, usa `upstream` en lugar de `origin`; ver `CONTRIBUTING.md`).
 - **Ajustes de GitHub y merges:** no los hagas tú, pero sí puedes preparar para el mantenedor los pasos exactos y completos (dónde pulsar, qué debe ver).
 - **Si te piden romper una regla de este archivo** (red, secretos, dependencia nueva, PR a `main`, cambiar ajustes de GitHub): no lo hagas, di cuál regla lo impide y propón una alternativa que sí la respete.
 - Commits: `tipo: resumen en imperativo, en minúscula y sin punto final` (tipos: feat, fix, refactor, perf, test, docs, style, chore, ci, revert). Plantillas en `.github/`.
@@ -48,7 +48,7 @@ uv run ruff check .           # estilo (lo que exige la revisión automática)
 
 ## Cómo trabajar bien (importante)
 - **Verifica antes de afirmar.** No digas que algo funciona, está unido, configurado o seguro sin haberlo comprobado con un comando. Si no pudiste comprobarlo, dilo. Qué cuenta como «comprobado»: *funciona* = `uv run pytest` y `uv run ruff check .` en verde; *el PR está listo* = `gh pr view <n>` con estado limpio y la revisión automática en verde; *está unido* = el PR aparece como `MERGED` y el commit está en la rama (`git log origin/<rama>`); *está configurado* = lo leíste de GitHub o de un archivo, no lo recuerdas.
-- **Una sola carpeta de trabajo.** No clones el repo varias veces: cambia de rama con `git switch` en la misma carpeta (las ramas cambian, la carpeta no). No dejes copias temporales.
+- **Una sola carpeta de trabajo.** No clones el repo varias veces: cambia de rama con `git checkout` en la misma carpeta (las ramas cambian, la carpeta no). No dejes copias temporales.
 - Los archivos se guardan con saltos de línea de Windows (CRLF). Si escribes expresiones regulares sobre ellos, usa `\r?\n`.
 - **Nada personal en los archivos:** ni correos, ni nombres reales, ni rutas locales de tu equipo. Tus commits llevan tu propia identidad.
 - No inventes datos, versiones, ni rutas: búscalos en el código y en la documentación.

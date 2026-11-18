@@ -9,7 +9,7 @@ Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en
 ## Dónde empezar y qué esperar
 
 - **Aportes bienvenidos:** reportes de errores, ideas, revisión del diseño, casos de prueba (por ejemplo, patrones de exposición bien documentados) y correcciones pequeñas de código.
-- **Por dónde entrar:** busca las *issues* con la etiqueta [`good first issue`](https://github.com/Alexmedina-Dev/AgentReach/labels/good%20first%20issue) o [`help wanted`](https://github.com/Alexmedina-Dev/AgentReach/labels/help%20wanted). Si aún no hay ninguna que te sirva, abre una *issue* contando qué quieres hacer **antes** de empezar un cambio grande.
+- **Por dónde entrar:** busca las *issues* con la etiqueta [`good first issue`](https://github.com/Alexmedina-Dev/AgentReach/labels/good%20first%20issue) o [`help wanted`](https://github.com/Alexmedina-Dev/AgentReach/labels/help%20wanted). Si aún no hay ninguna que te sirva, abre una *issue* contando qué quieres hacer **antes** de empezar un cambio grande. Si tomas una issue existente, comenta en ella que la tomas antes de programar, para que nadie la repita.
 - **Tiempos:** quien mantiene el repositorio revisa los Pull Requests cuando puede; no hay un plazo garantizado.
 - **Licencia de tu aporte:** al enviar un Pull Request, tu aporte se publica bajo la licencia Apache-2.0 del proyecto (sección 5 de la licencia).
 - **Sistemas:** hoy el proyecto se prueba solo en Windows (la revisión automática corre en Windows). Si usas macOS o Linux, tu aporte es bienvenido: dilo en el Pull Request, porque las pruebas pueden comportarse distinto.
@@ -79,6 +79,23 @@ Tengas el permiso que tengas, **trabaja en una sola carpeta**: las ramas cambian
 
 ## Correr las pruebas y el estilo
 
+**Inicio rápido, en orden** (la primera vez, en PowerShell; la suite completa tarda unos 3 minutos):
+
+```powershell
+uv sync                                                        # 1. el entorno
+uv run python pruebas/generar_proyecto_prueba.py "C:\dev\pp"   # 2. el proyecto de prueba (fuera del repo, con ruta corta)
+$env:AGENTREACH_PROYECTO_PRUEBA = "C:\dev\pp"                  # 3. dile a las pruebas dónde está
+$env:AGENTREACH_IDIOMA = "es"; $env:PYTHONUTF8 = "1"           # 4. mensajes en español y UTF-8
+uv run pytest                                                  # 5. las pruebas
+uv run ruff check .                                            # 6. el estilo
+```
+
+En Git Bash es lo mismo, con `export` en lugar de `$env:` (por ejemplo `export AGENTREACH_PROYECTO_PRUEBA='C:\dev\pp'`).
+
+**Resultado esperado en Windows**, sin modo desarrollador y sin `playwright`: pasan casi todas (unas 1900) y se omiten unas 40 (enlaces simbólicos, navegador y pruebas solo para POSIX). Un fallo es real: corrígelo antes de abrir el Pull Request. Para reproducir exactamente la revisión automática de GitHub añade `$env:CI = "true"`: así las pruebas que se omitirían por falta del proyecto de prueba cuentan como fallo.
+
+Estos son los mismos comandos con más detalle:
+
 ```powershell
 uv run pytest        # pruebas
 uv run ruff check .  # revisión de estilo
@@ -93,16 +110,19 @@ Varias pruebas, entre ellas todas las de reglas no negociables y las del orácul
 
 ```powershell
 # 1. Genera el proyecto de prueba en una carpeta fuera del repositorio
-uv run python pruebas/generar_proyecto_prueba.py "C:\dev\proyecto-prueba-agentreach"
+uv run python pruebas/generar_proyecto_prueba.py "C:\dev\pp"
 
 # 2. Dile a las pruebas dónde está
-$env:AGENTREACH_PROYECTO_PRUEBA = "C:\dev\proyecto-prueba-agentreach"
+$env:AGENTREACH_PROYECTO_PRUEBA = "C:\dev\pp"
 
 # 3. Corre las pruebas
 uv run pytest
 ```
 
 - **Sin la variable `AGENTREACH_PROYECTO_PRUEBA`, más de cien pruebas se omiten** (*skipped*) en silencio. En GitHub, la revisión automática (CI) las trata como fallos, así que conviene correrlas con el proyecto de prueba antes de abrir tu Pull Request.
+- **Usa una ruta corta** (como `C:\dev\pp`): una ruta larga rompe la prueba del tope de 12 líneas (`test_historia_32`) aunque tu código esté bien.
+- Si tu Windows no permite enlaces simbólicos, el generador imprime `symlink: no creado - OSError: [WinError 1314]`. Es lo esperado, no un error.
+- Las pruebas con navegador (reporte HTML) se omiten si falta `playwright`; la revisión automática de GitHub tampoco las corre. Para correrlas tú: `uv run --with playwright pytest tests/test_historia_42.py` (usan Edge o Chromium).
 - Las pruebas esperan los mensajes en español. Si tu sistema está en otro idioma, usa también `$env:AGENTREACH_IDIOMA = "es"` y `$env:PYTHONUTF8 = "1"`, como hace `.github/workflows/ci.yml`.
 - Las pruebas de enlaces simbólicos se omiten en Windows si tu usuario no puede crearlos (hace falta el modo desarrollador o ser administrador). GitHub sí las corre.
 - Para quitar el proyecto de prueba usa `uv run python pruebas/generar_proyecto_prueba.py --limpiar "<carpeta>"`. Bórralo así y no a mano: el generador deja algunos archivos con permisos negados a propósito.
@@ -133,6 +153,7 @@ Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 | `PruebaAlex` | Archivo de la etapa anterior del proyecto. Ya no se usa: no se contribuye ahí. |
 
 - Crea tu rama desde `development` y abre el Pull Request hacia `development`, nunca hacia `main`.
+- **Nombre de la rama:** corto y que diga qué haces; puedes usar el tipo del commit como prefijo (`fix/ignorar-venv`, `docs/mejorar-guia`). No hay un formato obligatorio.
 - La plantilla `.github/pull_request_template.md` se llena sola con `bmad-create-pr` si usas BMAD; si no, llénala a mano. Antes de abrir el PR corre `uv run pytest` y `uv run ruff check .`: la revisión automática hace lo mismo y debe quedar en verde.
 - Las ramas protegidas y su configuración las gestiona solo la persona dueña del repositorio.
 - Mensajes de commit según `.github/commit_template.md`: `tipo: resumen en imperativo, en minúscula y sin punto final`.
