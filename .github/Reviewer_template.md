@@ -75,7 +75,7 @@ Si de verdad bloquea, usa `issue:`. No lo suavices como `nit:`: eso enseña a ig
 ## Para quien mantiene el repositorio
 
 * [ ] Se une con **«Create a merge commit»**, y solo si la revisión automática pasó
-* [ ] Si el PR dice `Closes #N`, la issue se cierra sola al unirlo; si no, ciérrala con un comentario
+* [ ] **Cierra la issue a mano.** Aunque el PR diga `Closes #N`, GitHub solo cierra la issue sola cuando el PR se une a la rama principal (`main`), y estos PRs van a `development`. Ciérrala con un comentario (por ejemplo, el de agradecimiento)
 * [ ] Una contribución nunca cambia las reglas del proyecto ni los ajustes de GitHub
 
 ---
