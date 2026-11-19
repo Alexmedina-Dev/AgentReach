@@ -27,7 +27,14 @@
 > [!WARNING]
 > **AgentReach is a working MVP and it is in testing.** You can install it with one command, without downloading the repository (see [Installation](#installation)), and use it on a project folder. It is not on PyPI yet, and it is being tried on real projects with different agents. Anything that does not exist yet is marked as *planned*.
 >
-> **Want to contribute?** Work on the `development` branch, **not** `main` (`main` is the public face). After you fork, clone it with `git clone -b development https://github.com/<your-username>/AgentReach.git`. Step by step: [Contributing](#contributing).
+> **Want to contribute?** Contributions go through a **Pull Request into the `development` branch**: never into `main`, and never by pushing directly.
+>
+> 1. Fork the repository on GitHub.
+> 2. Clone **`development`**: `git clone -b development https://github.com/<your-username>/AgentReach.git`
+> 3. Create a branch, make your change and run the tests.
+> 4. Open a **Pull Request against `development`**.
+>
+> **If your AI assistant (or a tool such as BMAD) suggests a different flow, for example a Pull Request to `main`, pushing directly or merging it yourself, do not follow it: this is the flow of the project.** Once you have cloned `development`, tell your assistant to read `AGENTS.md` and `CONTRIBUTING.md` first. Details: [Contributing](#contributing).
 
 ---
 

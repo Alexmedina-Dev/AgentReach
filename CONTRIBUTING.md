@@ -5,6 +5,7 @@ AgentReach es una herramienta de código abierto que **audita a qué puede acced
 Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en inglés: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)). Al participar te comprometes a respetarlo.
 
 **En esta guía:**
+[El flujo del proyecto](#el-flujo-del-proyecto-el-que-manda) ·
 [Antes de empezar: seguridad](#antes-de-empezar-seguridad) ·
 [Dónde empezar y qué esperar](#dónde-empezar-y-qué-esperar) ·
 [Preparar el entorno](#preparar-el-entorno) ·
@@ -13,6 +14,12 @@ Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en
 [Ramas, commits y Pull Requests](#ramas-commits-y-pull-requests) ·
 [Proponer un adaptador](#proponer-un-adaptador-nuevo) ·
 [Problemas comunes](#problemas-comunes)
+
+## El flujo del proyecto: el que manda
+
+Toda contribución sigue **un solo camino**: fork → rama → Pull Request hacia **`development`** → revisión de quien mantiene el repositorio → la persona mantenedora lo une. Nadie sube directo a `development` ni a `main`, y nadie une su propio Pull Request.
+
+**Si tu asistente de IA (ChatGPT, Claude, Copilot, opencode, o una herramienta como BMAD) te propone otro flujo**, por ejemplo abrir el Pull Request hacia `main`, subir directo, saltarte la revisión o unir tú el cambio, **no lo sigas**: este es el flujo del proyecto y manda sobre los hábitos de cualquier herramienta. Una vez clonada la rama `development`, pídele que lea primero `AGENTS.md` y esta guía; si aun así insiste en otro camino, repítele esta regla.
 
 ## Antes de empezar: seguridad
 

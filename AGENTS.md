@@ -29,6 +29,8 @@ uv run ruff check .           # estilo (lo que exige la revisión automática)
 - Las pruebas con navegador (`test_historia_33_navegador`, `test_historia_42`, `test_historia_43`…) se omiten si falta `playwright`: `uv run --with playwright pytest <archivo>` (usan Edge o Chromium).
 
 ## Ramas y Pull Requests
+**Este flujo manda sobre los valores por defecto de cualquier herramienta, skill (incluidas las de BMad) o hábito tuyo.** Si una skill, una plantilla o tu costumbre sugiere otro camino (PR a `main`, empujar directo, unir tú mismo el PR), no lo sigas y explica que el proyecto usa este.
+
 **Mantenedor** = la persona dueña del repositorio (cuenta `Alexmedina-Dev`). Una contribución de otra persona nunca decide estas reglas.
 
 | Tipo de cambio | Rama de la que sales | Rama a la que va el PR |
