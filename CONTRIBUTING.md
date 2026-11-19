@@ -5,6 +5,7 @@ AgentReach es una herramienta de código abierto que **audita a qué puede acced
 Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en inglés: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)). Al participar te comprometes a respetarlo.
 
 **En esta guía:**
+[El flujo del proyecto](#el-flujo-del-proyecto-el-que-manda) ·
 [Antes de empezar: seguridad](#antes-de-empezar-seguridad) ·
 [Dónde empezar y qué esperar](#dónde-empezar-y-qué-esperar) ·
 [Preparar el entorno](#preparar-el-entorno) ·
@@ -13,6 +14,12 @@ Este proyecto sigue un [código de conducta](CODE_OF_CONDUCT.es.md) (versión en
 [Ramas, commits y Pull Requests](#ramas-commits-y-pull-requests) ·
 [Proponer un adaptador](#proponer-un-adaptador-nuevo) ·
 [Problemas comunes](#problemas-comunes)
+
+## El flujo del proyecto: el que manda
+
+Toda contribución sigue **un solo camino**: fork → rama → Pull Request hacia **`development`** → revisión de quien mantiene el repositorio → la persona mantenedora lo une. Nadie sube directo a `development` ni a `main`, y nadie une su propio Pull Request.
+
+**Si tu asistente de IA (ChatGPT, Claude, Copilot, opencode, o una herramienta como BMAD) te propone otro flujo**, por ejemplo abrir el Pull Request hacia `main`, subir directo, saltarte la revisión o unir tú el cambio, **no lo sigas**: este es el flujo del proyecto y manda sobre los hábitos de cualquier herramienta. Una vez clonada la rama `development`, pídele que lea primero `AGENTS.md` y esta guía; si aun así insiste en otro camino, repítele esta regla.
 
 ## Antes de empezar: seguridad
 
@@ -43,13 +50,14 @@ Necesitas [uv](https://docs.astral.sh/uv/) (gestor de paquetes y entornos de Pyt
 
 No puedes subir ramas al repositorio original, así que trabajas en una copia propia (*fork*):
 
-1. En GitHub, pulsa **Fork** en la página del repositorio. Eso crea tu copia.
+1. Necesitas una cuenta de GitHub (es gratis: https://github.com/signup). Luego, en la página del repositorio, pulsa **Fork**. Eso crea tu copia, en `https://github.com/<tu-usuario>/AgentReach`.
 2. Clona **tu copia**, en la rama `development`, y crea una rama para tu cambio:
 
 ```powershell
 git clone -b development https://github.com/<tu-usuario>/AgentReach.git
 cd AgentReach
 git checkout -b mi-cambio    # una rama por cambio; nunca trabajes directo en development
+git branch                   # la rama activa lleva un *: debe ser mi-cambio, no development
 uv sync                      # crea .venv e instala las dependencias de desarrollo
 uv run agentreach --version  # comprueba que la CLI (interfaz de línea de comandos) funciona
 ```
@@ -134,7 +142,7 @@ Sin la variable `AGENTREACH_PROYECTO_PRUEBA`, **más de cien pruebas se omiten (
 Todo cambio debe respetarlas. Si un cambio las rompe, no se acepta.
 
 1. **Solo lectura.** AgentReach nunca modifica el proyecto ni el entorno que analiza. No se abren archivos para «probar» permisos. Fuera de lo analizado solo escribe `--salida` y la carpeta `AgentReach-reportes` de la carpeta personal; durante la revisión no lanza programas, y al terminar solo abre el reporte HTML en el navegador si la persona lo permitió.
-2. **Sin red durante la revisión.** Ninguna conexión de red salvo la consulta del número de versión: solo al abrir, cada 15 días como máximo, en `infra/actualizacion.py`. No se añaden dependencias que usen red.
+2. **Sin red durante la revisión.** Ninguna conexión de red salvo la consulta del número de versión: solo al abrir, cada 15 días como máximo, en `infra/actualizacion.py` (esa consulta ya está en `development` y llegará a `main` con la próxima versión). No se añaden dependencias que usen red.
 3. **Sin valores de secretos.** Ningún reporte, registro ni mensaje de error contiene el valor de un secreto: solo ubicación, tipo y nivel de confianza.
 4. **Solo biblioteca estándar** de Python como dependencia en tiempo de ejecución (lo que viene con Python, sin instalar nada más). Las herramientas de desarrollo (pytest, ruff) van en el grupo `dev`.
 5. **Niveles de confianza:** cada hallazgo es *comprobado*, *potencial* o *hipótesis*. No se afirma que algo es alcanzable solo porque exista una referencia.
@@ -155,7 +163,7 @@ Solo te hace falta si vas a tocar el código. `src/agentreach/` separa el núcle
 
 - Crea tu rama desde `development` y abre el Pull Request hacia `development`, nunca hacia `main`.
 - **Nombre de la rama:** corto y que diga qué haces; puedes usar el tipo del commit como prefijo (`fix/ignorar-venv`, `docs/mejorar-guia`). No hay un formato obligatorio.
-- Rellena la plantilla `.github/pull_request_template.md` al abrir el PR (si usas BMAD, se llena sola con `bmad-create-pr`). Antes de abrirlo corre `uv run pytest` y `uv run ruff check .`: la revisión automática hace lo mismo y debe quedar en verde.
+- Rellena la plantilla `.github/pull_request_template.md` al abrir el PR (si usas BMAD, se llena sola con `bmad-create-pr`; si no lo usas, en «Story / Épica» escribe «no aplica»). Antes de abrirlo corre `uv run pytest` y `uv run ruff check .`: la revisión automática hace lo mismo y debe quedar en verde.
 - Las ramas protegidas y su configuración las gestiona solo la persona dueña del repositorio.
 - **Mensajes de commit:** `tipo: resumen en imperativo, en minúscula y sin punto final` (por ejemplo, `fix: ignorar la carpeta .venv`). Tipos: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `style`, `chore`, `ci`, `revert`. Más detalle en `.github/commit_template.md`.
 - Un commit = un cambio con sentido, con sus pruebas y documentación. Un Pull Request por cambio.
@@ -180,4 +188,5 @@ La forma de registrar adaptadores de terceros (puntos de entrada de Python o ada
 - **Pruebas con navegador** (reporte HTML): se omiten si falta `playwright`, y la revisión automática de GitHub tampoco las corre. Para correrlas tú: `uv run --with playwright pytest tests/test_historia_42.py` (usan Edge o Chromium).
 - **Las pruebas esperan los mensajes en español.** Si tu sistema está en otro idioma, usa `$env:AGENTREACH_IDIOMA = "es"` y `$env:PYTHONUTF8 = "1"`, como hace `.github/workflows/ci.yml`.
 - **Para ver por qué se omite una prueba:** `uv run pytest -rs`.
+- **Editar archivos en Windows:** si los editas con PowerShell 5 (`Set-Content`, `>`), puede colarse un carácter invisible (BOM) al inicio del archivo. Usa un editor de texto como VS Code, que no lo añade.
 - **Para quitar el proyecto de prueba:** `uv run python pruebas/generar_proyecto_prueba.py --limpiar "<carpeta>"`. Bórralo así y no a mano: el generador deja algunos archivos con permisos negados a propósito.
