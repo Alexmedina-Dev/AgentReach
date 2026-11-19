@@ -328,7 +328,7 @@ Distributed under the **Apache License 2.0**. See [`LICENSE`](LICENSE). Everyone
 
 Created by **Alex Medina** ([@Alexmedina-Dev](https://github.com/Alexmedina-Dev)). The planning follows the [BMAD](https://github.com/bmad-code-org/bmad-method) method. The work is supported by AI agents, which are exactly the kind of tool that AgentReach wants to audit.
 
-Thank you to everyone who contributes. First external contribution: **Ismail Duran**, who made the multi-project notice ignore dependency folders (`.venv`, `vendor`, `dist` and similar).
+Thank you to everyone who contributes to AgentReach with bug reports, ideas, reviews and code. The people who have contributed are listed on the [contributors page](https://github.com/Alexmedina-Dev/AgentReach/graphs/contributors).
 
 <p align="center">
   <img src="assets/agentreach-badge.png" alt="Audited with AgentReach" width="260"><br>
