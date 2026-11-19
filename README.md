@@ -27,7 +27,15 @@
 > [!WARNING]
 > **AgentReach is a working MVP and it is in testing.** You can install it with one command, without downloading the repository (see [Installation](#installation)), and use it on a project folder. It is not on PyPI yet, and it is being tried on real projects with different agents. Anything that does not exist yet is marked as *planned*.
 >
-> **Want to contribute?** Contributions go through a **Pull Request into the `development` branch**: never into `main`, and never by pushing directly.
+> **Just want to use it?** You do not need to download or clone anything. This one command installs the program from `main`, the public branch with the released version:
+>
+> ```powershell
+> uv tool install git+https://github.com/Alexmedina-Dev/AgentReach
+> ```
+>
+> Details in [Installation](#installation).
+>
+> **Want to contribute?** That is a different path, and it starts from `development`, not from `main`. Contributions go through a **Pull Request into the `development` branch**: never into `main`, and never by pushing directly.
 >
 > 1. Fork the repository on GitHub.
 > 2. Clone **`development`**: `git clone -b development https://github.com/<your-username>/AgentReach.git`
