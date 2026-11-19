@@ -320,11 +320,15 @@ The project will document how to add a new adapter without changing the core. Th
 
 ## License
 
-Distributed under the **Apache License 2.0**. See [`LICENSE`](LICENSE).
+Copyright 2026 **Alexmedina-Dev and AgentReach contributors**. See [`NOTICE`](NOTICE).
+
+Distributed under the **Apache License 2.0**. See [`LICENSE`](LICENSE). Everyone who contributes keeps the copyright of their own contribution and shares it under that same license.
 
 ## Credits
 
 Created by **Alex Medina** ([@Alexmedina-Dev](https://github.com/Alexmedina-Dev)). The planning follows the [BMAD](https://github.com/bmad-code-org/bmad-method) method. The work is supported by AI agents, which are exactly the kind of tool that AgentReach wants to audit.
+
+Thank you to everyone who contributes to AgentReach with bug reports, ideas, reviews and code. The people who have contributed are listed on the [contributors page](https://github.com/Alexmedina-Dev/AgentReach/graphs/contributors).
 
 <p align="center">
   <img src="assets/agentreach-badge.png" alt="Audited with AgentReach" width="260"><br>
