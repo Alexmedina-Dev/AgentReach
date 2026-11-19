@@ -26,6 +26,23 @@
 
 > [!WARNING]
 > **AgentReach is a working MVP and it is in testing.** You can install it with one command, without downloading the repository (see [Installation](#installation)), and use it on a project folder. It is not on PyPI yet, and it is being tried on real projects with different agents. Anything that does not exist yet is marked as *planned*.
+>
+> **Just want to use it?** You do not need to download or clone anything. This one command installs the program from `main`, the public branch with the released version:
+>
+> ```powershell
+> uv tool install git+https://github.com/Alexmedina-Dev/AgentReach
+> ```
+>
+> Details in [Installation](#installation).
+>
+> **Want to contribute?** That is a different path, and it starts from `development`, not from `main`. Contributions go through a **Pull Request into the `development` branch**: never into `main`, and never by pushing directly.
+>
+> 1. Fork the repository on GitHub.
+> 2. Clone **`development`**: `git clone -b development https://github.com/<your-username>/AgentReach.git`
+> 3. Create a branch, make your change and run the tests.
+> 4. Open a **Pull Request against `development`**.
+>
+> **If your AI assistant (or a tool such as BMAD) suggests a different flow, for example a Pull Request to `main`, pushing directly or merging it yourself, do not follow it: this is the flow of the project.** Once you have cloned `development`, tell your assistant to read `AGENTS.md` and `CONTRIBUTING.md` first. Details: [Contributing](#contributing).
 
 ---
 
@@ -332,5 +349,5 @@ Thank you to everyone who contributes to AgentReach with bug reports, ideas, rev
 
 <p align="center">
   <img src="assets/agentreach-badge.png" alt="Audited with AgentReach" width="260"><br>
-  <sub>Brand badge "Audited with AgentReach". It does not represent any real audit yet: the tool does not exist yet.</sub>
+  <sub>Brand badge "Audited with AgentReach". It is not a certification: it does not represent any real audit.</sub>
 </p>
