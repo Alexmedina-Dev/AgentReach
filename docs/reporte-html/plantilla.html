@@ -837,6 +837,7 @@ const S={agent:'',levels:new Set(),folder:'all',type:'all',q:'',view:'graph',sel
 const t=()=>T[lang];
 /* a level "not determined" says WHY: the file and the key AgentReach does not interpret (no values) */
 const ndText=(nd,lg)=>nd.map(x=>x.path+(x.key?' · '+x.key:'')).join('; ');
+const joinDot=(a,b)=>[a,b].filter(Boolean).join(' \u00b7 ');
 const ndWhere=(nd,lg)=>[nd.some(x=>/^~/.test(x.path||''))?T[lg].ndUser:'',nd.some(x=>!/^~/.test(x.path||''))?T[lg].ndProject:''].filter(Boolean).join(' ');
 const ndHint=(nd,lg)=>nd.some(x=>/^hooks\./.test(x.key||''))?' ('+T[lg].ndHooks+')':'';
 F.forEach(f=>{if(f.nd&&f.nd.length){['en','es'].forEach(lg=>{f.why[lg]=f.why[lg]+' — '+T[lg].ndBecause+': '+ndText(f.nd)+ndHint(f.nd,lg)+'. '+ndWhere(f.nd,lg)+' '+T[lg].ndWhy;});}});
@@ -1041,7 +1042,7 @@ function lvBadge(l){return '<span class="lvbadge lv-'+K[l]+'">'+ico(l,'sm')+esc(
 function detailHTML(f,skipHow){
   const T_=t(),F8=T_.f;
   const un=f.unrelated_to_task==='yes'?'<span class="unrel-yes">'+esc(unrelText(f))+'</span>':esc(unrelText(f));
-  const lines=['<code>'+esc(f.path)+'</code> · '+esc(T_.line(f.line)),esc(L(f.what))+' · '+esc(L(f.whose)),lvBadge(f.level)+' '+esc(L(f.why)),un,esc(agentName(f.agent)),esc(L(f.agent_rules)),howHTML(f),esc(L(f.meaning))];
+  const lines=['<code>'+esc(f.path)+'</code> · '+esc(T_.line(f.line)),esc(joinDot(L(f.what),L(f.whose))),lvBadge(f.level)+' '+esc(L(f.why)),un,esc(agentName(f.agent)),esc(L(f.agent_rules)),howHTML(f),esc(L(f.meaning))];
   const note=f.level==='verified'?T_.chainV:T_.chainO;
   return '<div class="actions"><span class="mono" style="align-self:center"><b>'+esc(f.id)+'</b></span><button type="button" class="btn" data-copy-path="'+f.id+'">'+esc(T_.copyPath)+'</button><button type="button" class="btn" data-copy-link="'+f.id+'">'+esc(T_.copyLink)+'</button></div><p class="chaincheck">'+esc(note)+'</p><dl class="f">'+lines.map((h,i)=>(skipHow&&i===6)?'':'<div'+(i===6?' class="act"':'')+'><dt><b>'+(i+1)+'</b> '+esc(F8[i])+'</dt><dd>'+h+'</dd></div>').join('')+'</dl>';
 }
@@ -1094,7 +1095,7 @@ function renderTable(){
     const open=S.open.has(f.id)||(S.sel&&S.sel.kind==='f'&&S.sel.id===f.id&&S.open.has(f.id));
     h+='<tr class="r'+(S.sel&&S.sel.id===f.id?' sel':'')+'" data-f="'+f.id+'"><td class="lvc" data-l="'+esc(T_.th.lv)+'"><span class="lvname lv-'+K[f.level]+'">'+ico(f.level,'sm')+esc(lvName(f.level))+'</span></td>'+
       '<td data-l="'+esc(T_.th.id)+'"><span class="mono">'+esc(f.id)+'</span></td>'+
-      '<td class="wh" data-l="'+esc(T_.th.where)+'"><code>'+esc(f.path)+':'+(f.line==null?'–':f.line)+'</code><button type="button" class="cp" data-copy-path="'+f.id+'" aria-label="'+esc(T_.copyPath+': '+f.path+':'+(f.line==null?'':f.line))+'" title="'+esc(T_.copyPath)+'">⧉</button></td>'+
+      '<td class="wh" data-l="'+esc(T_.th.where)+'"><code>'+esc(f.path)+(f.line==null?'':':'+f.line)+'</code><button type="button" class="cp" data-copy-path="'+f.id+'" aria-label="'+esc(T_.copyPath+': '+f.path+':'+(f.line==null?'':f.line))+'" title="'+esc(T_.copyPath)+'">⧉</button></td>'+
       '<td data-l="'+esc(T_.th.type)+'">'+esc(L(f.what))+'</td>'+
       '<td data-l="'+esc(T_.th.eff)+'">'+esc(L(f.whose))+'<span class="nclabel">'+esc(T_.notChecked)+'</span></td>'+
       '<td class="ag" data-l="'+esc(T_.th.agent)+'">'+esc(AGN())+'</td>'+
@@ -1205,8 +1206,8 @@ function renderPrint(){
   h+='<h2>'+esc(T_.cfgTitle)+'</h2>'+(CFG.length?CFG.map(c=>'<div class="det"><b>'+esc(c.name)+' · '+esc(T_.confBadge[c.conf])+'</b>'+(c.framework?'<br><i>'+esc(T_.frameworkOn(c.on))+'</i>':'')+'<ul>'+c.evidence.map(e=>'<li>'+esc(scopeName(e.scope))+': <code>'+esc(e.path)+'</code></li>').join('')+'</ul></div>').join(''):'<p>'+esc(T_.cfgNone)+'</p>')+(UNDET.length?UNDET.map(u=>'<p><b>'+esc(T_.undetTitle)+':</b> '+esc(T_.undetText(u.path,u.cands))+'</p>').join(''):'')+(CFG.length?'<p><i>'+esc(T_.cfgNote)+'</i></p>':'');
   h+='<h2>'+esc(T_.sumTitle)+'</h2><p class="sumline"><span>'+esc(T_.total)+': '+agentF().length+'</span><span>'+esc(counts)+'</span><span>'+esc(T_.shown(n,agentF().length))+'</span></p><p>'+esc(T_.printFilters)+': '+esc(filt.length?filt.join(' · '):T_.none)+'</p>';
   h+='<h2>'+esc(T_.table)+'</h2><table><thead><tr><th>'+esc(T_.th.lv)+'</th><th>'+esc(T_.th.id)+'</th><th>'+esc(T_.th.where)+'</th><th>'+esc(T_.th.type)+'</th><th>'+esc(T_.th.eff)+'</th></tr></thead><tbody>'+
-    fs.map(f=>'<tr><td class="lvp">'+pico(f.level)+' '+esc(lvName(f.level))+'</td><td><code>'+esc(f.id)+'</code></td><td><code>'+esc(f.path)+':'+(f.line==null?'–':f.line)+'</code></td><td>'+esc(L(f.what))+'</td><td>'+esc(L(f.whose))+' <i>('+esc(T_.notChecked)+')</i></td></tr>').join('')+'</tbody></table>';
-  h+='<h2>'+esc(T_.details)+' ('+n+')</h2>'+fs.map(f=>'<div class="det"><b>'+esc(f.id)+' · '+esc(lvName(f.level))+'</b><dl>'+T_.f.map((k,i)=>{const v=[f.path+' · '+T_.line(f.line),L(f.what)+' · '+L(f.whose),lvName(f.level)+'. '+L(f.why),unrelText(f),AGN(),L(f.agent_rules),howText(f),L(f.meaning)][i];return '<dt>'+(i+1)+'. '+esc(k)+'</dt><dd>'+esc(v)+'</dd>';}).join('')+'</dl></div>').join('');
+    fs.map(f=>'<tr><td class="lvp">'+pico(f.level)+' '+esc(lvName(f.level))+'</td><td><code>'+esc(f.id)+'</code></td><td><code>'+esc(f.path)+(f.line==null?'':':'+f.line)+'</code></td><td>'+esc(L(f.what))+'</td><td>'+esc(L(f.whose))+' <i>('+esc(T_.notChecked)+')</i></td></tr>').join('')+'</tbody></table>';
+  h+='<h2>'+esc(T_.details)+' ('+n+')</h2>'+fs.map(f=>'<div class="det"><b>'+esc(f.id)+' · '+esc(lvName(f.level))+'</b><dl>'+T_.f.map((k,i)=>{const v=[f.path+' · '+T_.line(f.line),joinDot(L(f.what),L(f.whose)),lvName(f.level)+'. '+L(f.why),unrelText(f),AGN(),L(f.agent_rules),howText(f),L(f.meaning)][i];return '<dt>'+(i+1)+'. '+esc(k)+'</dt><dd>'+esc(v)+'</dd>';}).join('')+'</dl></div>').join('');
   const tool=TOOL_LIMITS[lang].length?TOOL_LIMITS[lang]:TOOL_LIMITS.en;
   h+='<h2>'+esc(T_.limTitle)+'</h2><p>'+esc(T_.limLead)+'</p>'+NOTREV.map(l=>'<div class="nc2"><b>'+esc(T_.partFolder)+' · '+esc(L(l.title))+' ('+l.items.length+')</b><br><code>'+l.items.map(esc).join(', ')+'</code>'+(L(l.how)?'<br>'+esc(T_.fix)+': '+esc(L(l.how)):'')+'</div>').join('')+
     '<div class="nc2"><b>'+esc(T_.partTool)+'</b><ol>'+tool.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>'+(LIMITS_ALSO?esc(L(LIMITS_ALSO)):'')+'</div></article>';
