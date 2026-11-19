@@ -26,6 +26,8 @@
 
 > [!WARNING]
 > **AgentReach is a working MVP and it is in testing.** You can install it with one command, without downloading the repository (see [Installation](#installation)), and use it on a project folder. It is not on PyPI yet, and it is being tried on real projects with different agents. Anything that does not exist yet is marked as *planned*.
+>
+> **Want to contribute?** Work on the `development` branch, **not** `main` (`main` is the public face). After you fork, clone it with `git clone -b development https://github.com/<your-username>/AgentReach.git`. Step by step: [Contributing](#contributing).
 
 ---
 
@@ -336,5 +338,5 @@ The `_bmad/` and `.claude/skills/` folders of the `development` branch come from
 
 <p align="center">
   <img src="assets/agentreach-badge.png" alt="Audited with AgentReach" width="260"><br>
-  <sub>Brand badge "Audited with AgentReach". It does not represent any real audit yet: the tool does not exist yet.</sub>
+  <sub>Brand badge "Audited with AgentReach". It is not a certification: it does not represent any real audit.</sub>
 </p>
