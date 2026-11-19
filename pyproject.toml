@@ -4,7 +4,8 @@ version = "0.1.0.dev0"
 description = "Audita, en solo lectura, a qué puede acceder un agente de IA."
 readme = "README.md"
 license = "Apache-2.0"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Alexmedina-Dev and AgentReach contributors" }]
 requires-python = ">=3.12"
 # Solo biblioteca estándar en tiempo de ejecución (decisión del proyecto).
 dependencies = []
