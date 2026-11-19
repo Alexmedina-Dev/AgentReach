@@ -164,7 +164,7 @@ def test_la_plantilla_muestra_y_exporta_el_por_que():
     from agentreach.reporting.html import _plantilla
 
     plantilla = _plantilla()
-    for esperado in ("not_determined", "ndBecause", "ndNote", "not_determined_by", 'id="ndnote"', "ndWhy", "ndHooks"):
+    for esperado in ("not_determined", "ndBecause", "ndNote", "not_determined_by", 'id="ndnote"', "ndWhy", "ndHooks", "ndUser", "ndProject"):
         assert esperado in plantilla, esperado
 
 
@@ -208,6 +208,8 @@ def test_en_el_navegador_el_por_que_sale_en_el_detalle_y_en_las_exportaciones(mu
     assert "hooks.PreToolUse" in nota and "~/.claude/settings.json" in nota
     # en palabras normales: qué son los hooks y por qué el nivel no pasa de «Potencial»
     assert "programas que se ejecutan antes o después de cada acción del agente" in nota and "no afirma más que" in nota
+    # y de dónde sale el archivo: ~/.claude/settings.json está en el usuario, no en la carpeta revisada
+    assert "carpeta personal de usuario, fuera de la carpeta que revisaste" in nota
     pg.evaluate("window.__ar.setView('list')")
     pg.wait_for_timeout(100)
     pg.click("button[data-row]")
@@ -217,6 +219,7 @@ def test_en_el_navegador_el_por_que_sale_en_el_detalle_y_en_las_exportaciones(mu
     filas = json.loads(Path(descarga.value.path()).read_text(encoding="utf-8"))["findings"]
     assert any("hooks.PreToolUse" in f.get("not_determined_by", "") for f in filas) and SECRETO not in json.dumps(filas)
     assert any("programs that run before or after each agent action" in f.get("why", "") for f in filas)
+    assert any("outside the folder you reviewed" in f.get("why", "") for f in filas)
     with pg.expect_download() as descarga:
         pg.click("button:has-text('CSV')")
     contenido = Path(descarga.value.path()).read_text(encoding="utf-8")
