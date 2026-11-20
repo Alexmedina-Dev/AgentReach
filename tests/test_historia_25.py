@@ -226,3 +226,35 @@ def test_en_el_navegador_el_por_que_sale_en_el_detalle_y_en_las_exportaciones(mu
     filas_csv = list(csv.DictReader(io.StringIO(contenido)))
     assert any("hooks.PreToolUse" in f["not_determined_by"] for f in filas_csv) and SECRETO not in contenido
     assert not errores
+
+
+# ---- separadores que no cuelgan: sin «de quién» no hay « · » sobrante, y sin línea no hay «:–» ------------------------------------
+
+
+def test_la_plantilla_no_deja_separadores_colgando():
+    from agentreach.reporting.html import _plantilla
+
+    plantilla = _plantilla()
+    assert "joinDot" in plantilla
+    assert "' · '+esc(L(f.whose))" not in plantilla and "L(f.what)+' · '+L(f.whose)" not in plantilla
+    assert "+':'+(f.line==null?'–':f.line)" not in plantilla
+
+
+def test_en_el_navegador_no_cuelgan_separadores_cuando_falta_el_dueno_o_la_linea(mundo, tmp_path, navegador, capsys):
+    destino = tmp_path / "r.html"
+    assert cli.main([str(mundo["proyecto"]), "--home", str(mundo["casa"]), "--formato", "html", "--salida", str(destino)],
+                    ahora=lambda: AHORA) in (0, 1), capsys.readouterr().err
+    pg = navegador.new_context().new_page()
+    errores: list[str] = []
+    pg.on("pageerror", lambda e: errores.append(str(e)))
+    pg.goto(destino.as_uri() + "#view=table")
+    pg.wait_for_timeout(300)
+    celdas = pg.locator("td.wh").all_inner_texts()
+    if not celdas:
+        pytest.skip("este sistema no produce el hallazgo sin línea que se necesita")
+    assert not any(":–" in c for c in celdas), celdas
+    pg.locator("button[data-row]:visible").first.click()
+    pg.wait_for_timeout(100)
+    detalle = pg.locator("[id^='det-']:visible").first.inner_text()
+    assert not any(linea.strip().endswith("·") for linea in detalle.splitlines()), detalle
+    assert not errores
